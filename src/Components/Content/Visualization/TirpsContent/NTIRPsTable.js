@@ -313,6 +313,7 @@ class NTIRPsTable extends Component {
 										<thead>
 											<tr>
 												<th>Next</th>
+												{renderColumn('P/N', 'P/N', false)}
 												{renderColumn('relation', 'Relation', false)}
 												{renderColumn('symbol', 'Symbol', false)}
 												{this.props.discriminative &&
@@ -348,6 +349,7 @@ class NTIRPsTable extends Component {
 														}
 													>
 														<td>{tirp.next}</td>
+														<td>{"Positive"}</td>
 														<td>{tirp.relation}</td>
 														<td>{tirp.symbol}</td>
 														{this.props.discriminative && (

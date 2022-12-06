@@ -13,6 +13,7 @@ import RawData from './RawData';
 import App from '../../TirpsBiExploration/App';
 import SymbolsCorrelation from '../../../Content/TirpsBiExploration/CorrelationMatrixView/symbolsCorrelation';
 import RawDataTable from './RawDataTable';
+import NegativeTirps from "./NegativeTirps"
 /**
  * in this class you can see the content of the main navbar.
  * it has home, tutorial, Manage, register, log in, upload.
@@ -52,9 +53,9 @@ class TirpsContent extends Component {
 						<TIRPsSearch isPredictive={false} />
 					</Container>
 				</Route>
-				<Route path={'/TirpsApp/bar'}>
+				<Route path={'/TirpsApp/NegativeTirps'}>
 					<Container fluid>
-						<h1>bar</h1>
+						<NegativeTirps />	
 					</Container>
 				</Route>
 				<Route path={'/TirpsApp/PTIRPsSearch'}>

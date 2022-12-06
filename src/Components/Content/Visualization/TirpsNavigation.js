@@ -151,10 +151,10 @@ class TirpsNavigation extends Component {
 						>
 							<NavLink
 								activeClassName='active'
-								to={'/TirpsApp/bar'}
+								to={'/TirpsApp/NegativeTirps'}
 								{...(!this.props.two_class || disabledProps)}
 							>
-								<i className='fas fa-tree'></i> Bar
+								<i className='fas fa-tree'></i> NegativeTirps
 							</NavLink>
 						</SimpleOverlayTrigger>
 					</li>
