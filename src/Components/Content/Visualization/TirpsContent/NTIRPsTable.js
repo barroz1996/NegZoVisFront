@@ -325,6 +325,7 @@ class NTIRPsTable extends Component {
 												{this.props.discriminative &&
 													renderColumn('MHS1', 'MHS1')}
 												{renderColumn('MMD0', 'MMD0')}
+												{renderColumn('Time Zone', 'Time Zone', false)}
 												{this.props.discriminative &&
 													renderColumn('MMD1', 'MMD1')}
 											</tr>
@@ -364,6 +365,7 @@ class NTIRPsTable extends Component {
 															<td>{tirp.MHS1}</td>
 														)}
 														<td>{tirp.MMD0}</td>
+														<td>{1}</td>
 														{this.props.discriminative && (
 															<td>{tirp.MMD1}</td>
 														)}
