@@ -14,6 +14,8 @@ import SymbolPop from './SymbolPop';
 import SelectedTIRPTable from './SelectedTIRPTable';
 // import WeightsForm from './WeightsForm';
 import WeightsPop from './WeightsPop';
+import ProccessNegativeRender from './NegativeTirps/ProccessNegativeRender';
+import OutputAlgoritm from "../TirpsContent/NegativeTirps/OutputAlgoritm.json"
 
 import { getSubTree as getSubTreeRequest } from '../../../../networking/requests/visualization';
 
@@ -314,7 +316,12 @@ class NTIRPsTable extends Component {
 											<tr>
 												<th>Next</th>
 												{renderColumn('P/N', 'P/N', false)}
-												{renderColumn('relation', 'Relation', false)}
+												{renderColumn('symbol', 'Symbol', false)}
+												{renderColumn('VS0', 'VS0')}
+												{renderColumn('MHS0', 'MHS0')}
+												{renderColumn('MMD0', 'MMD0')}
+												{renderColumn('Time Zone', 'Time Zone', false)}
+												{/* {renderColumn('relation', 'Relation', false)}
 												{renderColumn('symbol', 'Symbol', false)}
 												{this.props.discriminative &&
 													renderColumn('score', 'Score')}
@@ -327,50 +334,64 @@ class NTIRPsTable extends Component {
 												{renderColumn('MMD0', 'MMD0')}
 												{renderColumn('Time Zone', 'Time Zone', false)}
 												{this.props.discriminative &&
-													renderColumn('MMD1', 'MMD1')}
+													renderColumn('MMD1', 'MMD1')} */}
 											</tr>
 										</thead>
 										<tbody>
-											{data.map((tirp, index) => {
-												const selected =
-													this.state.selectedTirp?._TIRP__unique_name ===
-													tirp.tirp._TIRP__unique_name;
+											{OutputAlgoritm.map((tirp, index) => {
+
 												return (
-													<tr
-														key={index}
-														onClick={() => {
-															this.setState({
-																selectedTirp: tirp.tirp,
-															});
-														}}
-														style={
-															selected
-																? { backgroundColor: '#AED6F1' }
-																: {}
-														}
-													>
-														<td>{tirp.next}</td>
-														<td>{"Positive"}</td>
-														<td>{tirp.relation}</td>
-														<td>{tirp.symbol}</td>
-														{this.props.discriminative && (
-															<td>{tirp.score}</td>
-														)}
-														<td>{tirp.VS0}</td>
-														{this.props.discriminative && (
-															<td>{tirp.VS1}</td>
-														)}
-														<td>{tirp.MHS0}</td>
-														{this.props.discriminative && (
-															<td>{tirp.MHS1}</td>
-														)}
-														<td>{tirp.MMD0}</td>
-														<td>{1}</td>
-														{this.props.discriminative && (
-															<td>{tirp.MMD1}</td>
-														)}
+													<tr>
+														<td> Next </td>
+														<td>{tirp.negatives[index] ? "Negative" : "Positive"}</td>
+														<td>{String(tirp.elements[0])}</td>
+														<td>{tirp['support']}</td>
+														<td>{Number.parseFloat(tirp['mean horizontal support']).toFixed(12)}</td>
+														<td>{Number.parseFloat(tirp['mean mean duration']).toFixed(12)}</td>
+														<td> need to get from Liel</td>
 													</tr>
-												);
+
+												)
+
+												// const selected =
+												// 	this.state.selectedTirp?._TIRP__unique_name ===
+												// 	tirp.tirp._TIRP__unique_name;
+												// return (
+												// 	<tr
+												// 		key={index}
+												// 		onClick={() => {
+												// 			this.setState({
+												// 				selectedTirp: tirp.tirp,
+												// 			});
+												// 		}}
+												// 		style={
+												// 			selected
+												// 				? { backgroundColor: '#AED6F1' }
+												// 				: {}
+												// 		}
+												// 	>
+												// 		<td>{tirp.next}</td>
+												// 		<td>{"Positive"}</td>
+												// 		<td>{tirp.relation}</td>
+												// 		<td>{tirp.symbol}</td>
+												// 		{this.props.discriminative && (
+												// 			<td>{tirp.score}</td>
+												// 		)}
+												// 		<td>{tirp.VS0}</td>
+												// 		{this.props.discriminative && (
+												// 			<td>{tirp.VS1}</td>
+												// 		)}
+												// 		<td>{tirp.MHS0}</td>
+												// 		{this.props.discriminative && (
+												// 			<td>{tirp.MHS1}</td>
+												// 		)}
+												// 		<td>{tirp.MMD0}</td>
+												// 		<td>{1}</td>
+												// 		{this.props.discriminative && (
+												// 			<td>{tirp.MMD1}</td>
+												// 		)}
+												// 	</tr>
+												// );
 											})}
 										</tbody>
 									</Table>
