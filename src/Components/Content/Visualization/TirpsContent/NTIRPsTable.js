@@ -14,8 +14,7 @@ import SymbolPop from './SymbolPop';
 import SelectedTIRPTable from './SelectedTIRPTable';
 // import WeightsForm from './WeightsForm';
 import WeightsPop from './WeightsPop';
-import ProccessNegativeRender from './NegativeTirps/ProccessNegativeRender';
-import OutputAlgoritm from "../TirpsContent/NegativeTirps/OutputAlgoritm.json"
+import axios from 'axios';
 
 import { getSubTree as getSubTreeRequest } from '../../../../networking/requests/visualization';
 
@@ -41,12 +40,26 @@ class NTIRPsTable extends Component {
 		sortFunc: undefined,
 		sortedCol: null,
 		sortAsc: true,
+
+		path: [],
+		outputAlgoritm: [],
 	};
+
+	async open_route() {
+		let url = 'http://127.0.0.1:443/get_negative_data'
+		const promise = await axios.get(url)
+		this.setState({
+			outputAlgoritm:  promise.data
+		})
+	}
 	
 	componentDidMount() {
 		if (!Cookies.get('auth-token')) {
 			window.open('#/Login', '_self');
 		}
+
+		// this.setNewLevel(this.props.table, this.getNextLevel([]));
+
 		this.entitiesNumber = parseInt(localStorage.num_of_entities);
 		this.entitiesNumberClass1 = parseInt(localStorage.num_of_entities_class_1);
 
@@ -58,6 +71,8 @@ class NTIRPsTable extends Component {
 		} else {
 			this.setNewLevel(this.props.table, []);
 		}
+
+		this.open_route()
 	}
 
 	getExistedChildren(tirps) {
@@ -259,6 +274,48 @@ class NTIRPsTable extends Component {
 		);
 	}
 
+	arrayEquals(a, b) {
+		return Array.isArray(a) &&
+		  Array.isArray(b) &&
+		  a.length === b.length &&
+		  a.every((val, index) => val === b[index]);
+	  }
+	
+
+	getNextLevel(){ 
+		const nextPatterns = this.state.outputAlgoritm.filter((row) => {
+			if (row.elements.length === this.state.path.length + 1 && row.elements[this.state.path.length].length === 1){
+				for(let i = 0; i < this.state.path.length; i++){
+					if(!this.arrayEquals(row.elements[i], this.state.path[i])){
+						return false
+					}
+				}
+				return true
+			}
+			else{
+				if (!this.arrayEquals(row.elements, this.state.path) && row.elements.length === this.state.path.length){
+					for(let i = 0; i < this.state.path.length - 1; i++){
+						if(!this.arrayEquals(row.elements[i], this.state.path[i])){
+							return false
+						}
+					}
+					let last = this.state.path.length - 1
+					if (this.state.path[last].length !== row.elements[last].length - 1){
+						return false
+					}
+					for(let i = 0; i < this.state.path[last].length; i++){
+						if(String(row.elements[last][i]) !== String(this.state.path[last][i])){
+							return false
+						}
+					}
+					return true
+				}
+			}
+			return false
+		} )
+		return nextPatterns
+	}
+
 	render() {
 		const data = this.computeTableData().sort(this.state.sortFunc);
 		const stringSort = (a, b, numeric) => {
@@ -292,6 +349,7 @@ class NTIRPsTable extends Component {
 				</th>
 			);
 		};
+		
 
 		return (
 			<Container fluid className='mt-2'>
@@ -338,21 +396,32 @@ class NTIRPsTable extends Component {
 											</tr>
 										</thead>
 										<tbody>
-											{OutputAlgoritm.map((tirp, index) => {
-
+											{this.getNextLevel().map((tirp, index) => {
+												// const selected = this.state.selectedTirp?._TIRP__unique_name === tirp.tirp._TIRP__unique_name;
 												return (
-													<tr>
-														<td> Next </td>
-														<td>{tirp.negatives[index] ? "Negative" : "Positive"}</td>
-														<td>{String(tirp.elements[0])}</td>
+													<tr
+														key={index}
+														onClick={() => {
+															this.setState({ 
+																path: tirp.elements
+															})
+														}}
+														// style={
+														// 	selected
+														// 		? { backgroundColor: '#AED6F1' }
+														// 		: {}
+														// }
+													>
+														<td> {console.log(this.state.path)} </td>
+														<td>{tirp.negatives[this.state.path.length] ? "Negative" : "Positive"}</td>
+														{/* needed to get the final index in tirp.elements in the index of tirp.elements.length - 1 */}
+														<td>{String(tirp.elements[tirp.elements.length - 1][tirp.elements[tirp.elements.length - 1].length - 1])}</td>
 														<td>{tirp['support']}</td>
 														<td>{Number.parseFloat(tirp['mean horizontal support']).toFixed(12)}</td>
 														<td>{Number.parseFloat(tirp['mean mean duration']).toFixed(12)}</td>
 														<td> need to get from Liel</td>
 													</tr>
-
 												)
-
 												// const selected =
 												// 	this.state.selectedTirp?._TIRP__unique_name ===
 												// 	tirp.tirp._TIRP__unique_name;
