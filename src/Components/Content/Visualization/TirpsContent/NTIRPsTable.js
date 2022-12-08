@@ -148,15 +148,15 @@ class NTIRPsTable extends Component {
 	};
 
 	Navbar() {
-		return [{ _TIRP__symbols: ['Root'] }, ...this.state.currentPath].map((tirp, idx) => (
+		return [["Root"], ...this.state.path].map((tirp) => (
 			<div className='w-25'>
 				<button
 					className='btn btn-workflow btn-arrow-right navbar-margin'
 					id={'Info'}
-					onClick={() => this.toLevel(idx)}
-					key={idx}
+					onClick={() => console.log(tirp)}
+					key={tirp}
 				>
-					{tirp._TIRP__symbols[tirp._TIRP__symbols.length - 1]}
+					{tirp[tirp.length - 1]}
 				</button>
 			</div>
 		));
