@@ -148,15 +148,15 @@ class NTIRPsTable extends Component {
 	};
 
 	Navbar() {
-		return [["Root"], ...this.state.path].map((tirp) => (
+		return [["Root"], ...this.state.path].map((tirp, index) => (
 			<div className='w-25'>
 				<button
 					className='btn btn-workflow btn-arrow-right navbar-margin'
 					id={'Info'}
-					onClick={() => console.log(tirp)}
-					key={tirp}
+					onClick={() => this.toNLevel([["Root"], ...this.state.path].slice(0, index + 1))}
+					key={index}
 				>
-					{tirp[tirp.length - 1]}
+					{tirp}
 				</button>
 			</div>
 		));
@@ -199,6 +199,19 @@ class NTIRPsTable extends Component {
 				const children = this.getExistedChildren(tirp);
 				this.setNewLevel(children, this.state.currentPath.slice(0, levelNum));
 			}
+		}
+	}
+
+	toNLevel(level) {
+		// eslint-disable-next-line
+		if (level == "Root") {
+			this.setState({
+				path: []
+			})
+		} else {
+			this.setState({
+				path: level.slice(1, level.length)
+			})
 		}
 	}
 
@@ -412,7 +425,7 @@ class NTIRPsTable extends Component {
 														// 		: {}
 														// }
 													>
-														<td> {console.log(this.state.path)} </td>
+														<td></td>
 														<td>{tirp.negatives[this.state.path.length] ? "Negative" : "Positive"}</td>
 														{/* needed to get the final index in tirp.elements in the index of tirp.elements.length - 1 */}
 														<td>{String(tirp.elements[tirp.elements.length - 1][tirp.elements[tirp.elements.length - 1].length - 1])}</td>
