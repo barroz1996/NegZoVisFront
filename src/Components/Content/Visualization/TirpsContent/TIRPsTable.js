@@ -19,7 +19,7 @@ import { getSubTree as getSubTreeRequest } from '../../../../networking/requests
 
 const headerSortingStyle = { backgroundColor: '#c8e6c9' };
 
-class NTIRPsTable extends Component {
+class TIRPsTable extends Component {
 	entitiesNumberCls0 = 1;
 	entitiesNumberCls1 = 1;
 	state = {
@@ -484,4 +484,4 @@ class NTIRPsTable extends Component {
 	}
 }
 
-export default NTIRPsTable;
+export default TIRPsTable;
