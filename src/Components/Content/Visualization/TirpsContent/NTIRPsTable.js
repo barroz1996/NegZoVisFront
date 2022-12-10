@@ -150,14 +150,27 @@ class NTIRPsTable extends Component {
 	Navbar() {
 		return [["Root"], ...this.state.path].map((tirp, index) => (
 			<div className='w-25'>
-				<button
-					className='btn btn-workflow btn-arrow-right navbar-margin'
-					id={'Info'}
-					onClick={() => this.toNLevel([["Root"], ...this.state.path].slice(0, index + 1))}
-					key={index}
-				>
-					{tirp}
-				</button>
+				{tirp.length <= 1 ? (
+					<button
+						className='btn btn-workflow btn-arrow-right navbar-margin'
+						id={'Info'}
+						onClick={() => this.toNLevel([["Root"], ...this.state.path].slice(0, index + 1))}
+						key={index}
+					>
+						{tirp}
+					</button>) :
+					(tirp.map((sub, jndex) => (
+							<button
+							className='btn btn-workflow btn-arrow-right navbar-margin'
+							id={'Info'}
+							onClick={() => this.toNLevelSub([["Root"], ...this.state.path].slice(0, index + 1), jndex)}
+							key={index}
+						>
+							{sub}
+						</button> 
+						))
+					)
+				}
 			</div>
 		));
 	}
@@ -203,18 +216,29 @@ class NTIRPsTable extends Component {
 	}
 
 	toNLevel(level) {
-		// eslint-disable-next-line
+	// eslint-disable-next-line
 		if (level == "Root") {
 			this.setState({
 				path: []
 			})
 		} else {
+			const new_path = level.slice(1, level.length)
+			console.log(new_path)
 			this.setState({
-				path: level.slice(1, level.length)
+				path: new_path
 			})
 		}
 	}
 
+	toNLevelSub(level, index) {
+		// eslint-disable-next-line
+		const new_path = level.slice(1, level.length)
+		new_path[new_path.length - 1] = new_path[new_path.length - 1].slice(0, index + 1)
+		this.setState({
+			path: new_path
+		})
+	}
+	
 	descendTree(tirp) {
 		if (this.isRoot()) {
 			const visualizationId = sessionStorage.getItem('visualizationId');
