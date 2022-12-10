@@ -4,7 +4,6 @@ added:
 			NegativeTirps.js
 			NTIRPsTable.js
 				
-
 changed:
 	front:
 		src\Components\Content\Visualization\TirpsContent:
