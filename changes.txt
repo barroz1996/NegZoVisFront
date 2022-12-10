@@ -6,12 +6,10 @@ added:
 				
 changed:
 	front:
-		src\Components\Content\Visualization\TirpsContent:
-			TirpsContent.js:
+		src\Components\Content\Visualization\TirpsContent\TirpsContent.js:
 				added at lines 56-60 the NegativeTirps tab.
 		
-		src\Components\Content\Visualization:
-			TirpsNavigation:
+		src\Components\Content\Visualization\TirpsNavigation:
 				added at lines 152-158 the NegativeTirps navigation path.
 				
 	backend:
