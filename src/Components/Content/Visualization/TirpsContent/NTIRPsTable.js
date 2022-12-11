@@ -279,6 +279,11 @@ class NTIRPsTable extends Component {
 				<Button
 					className={'btn btn-hugobot'}
 					id={'toy_example-btn'}
+					onClick={() => {
+						this.setState({ 
+							path: tirp.elements
+						})
+					}}
 				>
 					<i className='fas fa-caret-down' id={'toy_example-icon'} />
 				</Button>
@@ -496,7 +501,7 @@ class NTIRPsTable extends Component {
 														key={index}
 														onClick={() => {
 															this.setState({ 
-																path: tirp.elements
+																tirp: tirp
 															})
 														}}
 														// style={
