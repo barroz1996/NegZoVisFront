@@ -249,6 +249,21 @@ class NTIRPsTable extends Component {
 		}
 	}
 
+	NegativeNext(tirp) {
+		if (this.isThereNextLevel(tirp.elements)) {
+			return (
+				<Button
+					className={'btn btn-hugobot'}
+					id={'toy_example-btn'}
+				>
+					<i className='fas fa-caret-down' id={'toy_example-icon'} />
+				</Button>
+			);
+		} else {
+			return '';
+		}
+	}
+
 	getRelation(tirp) {
 		if (tirp._TIRP__rel.length === 0) {
 			return '-';
@@ -328,6 +343,47 @@ class NTIRPsTable extends Component {
 		} )
 		return nextPatterns
 	}
+
+	isThereNextLevel(elements){ 
+		console.log("grrrrrr")
+		console.log(elements)
+		if (this.arrayEquals(elements, ["Root"])){
+			console.log("got here")
+			return true
+		}
+		const nextPatterns = this.state.outputAlgoritm.filter((row) => {
+			if (row.elements.length === elements.length + 1 && row.elements[elements.length].length === 1){
+				for(let i = 0; i < elements.length; i++){
+					if(!this.arrayEquals(row.elements[i], elements[i])){
+						return false
+					}
+				}
+				return true
+			}
+			else{
+				if (!this.arrayEquals(row.elements, elements) && row.elements.length === elements.length){
+					for(let i = 0; i < elements.length - 1; i++){
+						if(!this.arrayEquals(row.elements[i], elements[i])){
+							return false
+						}
+					}
+					let last = elements.length - 1
+					if (elements[last].length !== row.elements[last].length - 1){
+						return false
+					}
+					for(let i = 0; i < elements[last].length; i++){
+						if(String(row.elements[last][i]) !== String(elements[last][i])){
+							return false
+						}
+					}
+					return true
+				}
+			}
+			return false
+		} )
+		return nextPatterns.length > 0
+	}
+	
 
 	render() {
 		const data = this.computeTableData().sort(this.state.sortFunc);
@@ -425,7 +481,7 @@ class NTIRPsTable extends Component {
 														// 		: {}
 														// }
 													>
-														<td></td>
+														<td>{this.NegativeNext(tirp)}</td>
 														<td>{tirp.negatives[this.state.path.length] ? "Negative" : "Positive"}</td>
 														{/* needed to get the final index in tirp.elements in the index of tirp.elements.length - 1 */}
 														<td>{String(tirp.elements[tirp.elements.length - 1][tirp.elements[tirp.elements.length - 1].length - 1])}</td>
