@@ -16,6 +16,8 @@ import SelectedTIRPTable from './SelectedTIRPTable';
 import WeightsPop from './WeightsPop';
 import axios from 'axios';
 
+import SelectedNTirpsTable from './SelectedNTIRPsTable';
+
 import { getSubTree as getSubTreeRequest } from '../../../../networking/requests/visualization';
 
 const headerSortingStyle = { backgroundColor: '#c8e6c9' };
@@ -43,6 +45,9 @@ class NTIRPsTable extends Component {
 
 		path: [],
 		outputAlgoritm: [],
+		currentLevel: 0, 
+		selectedPath: [], 
+		numOfSymbolInSelctedPath: 0, 
 	};
 
 	async open_route() {
@@ -223,7 +228,6 @@ class NTIRPsTable extends Component {
 			})
 		} else {
 			const new_path = level.slice(1, level.length)
-			console.log(new_path)
 			this.setState({
 				path: new_path
 			})
@@ -274,7 +278,7 @@ class NTIRPsTable extends Component {
 	}
 
 	NegativeNext(tirp) {
-		if (this.isThereNextLevel(tirp.elements)) {
+		if (this.getNextLevelByElements(tirp.elements).length > 0) {
 			return (
 				<Button
 					className={'btn btn-hugobot'}
@@ -373,13 +377,7 @@ class NTIRPsTable extends Component {
 		return nextPatterns
 	}
 
-	isThereNextLevel(elements){ 
-		console.log("grrrrrr")
-		console.log(elements)
-		if (this.arrayEquals(elements, ["Root"])){
-			console.log("got here")
-			return true
-		}
+	getNextLevelByElements(elements){ 
 		const nextPatterns = this.state.outputAlgoritm.filter((row) => {
 			if (row.elements.length === elements.length + 1 && row.elements[elements.length].length === 1){
 				for(let i = 0; i < elements.length; i++){
@@ -410,7 +408,7 @@ class NTIRPsTable extends Component {
 			}
 			return false
 		} )
-		return nextPatterns.length > 0
+		return nextPatterns
 	}
 	
 
@@ -501,7 +499,11 @@ class NTIRPsTable extends Component {
 														key={index}
 														onClick={() => {
 															this.setState({ 
-																tirp: tirp
+																tirp: tirp, 
+																currentLevel: this.state.currentLevel + 1, 
+																// selectedPath: this.getNextLevelByElements(tirp.elements), 
+																selectedPath: tirp,
+																numOfSymbolInSelctedPath: this.getNextLevelByElements(tirp.elements).length,
 															})
 														}}
 														// style={
@@ -569,10 +571,57 @@ class NTIRPsTable extends Component {
 					<Col sm={3}>
 						{this.state.selectedTirp && (
 							<>
-								<SelectedTIRPTable
-									table={this.state.selectedTirp}
-									type_of_comp={this.props.discriminative ? 'disc' : 'tirp'}
-								></SelectedTIRPTable>
+								{console.log("selected Path")}
+								{console.log(this.state.selectedPath)}
+								{console.log(this.state.currentLevel)}
+								{/* <SelectedNTirpsTable
+									args={[this.state.currentLevel, this.state.selectedPath]}
+								></SelectedNTirpsTable> */}
+								<Card>
+									<Card.Header className={'bg-hugobot'}>
+										<Card.Text className={'text-hugobot text-hugoob-advanced'}>
+											Selected TIRP info
+										</Card.Text>
+									</Card.Header>
+									<Card.Body className={'text-hugobot'}>
+										<div className='vertical-scroll vertical-scroll-advanced'>
+											<Table responsive={true} striped={true} bordered={true}>
+											<>
+												<thead>
+													<tr>
+														<th style={{ textAlign: 'left' }}>Metric</th>
+														<th>Value</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<th style={{ textAlign: 'left' }}>Current level</th>
+														<td>{this.state.currentLevel}</td>
+													</tr>
+													<tr>
+														<th style={{ textAlign: 'left' }}>Vertical support</th>
+														<td>
+															{!this.arrayEquals(this.state.selectedPath, []) && this.state.selectedPath['support'] }
+														</td>
+													</tr>
+													<tr>
+														<th>Mean horizontal_support</th>
+														<td>{!this.arrayEquals(this.state.selectedPath, []) && this.state.selectedPath['mean horizontal support']}</td>
+													</tr>
+													<tr>
+														<th style={{ textAlign: 'left' }}>Mean mean duration</th>
+														<td>{!this.arrayEquals(this.state.selectedPath, []) && this.state.selectedPath['mean mean duration']}</td>
+													</tr>
+													<tr>
+														<th style={{ textAlign: 'left' }}>Entities</th>
+														<td> {this.state.numOfSymbolInSelctedPath} </td>
+													</tr>
+												</tbody>
+											</>
+											</Table>
+										</div>
+									</Card.Body>
+								</Card>
 								{this.props.discriminative && (
 									<>
 										<Button
