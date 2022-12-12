@@ -46,7 +46,7 @@ class NTIRPsTable extends Component {
 		path: [],
 		outputAlgoritm: [],
 		currentLevel: 0, 
-		selectedPath: [], 
+		currentTirp: [], 
 		numOfSymbolInSelctedPath: 0, 
 	};
 
@@ -56,14 +56,26 @@ class NTIRPsTable extends Component {
 		this.setState({
 			outputAlgoritm:  promise.data
 		})
+		this.resetEntitiesSize()
+	}
+
+	resetEntitiesSize(){
+		const firstSymbol = this.state.outputAlgoritm.filter((row) => {
+			if(row.elements.length == 1 && row.elements[0].length == 1){
+				return true
+			}
+			return false
+		})
+		console.log(firstSymbol)
+		this.setState({
+			numOfSymbolInSelctedPath: firstSymbol.length
+		})
 	}
 	
 	componentDidMount() {
 		if (!Cookies.get('auth-token')) {
 			window.open('#/Login', '_self');
 		}
-
-		// this.setNewLevel(this.props.table, this.getNextLevel([]));
 
 		this.entitiesNumber = parseInt(localStorage.num_of_entities);
 		this.entitiesNumberClass1 = parseInt(localStorage.num_of_entities_class_1);
@@ -420,7 +432,6 @@ class NTIRPsTable extends Component {
 				ignorePunctuation: true,
 			});
 		};
-
 		const renderColumn = (columnName, columnTitle, numeric = true) => {
 			const selected = this.state.sortedCol === columnName;
 			const attributes = {
@@ -446,7 +457,6 @@ class NTIRPsTable extends Component {
 			);
 		};
 		
-
 		return (
 			<Container fluid className='mt-2'>
 				{this.Navbar()}
@@ -501,8 +511,7 @@ class NTIRPsTable extends Component {
 															this.setState({ 
 																tirp: tirp, 
 																currentLevel: this.state.currentLevel + 1, 
-																// selectedPath: this.getNextLevelByElements(tirp.elements), 
-																selectedPath: tirp,
+																currentTirp: tirp,
 																numOfSymbolInSelctedPath: this.getNextLevelByElements(tirp.elements).length,
 															})
 														}}
@@ -571,57 +580,11 @@ class NTIRPsTable extends Component {
 					<Col sm={3}>
 						{this.state.selectedTirp && (
 							<>
-								{console.log("selected Path")}
-								{console.log(this.state.selectedPath)}
-								{console.log(this.state.currentLevel)}
-								{/* <SelectedNTirpsTable
-									args={[this.state.currentLevel, this.state.selectedPath]}
-								></SelectedNTirpsTable> */}
-								<Card>
-									<Card.Header className={'bg-hugobot'}>
-										<Card.Text className={'text-hugobot text-hugoob-advanced'}>
-											Selected TIRP info
-										</Card.Text>
-									</Card.Header>
-									<Card.Body className={'text-hugobot'}>
-										<div className='vertical-scroll vertical-scroll-advanced'>
-											<Table responsive={true} striped={true} bordered={true}>
-											<>
-												<thead>
-													<tr>
-														<th style={{ textAlign: 'left' }}>Metric</th>
-														<th>Value</th>
-													</tr>
-												</thead>
-												<tbody>
-													<tr>
-														<th style={{ textAlign: 'left' }}>Current level</th>
-														<td>{this.state.currentLevel}</td>
-													</tr>
-													<tr>
-														<th style={{ textAlign: 'left' }}>Vertical support</th>
-														<td>
-															{!this.arrayEquals(this.state.selectedPath, []) && this.state.selectedPath['support'] }
-														</td>
-													</tr>
-													<tr>
-														<th>Mean horizontal_support</th>
-														<td>{!this.arrayEquals(this.state.selectedPath, []) && this.state.selectedPath['mean horizontal support']}</td>
-													</tr>
-													<tr>
-														<th style={{ textAlign: 'left' }}>Mean mean duration</th>
-														<td>{!this.arrayEquals(this.state.selectedPath, []) && this.state.selectedPath['mean mean duration']}</td>
-													</tr>
-													<tr>
-														<th style={{ textAlign: 'left' }}>Entities</th>
-														<td> {this.state.numOfSymbolInSelctedPath} </td>
-													</tr>
-												</tbody>
-											</>
-											</Table>
-										</div>
-									</Card.Body>
-								</Card>
+								<SelectedNTirpsTable 
+									currentLevel={this.state.currentLevel}
+									currentTirp={this.state.currentTirp}
+									numOfSymbolInSelctedPath={this.state.numOfSymbolInSelctedPath}
+								></SelectedNTirpsTable>
 								{this.props.discriminative && (
 									<>
 										<Button

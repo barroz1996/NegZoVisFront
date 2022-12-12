@@ -3,14 +3,28 @@ import { Card, Table } from 'react-bootstrap';
 
 class SelectedNTirpsTable extends Component {
 	state = {
-        currentLevel: this.props.args[0], 
-		selectedPath: this.props.args[1],
+        currentLevel: this.props.currentLevel, 
+		currentTirp: this.props.currentTirp,
+		numOfSymbolInSelctedPath: this.props.numOfSymbolInSelctedPath
     };
 
-	renderNTirpTable = (iter) => {
-		// console.log(this.state.currentLevel)
-        // console.log("iter")
-        // console.log(iter)
+	arrayEquals(a, b) {
+		return Array.isArray(a) &&
+		  Array.isArray(b) &&
+		  a.length === b.length &&
+		  a.every((val, index) => val === b[index]);
+	  }
+
+
+	renderSelectedTirp = () => {
+		this.state.currentLevel = this.props.currentLevel
+		this.state.currentTirp = this.props.currentTirp
+		this.state.numOfSymbolInSelctedPath = this.props.numOfSymbolInSelctedPath
+
+		return this.renderNTirpTable(this.state.currentLevel, this.state.currentTirp, this.state.numOfSymbolInSelctedPath)
+	}
+
+	renderNTirpTable = (level, tirp, entitesSize) => {
 		return (
 			<>
 				<thead>
@@ -22,25 +36,25 @@ class SelectedNTirpsTable extends Component {
 				<tbody>
 					<tr>
 						<th style={{ textAlign: 'left' }}>Current level</th>
-						<td>{this.state.currentLevel}</td>
+						<td>{level}</td>
 					</tr>
 					<tr>
 						<th style={{ textAlign: 'left' }}>Vertical support</th>
 						<td>
-                            {iter.length > 0 && ((iter['support'] / iter.length) * 100).toFixed(1)} %
+							{!this.arrayEquals(tirp, []) && tirp['support'] }
 						</td>
 					</tr>
 					<tr>
 						<th>Mean horizontal_support</th>
-						<td>{iter.length > 0 && iter['mean horizontal support'].toFixed(2)}</td>
+						<td>{!this.arrayEquals(tirp, []) && Number(tirp['mean horizontal support']).toFixed(3)}</td>
 					</tr>
 					<tr>
 						<th style={{ textAlign: 'left' }}>Mean mean duration</th>
-						<td>{iter.length > 0 && iter['mean mean duration'].toFixed(2)}</td>
+						<td>{!this.arrayEquals(tirp, []) && Number(tirp['mean mean duration']).toFixed(3)}</td>
 					</tr>
 					<tr>
 						<th style={{ textAlign: 'left' }}>Entities</th>
-						<td> Need to think</td>
+						<td> {entitesSize} </td>
 					</tr>
 				</tbody>
 			</>
@@ -69,7 +83,7 @@ class SelectedNTirpsTable extends Component {
 				<Card.Body className={'text-hugobot'}>
 					<div className='vertical-scroll vertical-scroll-advanced'>
 						<Table responsive={true} striped={true} bordered={true}>
-							{this.renderNTirpTable(this.state.selectedPath)}
+							{this.renderSelectedTirp()}
 						</Table>
 					</div>
 				</Card.Body>
