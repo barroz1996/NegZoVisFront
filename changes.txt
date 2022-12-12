@@ -3,6 +3,7 @@ added:
 		src\Components\Content\Visualization\TirpsContent:
 			NegativeTirps.js
 			NTIRPsTable.js
+			SelectedNTIRPsTable.js
 				
 changed:
 	front:

@@ -46,7 +46,7 @@ class NTIRPsTable extends Component {
 		path: [],
 		outputAlgoritm: [],
 		currentLevel: 0, 
-		currentTirp: [], 
+		currentTirp: {0: []}, 
 		numOfSymbolInSelctedPath: 0, 
 	};
 
@@ -66,7 +66,6 @@ class NTIRPsTable extends Component {
 			}
 			return false
 		})
-		console.log(firstSymbol)
 		this.setState({
 			numOfSymbolInSelctedPath: firstSymbol.length
 		})
@@ -171,7 +170,15 @@ class NTIRPsTable extends Component {
 					<button
 						className='btn btn-workflow btn-arrow-right navbar-margin'
 						id={'Info'}
-						onClick={() => this.toNLevel([["Root"], ...this.state.path].slice(0, index + 1))}
+						onClick={() => {
+							this.toNLevel([["Root"], ...this.state.path].slice(0, index + 1))
+
+							let newTirp = Object.fromEntries(Object.entries(this.state.currentTirp).slice(0, index+1))
+							this.setState({
+								currentLevel: index, 
+								currentTirp: newTirp,
+							})
+						}}
 						key={index}
 					>
 						{tirp}
@@ -180,7 +187,17 @@ class NTIRPsTable extends Component {
 							<button
 							className='btn btn-workflow btn-arrow-right navbar-margin'
 							id={'Info'}
-							onClick={() => this.toNLevelSub([["Root"], ...this.state.path].slice(0, index + 1), jndex)}
+							onClick={() => {
+								this.toNLevelSub([["Root"], ...this.state.path].slice(0, index + 1), jndex)
+
+								let newTirp = Object.fromEntries(Object.entries(this.state.currentTirp).slice(0, index+1))
+								this.setState({
+									currentLevel: index, 
+									currentTirp: newTirp,
+								})
+								console.log(this.state.currentLevel)
+								console.log(this.state.currentTirp)
+							}}
 							key={index}
 						>
 							{sub}
@@ -508,11 +525,22 @@ class NTIRPsTable extends Component {
 													<tr
 														key={index}
 														onClick={() => {
+															let newTirp = this.state.currentTirp
+															let newLevel = this.state.currentLevel
+															let numOfEntites = this.state.numOfSymbolInSelctedPath
+															let numOfNextEntities = this.getNextLevelByElements(tirp.elements).length
+
+															if (numOfNextEntities > 0){
+																newLevel += 1
+																newTirp[this.state.currentLevel + 1] = tirp
+																numOfEntites = numOfNextEntities
+															}
+
 															this.setState({ 
 																tirp: tirp, 
-																currentLevel: this.state.currentLevel + 1, 
-																currentTirp: tirp,
-																numOfSymbolInSelctedPath: this.getNextLevelByElements(tirp.elements).length,
+																currentLevel: newLevel, 
+																currentTirp: newTirp, 
+																numOfSymbolInSelctedPath: numOfEntites,
 															})
 														}}
 														// style={
@@ -582,7 +610,7 @@ class NTIRPsTable extends Component {
 							<>
 								<SelectedNTirpsTable 
 									currentLevel={this.state.currentLevel}
-									currentTirp={this.state.currentTirp}
+									currentTirp={this.state.currentTirp[this.state.currentLevel]}
 									numOfSymbolInSelctedPath={this.state.numOfSymbolInSelctedPath}
 								></SelectedNTirpsTable>
 								{this.props.discriminative && (
