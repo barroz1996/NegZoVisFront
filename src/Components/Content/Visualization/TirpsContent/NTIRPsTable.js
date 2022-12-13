@@ -56,19 +56,19 @@ class NTIRPsTable extends Component {
 		this.setState({
 			outputAlgoritm:  promise.data
 		})
-		this.resetEntitiesSize()
+		this.setState({
+			numOfSymbolInSelctedPath: this.getRoorEntitiesSize()
+		})
 	}
 
-	resetEntitiesSize(){
+	getRoorEntitiesSize(){
 		const firstSymbol = this.state.outputAlgoritm.filter((row) => {
 			if(row.elements.length == 1 && row.elements[0].length == 1){
 				return true
 			}
 			return false
 		})
-		this.setState({
-			numOfSymbolInSelctedPath: firstSymbol.length
-		})
+		return firstSymbol.length
 	}
 	
 	componentDidMount() {
@@ -177,7 +177,8 @@ class NTIRPsTable extends Component {
 							this.setState({
 								currentLevel: index, 
 								currentTirp: newTirp,
-								numOfSymbolInSelctedPath: this.getNextLevelByElements(newTirp[index].elements).length,  //need to fix
+								numOfSymbolInSelctedPath: index === 0 ? this.getRoorEntitiesSize() : 
+																	   this.getNextLevelByElements(newTirp[index].elements).length,  //need to fix
 							})
 						}}
 						key={index}
@@ -195,7 +196,8 @@ class NTIRPsTable extends Component {
 								this.setState({
 									currentLevel: index, 
 									currentTirp: newTirp,
-									numOfSymbolInSelctedPath: this.getNextLevelByElements(newTirp[index].elements).length,  //need to fix
+									numOfSymbolInSelctedPath: index === 0 ? this.getRoorEntitiesSize()  : 
+																		   this.getNextLevelByElements(newTirp[index].elements).length,  //need to fix
 								})
 							}}
 							key={index}
