@@ -320,7 +320,9 @@ class NTIRPsTable extends Component {
 					id={'toy_example-btn'}
 					onClick={() => {
 						this.setState({ 
-							path: tirp.elements
+							path: tirp.elements, 
+							currentLevel: this.state.currentLevel + 1,
+							numOfSymbolInSelctedPath: this.getNextLevelByElements(tirp.elements).length,
 						})
 					}}
 				>
@@ -533,23 +535,22 @@ class NTIRPsTable extends Component {
 														key={index}
 														onClick={() => {
 															let newTirp = this.state.currentTirp
-															let newLevel = this.state.currentLevel
 															let numOfEntites = this.getNextLevelByElements(tirp.elements).length
 
 															if (numOfEntites > 0){
-																newLevel += 1
 																newTirp[this.state.currentLevel + 1] = tirp
+																this.setState({ 
+																	tirp: tirp, 
+																	currentTirp: newTirp, 
+																})
 															}else{
 																newTirp[this.state.currentLevel] = tirp
-																numOfEntites = 0
+																this.setState({ 
+																	tirp: tirp, 
+																	currentTirp: newTirp, 
+																	numOfSymbolInSelctedPath: 0
+																})
 															}
-
-															this.setState({ 
-																tirp: tirp, 
-																currentLevel: newLevel, 
-																currentTirp: newTirp, 
-																numOfSymbolInSelctedPath: numOfEntites,
-															})
 														}}
 														// style={
 														// 	selected
