@@ -83,7 +83,6 @@ class NTIRPTimeLine extends Component {
       }
 
 
-
     computeNDataset = (elements,timezone) => {
         const columns = [
             { type: "string", id: "Elements" },
@@ -94,9 +93,7 @@ class NTIRPTimeLine extends Component {
         const dataset = []
         let startTime = 0
         for(let i = 0; i< elements.length; i++) {
-            console.log("timezone-i" + timezone[i])
-            const endTime = startTime + timezone[i]
-            console.log("endtime" + endTime)
+            const endTime = startTime + (timezone[i] * 1000)
             const row = [String(elements[i]), startTime, endTime]
             startTime = endTime
             dataset.push(row)
@@ -104,22 +101,22 @@ class NTIRPTimeLine extends Component {
         const data = [columns, ...dataset];
         return data
 
-        
-
-			// const [startTime, endTime] = classMode === 1 ? intervalCls1 : intervalCls0;
-
-			// return [symbol, `${symbol} - ${duration}`, startTime, endTime];
 		};
 	render() {
-        console.log(this.props.tirp)
 		const elements = this.props.tirp.elements;
 		// const negatives = this.props.tirp.negatives;
 		const timezone = this.props.tirp.avg_duration;
 		const dataset = this.computeNDataset(elements, timezone);
+		const intervals = dataset.slice(1);
         const options = {
             hAxis: {
-              ticks: dataset.map(([label, start, end]) => [start, end]),
+              ticks: intervals.map(([label, start, end]) => [start, end]),
             },
+			annotations: {
+				0: {
+					style: 'circle'
+				},
+			}
           };
         // const intervals = dataset.slice(1);
         // const ticks = intervals.flatMap((interval) => interval.slice(1, 3));
@@ -127,6 +124,8 @@ class NTIRPTimeLine extends Component {
 		// const intervals = dataset.slice(1);
 		// const ticks = intervals.flatMap((interval) => interval.slice(2, 4));
 		// const hasHours = ticks.find((tick) => tick.getHours() > 0);
+		console.log("intervals: "+ intervals)
+		console.log("TICKS: " + options.hAxis.ticks)
 		return (
 			<div>
 				<Card>
