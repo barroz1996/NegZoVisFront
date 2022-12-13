@@ -43,11 +43,13 @@ class NTIRPsTable extends Component {
 		sortedCol: null,
 		sortAsc: true,
 
+		//our params:
 		path: [],
 		outputAlgoritm: [],
 		currentLevel: 0, 
 		currentTirp: {0: []}, 
 		numOfSymbolInSelctedPath: 0, 
+		numOfSymbolsInLevel0: 0, 
 	};
 
 	async open_route() {
@@ -56,8 +58,10 @@ class NTIRPsTable extends Component {
 		this.setState({
 			outputAlgoritm:  promise.data
 		})
+		let symbolLevel0 = this.getRoorEntitiesSize()
 		this.setState({
-			numOfSymbolInSelctedPath: this.getRoorEntitiesSize()
+			numOfSymbolInSelctedPath: symbolLevel0,
+			numOfSymbolsInLevel0: symbolLevel0
 		})
 	}
 
@@ -177,7 +181,7 @@ class NTIRPsTable extends Component {
 							this.setState({
 								currentLevel: index, 
 								currentTirp: newTirp,
-								numOfSymbolInSelctedPath: index === 0 ? this.getRoorEntitiesSize() : 
+								numOfSymbolInSelctedPath: index === 0 ? this.state.numOfSymbolsInLevel0 : 
 																	   this.getNextLevelByElements(newTirp[index].elements).length,  //need to fix
 							})
 						}}
@@ -196,7 +200,7 @@ class NTIRPsTable extends Component {
 								this.setState({
 									currentLevel: index, 
 									currentTirp: newTirp,
-									numOfSymbolInSelctedPath: index === 0 ? this.getRoorEntitiesSize()  : 
+									numOfSymbolInSelctedPath: index === 0 ? this.state.numOfSymbolsInLevel0  : 
 																		   this.getNextLevelByElements(newTirp[index].elements).length,  //need to fix
 								})
 							}}
@@ -499,6 +503,7 @@ class NTIRPsTable extends Component {
 											<tr>
 												<th>Next</th>
 												{renderColumn('P/N', 'P/N', false)}
+												{renderColumn('relation', 'Relation', false)}
 												{renderColumn('symbol', 'Symbol', false)}
 												{renderColumn('VS0', 'VS0')}
 												{renderColumn('MHS0', 'MHS0')}
@@ -554,7 +559,9 @@ class NTIRPsTable extends Component {
 													>
 														<td>{this.NegativeNext(tirp)}</td>
 														<td>{tirp.negatives[this.state.path.length] ? "Negative" : "Positive"}</td>
-														{/* needed to get the final index in tirp.elements in the index of tirp.elements.length - 1 */}
+														<td>{this.state.currentLevel === 0 ? "-" :
+														         tirp.elements.length - 1 === 1 ? "after" : "same time"}</td>
+														{/* need to get the final index in tirp.elements in the index of tirp.elements.length - 1 */}
 														<td>{String(tirp.elements[tirp.elements.length - 1][tirp.elements[tirp.elements.length - 1].length - 1])}</td>
 														<td>{tirp['support']}</td>
 														<td>{Number.parseFloat(tirp['mean horizontal support']).toFixed(12)}</td>
