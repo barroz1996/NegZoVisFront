@@ -11,8 +11,9 @@ import TIRPsPie from './TIRPsPie';
 import TIRPTimeLine from './TIRPTimeLine';
 import TirpMatrix from './TirpMatrix';
 import SymbolPop from './SymbolPop';
-import SelectedTIRPTable from './SelectedTIRPTable';
+// import SelectedTIRPTable from './SelectedTIRPTable';
 // import WeightsForm from './WeightsForm';
+import NTIRPTimeLine from './NTIRPTimeLine';
 import WeightsPop from './WeightsPop';
 import axios from 'axios';
 
@@ -714,10 +715,10 @@ class NTIRPsTable extends Component {
 						</Col>
 					)}
 					<Col xl={4} lg={6}>
-						{this.state.selectedTirp && (
-							<TIRPTimeLine
-								tirp={this.state.selectedTirp}
-								type_of_comp={this.props.discriminative ? 'disc' : 'tirp'}
+						{/* {console.log(this.state.currentTirp)} */}
+						{Object.keys(this.state.currentTirp).length > 1 && (
+							<NTIRPTimeLine
+								tirp={this.state.currentTirp[this.state.currentLevel]}
 							/>
 						)}
 					</Col>
