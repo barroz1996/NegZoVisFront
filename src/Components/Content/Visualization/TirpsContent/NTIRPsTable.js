@@ -49,6 +49,7 @@ class NTIRPsTable extends Component {
 		outputAlgoritm: [],
 		currentLevel: 0, 
 		currentTirp: {0: []}, 
+		tirp : {},
 		numOfSymbolInSelctedPath: 0, 
 		numOfSymbolsInLevel0: 0, 
 	};
@@ -535,23 +536,14 @@ class NTIRPsTable extends Component {
 													<tr
 														key={index}
 														onClick={() => {
-															let newTirp = this.state.currentTirp
+															
 															let numOfEntites = this.getNextLevelByElements(tirp.elements).length
-
-															if (numOfEntites > 0){
-																newTirp[this.state.currentLevel + 1] = tirp
-																this.setState({ 
-																	tirp: tirp, 
-																	currentTirp: newTirp, 
-																})
-															}else{
-																newTirp[this.state.currentLevel] = tirp
-																this.setState({ 
-																	tirp: tirp, 
-																	currentTirp: newTirp, 
-																	numOfSymbolInSelctedPath: 0
-																})
-															}
+	
+															this.setState({ 
+																tirp: tirp, 
+																numOfSymbolInSelctedPath: numOfEntites
+															})
+															
 														}}
 														// style={
 														// 	selected
@@ -620,11 +612,14 @@ class NTIRPsTable extends Component {
 					<Col sm={3}>
 						{this.state.selectedTirp && (
 							<>
+							{this.state.tirp && (
 								<SelectedNTirpsTable 
 									currentLevel={this.state.currentLevel}
-									currentTirp={this.state.currentTirp[this.state.currentLevel]}
+									currentTirp={this.state.tirp}
 									numOfSymbolInSelctedPath={this.state.numOfSymbolInSelctedPath}
-								></SelectedNTirpsTable>
+							
+								></SelectedNTirpsTable> 
+								)}
 								{this.props.discriminative && (
 									<>
 										<Button
@@ -716,9 +711,9 @@ class NTIRPsTable extends Component {
 					)}
 					<Col xl={4} lg={6}>
 						{/* {console.log(this.state.currentTirp)} */}
-						{Object.keys(this.state.currentTirp).length > 1 && (
+						{Object.keys(this.state.tirp).length > 0 && (
 							<NTIRPTimeLine
-								tirp={this.state.currentTirp[this.state.currentLevel]}
+								tirp={this.state.tirp}
 							/>
 						)}
 					</Col>

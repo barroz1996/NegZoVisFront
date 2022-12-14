@@ -92,6 +92,7 @@ class NTIRPTimeLine extends Component {
 
         const dataset = []
         let startTime = 0
+		console.log(elements)
         for(let i = 0; i< elements.length; i++) {
             const endTime = startTime + (timezone[i] * 1000)
             const row = [String(elements[i]), startTime, endTime]
