@@ -8,14 +8,6 @@ class SelectedNTirpsTable extends Component {
 		numOfSymbolInSelctedPath: this.props.numOfSymbolInSelctedPath
     };
 
-	arrayEquals(a, b) {
-		return Array.isArray(a) &&
-		  Array.isArray(b) &&
-		  a.length === b.length &&
-		  a.every((val, index) => val === b[index]);
-	  }
-
-
 	renderSelectedTirp = () => {
 		this.state.currentLevel = this.props.currentLevel
 		this.state.currentTirp = this.props.currentTirp
@@ -41,16 +33,16 @@ class SelectedNTirpsTable extends Component {
 					<tr>
 						<th style={{ textAlign: 'left' }}>Vertical support</th>
 						<td>
-							{!this.arrayEquals(tirp, []) && tirp['support'] }
+							{Object.keys(tirp).length > 0 && tirp['support']}
 						</td>
 					</tr>
 					<tr>
 						<th>Mean horizontal_support</th>
-						<td>{!this.arrayEquals(tirp, []) && Number(tirp['mean horizontal support']).toFixed(3)}</td>
+						<td>{Object.keys(tirp).length > 0 && Number(tirp['mean horizontal support']).toFixed(3)}</td>
 					</tr>
 					<tr>
 						<th style={{ textAlign: 'left' }}>Mean mean duration</th>
-						<td>{!this.arrayEquals(tirp, []) && Number(tirp['mean mean duration']).toFixed(3)}</td>
+						<td>{Object.keys(tirp).length > 0 && Number(tirp['mean mean duration']).toFixed(3)}</td>
 					</tr>
 					<tr>
 						<th style={{ textAlign: 'left' }}>Entities</th>
