@@ -183,8 +183,9 @@ class NTIRPsTable extends Component {
 							this.setState({
 								currentLevel: index, 
 								currentTirp: newTirp,
+								tirp: newTirp[index], 
 								numOfSymbolInSelctedPath: index === 0 ? this.state.numOfSymbolsInLevel0 : 
-																	   this.getNextLevelByElements(newTirp[index].elements).length,  //need to fix
+																	   this.getNextLevelByElements(newTirp[index].elements).length, 
 							})
 						}}
 						key={index}
@@ -202,8 +203,9 @@ class NTIRPsTable extends Component {
 								this.setState({
 									currentLevel: index, 
 									currentTirp: newTirp,
+									tirp: newTirp[index], 
 									numOfSymbolInSelctedPath: index === 0 ? this.state.numOfSymbolsInLevel0  : 
-																		   this.getNextLevelByElements(newTirp[index].elements).length,  //need to fix
+																		   this.getNextLevelByElements(newTirp[index].elements).length,
 								})
 							}}
 							key={index}
@@ -538,9 +540,12 @@ class NTIRPsTable extends Component {
 														onClick={() => {
 															
 															let numOfEntites = this.getNextLevelByElements(tirp.elements).length
-	
+															let newCurrentTirp = this.state.currentTirp
+															newCurrentTirp[this.state.currentLevel + 1] = tirp
+
 															this.setState({ 
 																tirp: tirp, 
+													            currentTirp: newCurrentTirp, 
 																numOfSymbolInSelctedPath: numOfEntites
 															})
 															
