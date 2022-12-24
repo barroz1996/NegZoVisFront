@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Chart from 'react-google-charts';
-import { ButtonGroup, Card, ToggleButton } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import service from './service.js';
 
 class NTIRPTimeLine extends Component {
@@ -83,7 +83,7 @@ class NTIRPTimeLine extends Component {
       }
 
 
-    computeNDataset = (elements,timezone) => {
+    computeNDataset = (elements, negatives, timezone) => {
         const columns = [
             { type: "string", id: "Elements" },
             { type: "number", id: "Start" },
@@ -92,12 +92,25 @@ class NTIRPTimeLine extends Component {
 
         const dataset = []
         let startTime = 0
-		console.log(elements)
         for(let i = 0; i< elements.length; i++) {
             const endTime = startTime + (timezone[i] * 1000)
-            const row = [String(elements[i]), startTime, endTime]
-            startTime = endTime
-            dataset.push(row)
+			if (elements[i].length > 1) {
+				for(let j = 0; j< elements[i].length; j++) {
+					const row = [String(elements[i][j]), startTime, endTime]
+					dataset.push(row)
+				}
+				startTime = endTime
+			} else {
+				if (negatives[i]) {
+					const row = [String.fromCharCode(172) + String(elements[i]), startTime, endTime]
+					startTime = endTime
+					dataset.push(row)
+				} else {
+					const row = [String(elements[i]), startTime, endTime]
+					startTime = endTime
+					dataset.push(row)
+				}
+			}
         }
         const data = [columns, ...dataset];
         return data
@@ -105,9 +118,9 @@ class NTIRPTimeLine extends Component {
 		};
 	render() {
 		const elements = this.props.tirp.elements;
-		// const negatives = this.props.tirp.negatives;
+		const negatives = this.props.tirp.negatives;
 		const timezone = this.props.tirp.avg_duration;
-		const dataset = this.computeNDataset(elements, timezone);
+		const dataset = this.computeNDataset(elements, negatives, timezone);
 		const intervals = dataset.slice(1);
         const options = {
             hAxis: {
