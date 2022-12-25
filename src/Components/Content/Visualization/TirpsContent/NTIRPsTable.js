@@ -508,14 +508,15 @@ class NTIRPsTable extends Component {
 										<thead>
 											<tr>
 												<th>Next</th>
-												{renderColumn('P/N', 'P/N', false)}
+												<th>P/N</th>
+												{/*renderColumn('P/N', 'P/N', false)*/}
 												{renderColumn('relation', 'Relation', false)}
 												{renderColumn('symbol', 'Symbol', false)}
 												{renderColumn('VS0', 'VS0')}
 												{renderColumn('MHS0', 'MHS0')}
 												{renderColumn('MMD0', 'MMD0')}
-												{renderColumn('Time Zone', 'Time Zone', false)}
-												{/* {renderColumn('relation', 'Relation', false)}
+												{/*renderColumn('Time Zone', 'Time Zone', false)}
+												{{renderColumn('relation', 'Relation', false)}
 												{renderColumn('symbol', 'Symbol', false)}
 												{this.props.discriminative &&
 													renderColumn('score', 'Score')}
@@ -565,7 +566,7 @@ class NTIRPsTable extends Component {
 														<td>{tirp['support']}</td>
 														<td>{Number.parseFloat(tirp['mean horizontal support']).toFixed(2)}</td>
 														<td>{Number.parseFloat(tirp['mean mean duration']).toFixed(2)}</td>
-														<td> need to get from Liel</td>
+														{/*<td> need to get from Liel</td>*/}
 													</tr>
 												)
 												// const selected =
