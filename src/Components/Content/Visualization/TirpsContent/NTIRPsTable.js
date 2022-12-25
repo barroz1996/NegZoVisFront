@@ -8,7 +8,6 @@ import Col from 'react-bootstrap/Col';
 
 import DTirpBarPlot from './DTirpBarPlot';
 import TIRPsPie from './TIRPsPie';
-import TIRPTimeLine from './TIRPTimeLine';
 import TirpMatrix from './TirpMatrix';
 import SymbolPop from './SymbolPop';
 // import SelectedTIRPTable from './SelectedTIRPTable';
@@ -170,7 +169,9 @@ class NTIRPsTable extends Component {
 	};
 
 	Navbar() {
-		return [["Root"], ...this.state.path].map((tirp, index) => (
+		return (
+		<div style={{ display: 'flex' }} >
+			{[["Root"], ...this.state.path].map((tirp, index) => (
 			<div className='w-25'>
 				{tirp.length <= 1 ? (
 					<button
@@ -216,7 +217,8 @@ class NTIRPsTable extends Component {
 					)
 				}
 			</div>
-		));
+		))}
+		</div>)
 	}
 
 	isRoot() {
@@ -560,8 +562,7 @@ class NTIRPsTable extends Component {
 														<td>{this.NegativeNext(tirp)}</td>
 														<td>{tirp.negatives[this.state.path.length] ? "Negative" : "Positive"}</td>
 														<td>{this.state.currentLevel === 0 ? "-" :
-														         tirp.elements.length - 1 === 1 ? "after" : "same time"}</td>
-														{/* need to get the final index in tirp.elements in the index of tirp.elements.length - 1 */}
+														         tirp.elements[tirp.elements.length - 1].length === 1 ? "before" : "equals"}</td>
 														<td>{String(tirp.elements[tirp.elements.length - 1][tirp.elements[tirp.elements.length - 1].length - 1])}</td>
 														<td>{tirp['support']}</td>
 														<td>{Number.parseFloat(tirp['mean horizontal support']).toFixed(2)}</td>
