@@ -563,8 +563,8 @@ class NTIRPsTable extends Component {
 														{/* need to get the final index in tirp.elements in the index of tirp.elements.length - 1 */}
 														<td>{String(tirp.elements[tirp.elements.length - 1][tirp.elements[tirp.elements.length - 1].length - 1])}</td>
 														<td>{tirp['support']}</td>
-														<td>{Number.parseFloat(tirp['mean horizontal support']).toFixed(12)}</td>
-														<td>{Number.parseFloat(tirp['mean mean duration']).toFixed(12)}</td>
+														<td>{Number.parseFloat(tirp['mean horizontal support']).toFixed(2)}</td>
+														<td>{Number.parseFloat(tirp['mean mean duration']).toFixed(2)}</td>
 														<td> need to get from Liel</td>
 													</tr>
 												)
