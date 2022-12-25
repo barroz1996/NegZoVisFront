@@ -668,7 +668,8 @@ class NTIRPsTable extends Component {
 								<Button
 									className={'tirp-table-buttons'}
 									variant='primary'
-									disabled={!this.isSomeTirpSelected()}
+									/*disabled={!this.isSomeTirpSelected()}*/
+									disabled={this.isRoot()}
 									onClick={() => this.setState({ modalShowSymbolPop: true })}
 								>
 									Explore Symbols
@@ -682,7 +683,8 @@ class NTIRPsTable extends Component {
 								<Button
 									className={'tirp-table-buttons'}
 									variant='primary'
-									disabled={!this.isSomeTirpSelected()}
+									/*disabled={!this.isSomeTirpSelected()}*/
+									disabled={this.isRoot()}
 									onClick={() => this.setState({ modalShowRawPop: true })}
 								>
 									See Raw Data
