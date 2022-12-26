@@ -21,39 +21,60 @@ class NTirpMatrix extends Component {
         let currTirp = this.props.tirp;
 		let symbols = this.props.currentLevel > 0 ? currTirp.elements : [[]];
         const elements = [].concat(...symbols);
+
+		const mapping = symbols.reduce((acc, innerArray, arrayIndex) => {
+			return acc.concat(innerArray.map((value, valueIndex) => ({
+			  value,
+			  arrayIndex,
+			  valueIndex: acc.length + valueIndex + 1,
+			})));
+		  }, []);
+
+		console.log(mapping)
+		
+
 		// let relations = currTirp._TIRP__rel;
-		let matrix = new Array(elements.length);
-		let iterations = 1;
-		// let relIndex = 0;
-		// let num = 1;
+		const matrix = [];
+		let mElements = elements.slice(1, elements.length + 1);
+		mElements = [""].concat(mElements)
 
-		for (let i = 0; i < matrix.length; i++) {
-			matrix[i] = [];
-			// num = num + 1 ;
+		// Add the first row with the elements in their order
+		matrix.push(mElements);
+
+		// Nested loop to compare every two values
+		for (let i = 0; i < elements.length - 1; i++) {
+		  matrix[i + 1] = [elements[i]];
 		}
-
-		for(let i = 0; i < matrix.length; i++){
-			for(let j=0; j < matrix.length; j++){
-				matrix[i][j] = ""
+		for (let i = 1; i < elements.length; i++) {
+		  for (let j = 1; j < elements.length; j++) {
+			let row_element;
+			mapping.forEach(element => {
+				if (element.valueIndex === j) {
+					row_element = element.arrayIndex
+				}
+			});
+			let col_element;
+			mapping.forEach(element => {
+				if (element.valueIndex - 1 === i) {
+					col_element = element.arrayIndex
+				}
+			});
+			if(row_element === col_element) {
+				matrix[j][i] = "equals"
 			}
+			if(row_element < col_element) { 
+				matrix[j][i] = "before"
+			}
+			if(row_element > col_element) { 
+				matrix[j][i] = ""
+			}
+			if(j > i) {
+				matrix[j][i] = ""
+			}
+		  }
 		}
 
-		matrix[0] = elements.slice(1, elements.length + 1);
-		matrix[0].unshift('');
-		let cols = elements.slice(0, elements.length - 1);
-		for (let i = 1; i < cols.length + 1; i++) {
-			matrix[i][0] = cols[i - 1];
-		}
-		//matrix[0][1].unshift("");
-		for (let i = 1; i < elements.length;  i++) {
-            let relIndex = 0;
-			for (let j = 1; j < iterations + 1 ; j++) {
-                matrix[j][i] = symbols[relIndex].length === 1 ? "before" : "equals"
-                relIndex = (relIndex + j) % (symbols.length)
-			}
-			iterations = iterations + 1;
-		}
-		this.state.matrix = matrix;
+		this.state.matrix = matrix
 	};
 
 	draw = () => {
