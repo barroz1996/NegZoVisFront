@@ -31,6 +31,13 @@ class NTirpMatrix extends Component {
 			matrix[i] = [];
 			// num = num + 1 ;
 		}
+
+		for(let i = 0; i < matrix.length; i++){
+			for(let j=0; j < matrix.length; j++){
+				matrix[i][j] = ""
+			}
+		}
+
 		matrix[0] = elements.slice(1, elements.length + 1);
 		matrix[0].unshift('');
 		let cols = elements.slice(0, elements.length - 1);
