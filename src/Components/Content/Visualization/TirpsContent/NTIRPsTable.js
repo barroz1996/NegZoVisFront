@@ -19,6 +19,7 @@ import axios from 'axios';
 import SelectedNTirpsTable from './SelectedNTIRPsTable';
 
 import { getSubTree as getSubTreeRequest } from '../../../../networking/requests/visualization';
+import NTirpMatrix from './NTIRPMatrix';
 
 const headerSortingStyle = { backgroundColor: '#c8e6c9' };
 
@@ -51,6 +52,7 @@ class NTIRPsTable extends Component {
 		tirp : {},
 		numOfSymbolInSelctedPath: 0, 
 		numOfSymbolsInLevel0: 0, 
+		NmodalShow: false,
 	};
 
 	async open_route() {
@@ -653,17 +655,18 @@ class NTIRPsTable extends Component {
 									</>
 								)}
 								<Button
-									disabled={this.isRoot()}
+									disabled={Object.keys(this.state.tirp).length === 0}
 									style={{ width: '100%' }}
 									variant='primary'
-									onClick={() => this.setState({ modalShow: true })}
+									onClick={() => this.setState({ NmodalShow: true })}
 								>
 									Get Relations
 								</Button>
-								<TirpMatrix
-									show={this.state.modalShow}
-									row={this.state.selectedTirp}
-									onHide={() => this.setState({ modalShow: false })}
+								<NTirpMatrix
+									show={this.state.NmodalShow}
+									tirp={this.state.tirp}
+									currentLevel={this.state.currentLevel}
+									onHide={() => this.setState({ NmodalShow: false })}
 								/>
 
 								<Button
