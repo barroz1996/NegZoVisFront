@@ -19,30 +19,30 @@ class NTirpMatrix extends Component {
 
 	DrawMatrix = () => {
         let currTirp = this.props.tirp;
-		let symbols = this.props.currentLevel > 0 ? currTirp.elements : [];
+		let symbols = this.props.currentLevel > 0 ? currTirp.elements : [[]];
+        const elements = [].concat(...symbols);
 		// let relations = currTirp._TIRP__rel;
-		let matrix = new Array(symbols.length);
+		let matrix = new Array(elements.length);
 		let iterations = 1;
-		let relIndex = 0;
+		// let relIndex = 0;
 		// let num = 1;
 
 		for (let i = 0; i < matrix.length; i++) {
 			matrix[i] = [];
 			// num = num + 1 ;
 		}
-		matrix[0] = symbols.slice(1, symbols.length + 1);
+		matrix[0] = elements.slice(1, elements.length + 1);
 		matrix[0].unshift('');
-		let cols = symbols.slice(0, symbols.length - 1);
+		let cols = elements.slice(0, elements.length - 1);
 		for (let i = 1; i < cols.length + 1; i++) {
 			matrix[i][0] = cols[i - 1];
 		}
 		//matrix[0][1].unshift("");
-		for (let i = 1; i < symbols.length; i++) {
-			for (let j = 1; j < iterations + 1; j++) {
-				// matrix[j][i] = relations[relIndex].substring(0, 1);
-                matrix[j][i] = this.props.currentLevel === 0 ?  "-" :
-                                    symbols[symbols.length - 1].length === 1 ? "before" : "equals"
-				relIndex = relIndex + 1;
+		for (let i = 1; i < elements.length;  i++) {
+            let relIndex = 0;
+			for (let j = 1; j < iterations + 1 ; j++) {
+                matrix[j][i] = symbols[relIndex].length === 1 ? "before" : "equals"
+                relIndex = (relIndex + j) % (symbols.length)
 			}
 			iterations = iterations + 1;
 		}
