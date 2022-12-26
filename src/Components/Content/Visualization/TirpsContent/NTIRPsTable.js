@@ -53,13 +53,21 @@ class NTIRPsTable extends Component {
 		numOfSymbolInSelctedPath: 0, 
 		numOfSymbolsInLevel0: 0, 
 		NmodalShow: false,
+		vnames: []
 	};
 
 	async open_route() {
 		let url = 'http://127.0.0.1:443/get_negative_data'
 		const promise = await axios.get(url)
 		this.setState({
-			outputAlgoritm:  promise.data
+			outputAlgoritm: promise.data
+		})
+		let surl = 'http://127.0.0.1:443/get_negative_variables'
+		const spromise = await axios.get(surl)
+		console.log("data")
+		console.log(spromise.data)
+		this.setState({
+			vnames: spromise.data
 		})
 		let symbolLevel0 = this.getRoorEntitiesSize()
 		this.setState({

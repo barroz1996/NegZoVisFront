@@ -137,8 +137,6 @@ class NTIRPTimeLine extends Component {
 		// const intervals = dataset.slice(1);
 		// const ticks = intervals.flatMap((interval) => interval.slice(2, 4));
 		// const hasHours = ticks.find((tick) => tick.getHours() > 0);
-		console.log("intervals: "+ intervals)
-		console.log("TICKS: " + options.hAxis.ticks)
 		return (
 			<div>
 				<Card>

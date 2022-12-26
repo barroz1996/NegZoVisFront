@@ -29,10 +29,7 @@ class NTirpMatrix extends Component {
 			  valueIndex: acc.length + valueIndex + 1,
 			})));
 		  }, []);
-
-		console.log(mapping)
-		
-
+	
 		// let relations = currTirp._TIRP__rel;
 		const matrix = [];
 		let mElements = elements.slice(1, elements.length + 1);
