@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Card } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
+import axios from 'axios';
 
 class NTirpMatrix extends Component {
 	state = {
@@ -17,6 +18,18 @@ class NTirpMatrix extends Component {
 		if (this.props.show && this.props.currentLevel > 0) {
 			this.DrawMatrix();
 		}
+	}
+
+	async renderData() {
+		let surl = 'http://127.0.0.1:443/get_negative_variables'
+		const spromise = await axios.get(surl)
+		this.setState({
+			vnames: spromise.data
+		})
+	}
+
+	componentDidMount() {
+		this.renderData()
 	}
 
 	DrawMatrix = () => {
