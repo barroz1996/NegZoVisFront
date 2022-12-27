@@ -7,11 +7,13 @@ class NTirpMatrix extends Component {
 		matrix: [],
 		tirp: {},
         currentLevel: 0,
+		vnames: [], 
 	};
 	constructor(props) {
 		super(props);
 		this.state.tirp = this.props.tirp;
-        this.currentLevel = this.props.currentLevel
+        this.state.currentLevel = this.props.currentLevel
+		this.state.vnames = this.props.vnames
 		if (this.props.show && this.props.currentLevel > 0) {
 			this.DrawMatrix();
 		}
@@ -70,7 +72,16 @@ class NTirpMatrix extends Component {
 			}
 		  }
 		}
-
+		for (let i = 1; i < elements.length; i++) {
+			console.log("check1")
+			console.log(matrix[i][0])
+			matrix[i][0] = String(this.state.vnames[matrix[i][0]])
+		}
+		for (let j = 1; j < elements.length; j++) {
+			console.log("check2")
+			console.log(matrix[0][j])
+			matrix[0][j] = String(this.state.vnames[matrix[0][j]])
+		}
 		this.state.matrix = matrix
 	};
 

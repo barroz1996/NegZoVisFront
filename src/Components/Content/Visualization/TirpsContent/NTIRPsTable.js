@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col';
 
 import DTirpBarPlot from './DTirpBarPlot';
 import TIRPsPie from './TIRPsPie';
-import TirpMatrix from './TirpMatrix';
+// import TirpMatrix from './TirpMatrix';
 import SymbolPop from './SymbolPop';
 // import SelectedTIRPTable from './SelectedTIRPTable';
 // import WeightsForm from './WeightsForm';
@@ -53,7 +53,7 @@ class NTIRPsTable extends Component {
 		numOfSymbolInSelctedPath: 0, 
 		numOfSymbolsInLevel0: 0, 
 		NmodalShow: false,
-		vnames: []
+		vnames: [], 
 	};
 
 	async open_route() {
@@ -64,8 +64,8 @@ class NTIRPsTable extends Component {
 		})
 		let surl = 'http://127.0.0.1:443/get_negative_variables'
 		const spromise = await axios.get(surl)
-		console.log("data")
-		console.log(spromise.data)
+		// console.log("data")
+		// console.log(spromise.data)
 		this.setState({
 			vnames: spromise.data
 		})
@@ -78,7 +78,7 @@ class NTIRPsTable extends Component {
 
 	getRoorEntitiesSize(){
 		const firstSymbol = this.state.outputAlgoritm.filter((row) => {
-			if(row.elements.length == 1 && row.elements[0].length == 1){
+			if(row.elements.length === 1 && row.elements[0].length === 1){
 				return true
 			}
 			return false
@@ -201,7 +201,7 @@ class NTIRPsTable extends Component {
 						}}
 						key={index}
 					>
-						{tirp}
+						{typeof(tirp[0]) === "string" ? "ROOT" : this.state.vnames[tirp]}
 					</button>) :
 					(tirp.map((sub, jndex) => (
 							<button
@@ -221,7 +221,7 @@ class NTIRPsTable extends Component {
 							}}
 							key={index}
 						>
-							{sub}
+							{this.state.vnames[sub]}
 						</button> 
 						))
 					)
@@ -523,7 +523,7 @@ class NTIRPsTable extends Component {
 												<th>P/N</th>
 												{/*renderColumn('P/N', 'P/N', false)*/}
 												{renderColumn('relation', 'Relation', false)}
-												{renderColumn('symbol', 'Symbol', false)}
+												{renderColumn('symbol', 'Symbol')}
 												{renderColumn('VS0', 'VS0')}
 												{renderColumn('MHS0', 'MHS0')}
 												{renderColumn('MMD0', 'MMD0')}
@@ -573,7 +573,8 @@ class NTIRPsTable extends Component {
 														<td>{tirp.negatives[this.state.path.length] ? "Negative" : "Positive"}</td>
 														<td>{this.state.currentLevel === 0 ? "-" :
 														         tirp.elements[tirp.elements.length - 1].length === 1 ? "before" : "equals"}</td>
-														<td>{String(tirp.elements[tirp.elements.length - 1][tirp.elements[tirp.elements.length - 1].length - 1])}</td>
+														<td>{Object.keys(this.state.vnames).length > 0 && 
+														     this.state.vnames[tirp.elements[tirp.elements.length - 1][tirp.elements[tirp.elements.length - 1].length - 1]]}</td>
 														<td>{tirp['support']}</td>
 														<td>{Number.parseFloat(tirp['mean horizontal support']).toFixed(2)}</td>
 														<td>{Number.parseFloat(tirp['mean mean duration']).toFixed(2)}</td>
@@ -673,6 +674,7 @@ class NTIRPsTable extends Component {
 								<NTirpMatrix
 									show={this.state.NmodalShow}
 									tirp={this.state.tirp}
+									vnames={this.state.vnames}
 									currentLevel={this.state.currentLevel}
 									onHide={() => this.setState({ NmodalShow: false })}
 								/>
@@ -734,6 +736,7 @@ class NTIRPsTable extends Component {
 						{Object.keys(this.state.tirp).length > 0 && (
 							<NTIRPTimeLine
 								tirp={this.state.tirp}
+								vnames={this.state.vnames}
 							/>
 						)}
 					</Col>

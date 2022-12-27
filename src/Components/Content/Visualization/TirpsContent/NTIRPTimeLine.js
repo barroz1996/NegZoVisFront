@@ -83,7 +83,7 @@ class NTIRPTimeLine extends Component {
       }
 
 
-    computeNDataset = (elements, negatives, timezone, gap) => {
+    computeNDataset = (vnames, elements, negatives, timezone, gap) => {
         const columns = [
             { type: "string", id: "Elements" },
             { type: "number", id: "Start" },
@@ -96,15 +96,15 @@ class NTIRPTimeLine extends Component {
             const endTime = startTime + (timezone[i] * 1000)
 			if (elements[i].length > 1) {
 				for(let j = 0; j< elements[i].length; j++) {
-					const row = [String(elements[i][j]), startTime, endTime]
+					const row = [vnames[elements[i][j]], startTime, endTime]
 					dataset.push(row)
 				}
 			} else {
 				if (negatives[i]) {
-					const row = [String.fromCharCode(172) + String(elements[i]), startTime, endTime]
+					const row = [String.fromCharCode(172) + vnames[elements[i]], startTime, endTime]
 					dataset.push(row)
 				} else {
-					const row = [String(elements[i]), startTime, endTime]
+					const row = [vnames[elements[i]], startTime, endTime]
 					dataset.push(row)
 				}
 			}
@@ -115,11 +115,12 @@ class NTIRPTimeLine extends Component {
 
 		};
 	render() {
+		const vnames = this.props.vnames;
 		const elements = this.props.tirp.elements;
 		const negatives = this.props.tirp.negatives;
 		const timezone = this.props.tirp.durations;
 		const gap = this.props.tirp.gaps;
-		const dataset = this.computeNDataset(elements, negatives, timezone, gap);
+		const dataset = this.computeNDataset(vnames, elements, negatives, timezone, gap);
 		const intervals = dataset.slice(1);
         const options = {
             hAxis: {
