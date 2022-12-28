@@ -45,7 +45,6 @@ class NTirpMatrix extends Component {
 			})));
 		  }, []);
 	
-		// let relations = currTirp._TIRP__rel;
 		const matrix = [];
 		let mElements = elements.slice(1, elements.length + 1);
 		mElements = [""].concat(mElements)
@@ -53,9 +52,8 @@ class NTirpMatrix extends Component {
 		// Add the first row with the elements in their order
 		matrix.push(mElements);
 
-		// Nested loop to compare every two values
 		for (let i = 0; i < elements.length - 1; i++) {
-		  matrix[i + 1] = [elements[i]];
+		  matrix[i + 1] = [String(this.state.vnames[elements[i]])];
 		}
 		for (let i = 1; i < elements.length; i++) {
 		  for (let j = 1; j < elements.length; j++) {
@@ -85,16 +83,10 @@ class NTirpMatrix extends Component {
 			}
 		  }
 		}
-		for (let i = 1; i < elements.length; i++) {
-			console.log("check1")
-			console.log(matrix[i][0])
-			matrix[i][0] = String(this.state.vnames[matrix[i][0]])
-		}
 		for (let j = 1; j < elements.length; j++) {
-			console.log("check2")
-			console.log(matrix[0][j])
 			matrix[0][j] = String(this.state.vnames[matrix[0][j]])
 		}
+		// eslint-disable-next-line
 		this.state.matrix = matrix
 	};
 
