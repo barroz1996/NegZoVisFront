@@ -5,7 +5,6 @@ import { Card, Button, Table } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
 import DTirpBarPlot from './DTirpBarPlot';
 import TIRPsPie from './TIRPsPie';
 // import TirpMatrix from './TirpMatrix';
@@ -54,6 +53,7 @@ class NTIRPsTable extends Component {
 		numOfSymbolsInLevel0: 0, 
 		NmodalShow: false,
 		vnames: [], 
+		id: 0,
 	};
 
 	async open_route() {
@@ -180,13 +180,13 @@ class NTIRPsTable extends Component {
 
 	Navbar() {
 		return (
-		<div style={{ display: 'flex' }} >
+		<div style={{ display: 'flex' }}>
 			{[["Root"], ...this.state.path].map((tirp, index) => (
 			<div className='w-25'>
 				{tirp.length <= 1 ? (
 					<button
 						className='btn btn-workflow btn-arrow-right navbar-margin'
-						id={'Info'}
+						key={tirp.id}
 						onClick={() => {
 							this.toNLevel([["Root"], ...this.state.path].slice(0, index + 1))
 
@@ -199,30 +199,28 @@ class NTIRPsTable extends Component {
 																	   this.getNextLevelByElements(newTirp[index].elements).length, 
 							})
 						}}
-						key={(Math.random() * 1000)}
 					>
 						{typeof(tirp[0]) === "string" ? "ROOT" : this.state.vnames[tirp]}
 					</button>) :
 					(tirp.map((sub, jndex) => (
 							<button
-							className='btn btn-workflow btn-arrow-right navbar-margin'
-							id={'Info'}
-							onClick={() => {
-								this.toNLevelSub([["Root"], ...this.state.path].slice(0, index + 1), jndex)
+								className='btn btn-workflow btn-arrow-right navbar-margin'
+								key={sub.id}
+								onClick={() => {
+									this.toNLevelSub([["Root"], ...this.state.path].slice(0, index + 1), jndex)
 
-								let newTirp = Object.fromEntries(Object.entries(this.state.currentTirp).slice(0, index+1))
-								this.setState({
-									currentLevel: index, 
-									currentTirp: newTirp,
-									tirp: newTirp[index], 
-									numOfSymbolInSelctedPath: index === 0 ? this.state.numOfSymbolsInLevel0  : 
-																		   this.getNextLevelByElements(newTirp[index].elements).length,
-								})
-							}}
-							key={(Math.random() * 1000)}
-						>
-							{this.state.vnames[sub]}
-						</button> 
+									let newTirp = Object.fromEntries(Object.entries(this.state.currentTirp).slice(0, index+1))
+									this.setState({
+										currentLevel: index, 
+										currentTirp: newTirp,
+										tirp: newTirp[index], 
+										numOfSymbolInSelctedPath: index === 0 ? this.state.numOfSymbolsInLevel0  : 
+																			this.getNextLevelByElements(newTirp[index].elements).length,
+									})
+								}}
+							>
+								{this.state.vnames[sub]}
+							</button> 
 						))
 					)
 				}
