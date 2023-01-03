@@ -10,11 +10,17 @@ class NTIRPTimeLine extends Component {
 		classMode: 0,
 	};
 
+	createCustomHTMLContent(first, second, third, fourth) {
+		return ('<div style="padding:5px 5px 5px 5px;">' +
+		first + '<br>' +second + third + fourth +
+		'</div>')
+	}
+
     computeNDataset = (vnames, elements, negatives, timezone, gap) => {
         const columns = [
             { type: "string", id: "Elements" },
 			{ type: "string", id: "dummy bar label" },
-       		{ type: "string", role: "tooltip" },
+       		{ type: "string", role: "tooltip" ,'p': {'html': true}},
             { type: "number", id: "Start" },
             { type: "number", id: "End" },
         ];
@@ -26,8 +32,8 @@ class NTIRPTimeLine extends Component {
 			if (elements[i].length > 1) {
 				for(let j = 0; j < elements[i].length; j++) {
 					const row = [vnames[elements[i][j]], '',
-					vnames[elements[i][j]] + 
-					" Duration: " + String(((endTime - startTime)/ 1000).toFixed(2)) + " Time Units", 
+					this.createCustomHTMLContent(vnames[elements[i][j]], "Duration: ", 
+					String(((endTime - startTime)/ 1000).toFixed(2))," Time Units"),
 					startTime, 
 					endTime]
 					dataset.push(row)
@@ -35,15 +41,15 @@ class NTIRPTimeLine extends Component {
 			} else {
 				if (negatives[i]) {
 					const row = [String.fromCharCode(172) + vnames[elements[i]], '',
-					String.fromCharCode(172) + vnames[elements[i]] +  
-					" Duration: " + String(((endTime - startTime)/ 1000).toFixed(2)) + " Time Units", 
+					this.createCustomHTMLContent(String.fromCharCode(172) + vnames[elements[i]], "Duration: ",
+					String(((endTime - startTime)/ 1000).toFixed(2)), " Time Units"),
 					startTime, 
 					endTime]
 					dataset.push(row)
 				} else {
 					const row = [vnames[elements[i]], '',
-					vnames[elements[i]] + 
-					" Duration: " + String(((endTime - startTime)/ 1000).toFixed(2)) + " Time Units", 
+					this.createCustomHTMLContent(vnames[elements[i]], " Duration: ",
+					String(((endTime - startTime)/ 1000).toFixed(2)), " Time Units"), 
 					startTime, 
 					endTime]
 					dataset.push(row)
@@ -68,6 +74,7 @@ class NTIRPTimeLine extends Component {
             //   ticks: intervals.map(([label, start, end]) => [start, end]),
             // },
 			timeline: { colorByRowLabel: true },
+			tooltip: {isHtml: true},
           };
 		return (
 			<div>
