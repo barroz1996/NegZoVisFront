@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Chart from 'react-google-charts';
 import { Card } from 'react-bootstrap';
-import service from './service.js';
 
 class NTIRPTimeLine extends Component {
 	defaultColors = ['#ff6347', '#ee82ee', '#ffa500', '#6a5acd', '#7f2b47', '#7fffe6', '#ffff10'];
@@ -10,9 +9,12 @@ class NTIRPTimeLine extends Component {
 		classMode: 0,
 	};
 
-	createCustomHTMLContent(first, second, third, fourth) {
+	createCustomHTMLContent(title, duration, time, fourth) {
 		return ('<div style="padding:5px 5px 5px 5px;">' +
-		first + '<br>' +second + third + fourth +
+		// eslint-disable-next-line
+		'<b>' + title + '</b>' + '<br>' + duration + time + 
+		// eslint-disable-next-line
+		(time == 1 ? " Time Unit" : fourth) +
 		'</div>')
 	}
 
@@ -70,9 +72,9 @@ class NTIRPTimeLine extends Component {
 		const dataset = this.computeNDataset(vnames, elements, negatives, timezone, gap);
 		const intervals = dataset.slice(1);
         const options = {
-            // hAxis: {
-            //   ticks: intervals.map(([label, start, end]) => [start, end]),
-            // },
+            hAxis: {
+              ticks: intervals.map(([label, start, end]) => [start, end]),
+            },
 			timeline: { colorByRowLabel: true },
 			tooltip: {isHtml: true},
           };
