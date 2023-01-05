@@ -12,6 +12,7 @@ import TIRPTimeLine from '../TirpsContent/TIRPTimeLine';
 import TIRPsPie from '../TirpsContent/TIRPsPie';
 import DTirpBarPlot from '../TirpsContent/DTirpBarPlot';
 import SymbolPop from '../TirpsContent/SymbolPop';
+import axios from 'axios';
 
 import {
 	getSubTree,
@@ -34,6 +35,8 @@ class NTIRPsSearch extends Component {
 		});
 		const statesDict = Object.fromEntries(statesEntries);
 		const stateIDs = Object.keys(statesDict);
+
+		this.open_route()
 
 		this.state = {
 			parameters: {
@@ -73,9 +76,30 @@ class NTIRPsSearch extends Component {
 
 			allTirps: {},
 			chosenTIRP: undefined,
-			modalShowRawPop: false
+			modalShowRawPop: false,
+
+
+			/////// OUR //////////
+			outputAlgoritm : [],
+			vnames : []
 		};
 		this.getAllTirps();
+	}
+
+	async open_route() {
+		console.log("HEYYYY")
+		let url = 'http://127.0.0.1:443/get_negative_data'
+		const promise = await axios.get(url)
+		this.setState({
+			outputAlgoritm: promise.data
+		})
+		let surl = 'http://127.0.0.1:443/get_negative_variables'
+		const spromise = await axios.get(surl)
+		console.log("data")
+		console.log(spromise.data)
+		this.setState({
+			vnames: spromise.data
+		})
 	}
 
 	async getAllTirps() {
@@ -109,6 +133,10 @@ class NTIRPsSearch extends Component {
 			const subTree = this.flatTree(children, getChildren);
 			return acc.concat([curr, ...subTree]);
 		}, []);
+	}
+
+	componentDidMount() {
+		this.open_route()
 	}
 
 	changeParameter = (event) => {
