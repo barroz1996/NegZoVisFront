@@ -98,7 +98,7 @@ class NTIRPsSearch extends Component {
 				maxSizeCls0: 10,
 				minHSCls0: 1,
 				maxHSCls0: 100,
-				minVSCls0: Math.round(parseFloat(localStorage.min_ver_support) * 100),
+				minVSCls0: 1,
 				maxVSCls0: 100,
 			},
 
@@ -229,31 +229,35 @@ class NTIRPsSearch extends Component {
 		let searchResults = this.state.outputAlgoritm
 
 		if(this.state.startNList.length > 0){
-			searchResults = searchResults.filter((row) => {
-				return row.negatives[0] ? 
-							this.state.startNList.includes(String.fromCharCode(172) + this.state.vnames[row.elements[0][0]])
-						:
-							this.state.startNList.includes(this.state.vnames[row.elements[0][0]])
-			}) 
+			searchResults = searchResults.filter((row) =>
+				row.negatives[0] ? 
+						this.state.startNList.includes(String.fromCharCode(172) + this.state.vnames[row.elements[0][0]])
+					:
+						this.state.startNList.includes(this.state.vnames[row.elements[0][0]])
+			) 
 		}
 
 		if(this.state.endNList.length > 0 ){
-			searchResults = searchResults.filter((row) => {
-				return row.negatives[row.elements.length - 1] ? 
-							this.state.endNList.includes(String.fromCharCode(172) + this.state.vnames[row.elements[row.elements.length - 1][row.elements[row.elements.length - 1].length - 1]])
-						:
-							this.state.endNList.includes(this.state.vnames[row.elements[row.elements.length - 1][row.elements[row.elements.length - 1].length - 1]])
+			searchResults = searchResults.filter((row) =>
+				row.negatives[row.elements.length - 1] ? 
+						this.state.endNList.includes(String.fromCharCode(172) + this.state.vnames[row.elements[row.elements.length - 1][row.elements[row.elements.length - 1].length - 1]])
+					:
+						this.state.endNList.includes(this.state.vnames[row.elements[row.elements.length - 1][row.elements[row.elements.length - 1].length - 1]])
 				
-			}) 
+			) 
 		}
 
 		if(this.state.containNList.length > 0 ){
 			searchResults = searchResults.filter((row) => {
 				let found = false
-				row.elements[0] = row.elements[0].slice(1)
-				row.elements[row.elements.length - 1] = row.elements[0].slice(0, row.elements.length - 1)
+				let copyrow = []
+				for (var i = 0; i < row.elements.length; i++)
+    					copyrow[i] = row.elements[i].slice();
 
-				row.elements.forEach( (row_i, index_i) => {
+				copyrow[0] = copyrow[0].slice(1)
+				copyrow[copyrow.length - 1] = copyrow[0].slice(0, copyrow.length - 1)
+
+				copyrow.forEach( (row_i, index_i) => {
 					row_i.forEach(element_j => {
 						if (!found){
 							found = row.negatives[index_i] ? 
@@ -266,6 +270,21 @@ class NTIRPsSearch extends Component {
 				return found
 			}) 
 		}
+
+		// console.log(this.state.Nparameters.minSizeCls0)
+		// console.log(this.state.Nparameters.maxSizeCls0)
+		// console.log(this.state.Nparameters.minHSCls0)
+		// console.log(this.state.Nparameters.maxHSCls0)
+		// console.log(this.state.Nparameters.minVSCls0)
+		// console.log(this.state.Nparameters.maxVSCls0)
+
+		searchResults = searchResults.filter((row) =>
+							this.state.Nparameters.minSizeCls0 <= row.elements.flat().length && row.elements.flat().length <= this.state.Nparameters.maxSizeCls0 && 
+							this.state.Nparameters.minHSCls0 <= row['mean horizontal support']  && row['mean horizontal support'] <= this.state.Nparameters.maxHSCls0 
+							// this.state.Nparameters.minVSCls0 <= (row['support'] / this.state.outputAlgoritm) * 100  &&
+							//                                     (row['support'] / this.state.outputAlgoritm) * 100 <= this.state.Nparameters.maxVSCls0
+		)
+
 
 		console.log(searchResults)
 
@@ -349,8 +368,8 @@ class NTIRPsSearch extends Component {
 							changeMeasureToRate={(NmeasureToRate) =>
 								this.setState({ NmeasureToRate })
 							}
-							parameters={this.state.parameters}
-							changeParameter={this.changeParameter}
+							parameters={this.state.Nparameters}
+							changeParameter={this.changeNParameter}
 							isPredictive={this.props.isPredictive}
 						/>
 					</Col>
