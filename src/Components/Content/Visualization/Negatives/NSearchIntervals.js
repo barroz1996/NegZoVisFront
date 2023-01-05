@@ -16,47 +16,19 @@ class NSearchIntervals extends Component {
 		};
 	}
 
-    async open_route() {
+
+    async componentDidMount() {
+		let allVnames = []  
 		let surl = 'http://127.0.0.1:443/get_negative_variables'
 		const spromise = await axios.get(surl)
-		this.setState({
-			vnames: spromise.data
-		})
-
-        let allVnames = []     
-        for (const [key, value] of Object.entries(this.state.vnames)) {
+		for (const [key, value] of Object.entries(spromise.data)) {
             allVnames.push(value)
             allVnames.push(String.fromCharCode(172) + value)
           }
-
-        this.setState({
+		this.setState({
 			vnames: allVnames
 		})
-
-        console.log("vnames: ")
-        console.log(this.state.vnames)
 	}
-
-
-    componentDidMount() {
-		this.open_route()
-	}
-
-    getAllVnames(){
-        // let allVnames = []     
-        // for (const [key, value] of Object.entries(this.state.vnames)) {
-        //     allVnames.push(value)
-        //     allVnames.push(String.fromCharCode(172) + value)
-        //   }
-
-        // this.setState({
-		// 	vnames: allVnames
-		// })
-
-        // console.log("vnames: ")
-        // console.log(this.state.vnames)
-    }
-
 
 	handleOnSelect = (selected, id) => {
 		const newSelected = selected
@@ -75,7 +47,7 @@ class NSearchIntervals extends Component {
 	};
 
 	render() {
-        this.getAllVnames()
+		console.log(this.state.vnames)
 		return (
 			<div className='intervals'>
 				<div className='vertical-scroll-intervals'>
