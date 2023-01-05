@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, ToggleButtonGroup, ToggleButton, Col, Row, Button } from 'react-bootstrap';
 
-import SearchGraph from '../TirpsContent/SearchGraph';
+import NSearchGraph from './NSearchGraph';
 import SearchIntervals from '../TirpsContent/SearchIntervals';
 import SearchLimits from '../TirpsContent/SearchLimits';
 import SearchTable from '../TirpsContent/SearchTable';
@@ -271,13 +271,6 @@ class NTIRPsSearch extends Component {
 			}) 
 		}
 
-		// console.log(this.state.Nparameters.minSizeCls0)
-		// console.log(this.state.Nparameters.maxSizeCls0)
-		// console.log(this.state.Nparameters.minHSCls0)
-		// console.log(this.state.Nparameters.maxHSCls0)
-		// console.log(this.state.Nparameters.minVSCls0)
-		// console.log(this.state.Nparameters.maxVSCls0)
-
 		searchResults = searchResults.filter((row) =>
 							this.state.Nparameters.minSizeCls0 <= row.elements.flat().length && row.elements.flat().length <= this.state.Nparameters.maxSizeCls0 && 
 							this.state.Nparameters.minHSCls0 <= row['mean horizontal support']  && row['mean horizontal support'] <= this.state.Nparameters.maxHSCls0 
@@ -375,40 +368,43 @@ class NTIRPsSearch extends Component {
 					</Col>
 				</Row>
 				<Row className='results-container'>
-					{/* <Col sm={8}>
+					<Col sm={8}>
 						{this.showTableOrGraph()}
-						{this.state.showGraph ? (
-							<SearchGraph
-								isPredictive={this.props.isPredictive}
-								minVS0={this.state.parameters.minVSCls0}
-								maxVS0={this.state.parameters.maxVSCls0}
-								minHS0={this.state.parameters.minHSCls0}
-								maxHS0={this.state.parameters.maxHSCls0}
-								minSize0={this.state.parameters.minSizeCls0}
-								maxSize0={this.state.parameters.maxSizeCls0}
-								minVS1={this.state.parameters.minVSCls1}
-								maxVS1={this.state.parameters.maxVSCls1}
-								minHS1={this.state.parameters.minHSCls1}
-								maxHS1={this.state.parameters.maxHSCls1}
-								handleOnSelect={this.handleOnSelect.bind(this)}
-								measureToRate={this.state.measureToRate}
-								selectedSymbols={
-									this.state.selected[this.props.isPredictive ? 7 : 4]
-								}
-								selectedRelations={
-									this.state.selected[this.props.isPredictive ? 8 : 5]
-								}
+						{/* {this.state.showGraph ? ( */}
+							<NSearchGraph
+								// isPredictive={this.props.isPredictive}
+								// minVS0={this.state.parameters.minVSCls0}
+								// maxVS0={this.state.parameters.maxVSCls0}
+								// minHS0={this.state.parameters.minHSCls0}
+								// maxHS0={this.state.parameters.maxHSCls0}
+								// minSize0={this.state.parameters.minSizeCls0}
+								// maxSize0={this.state.parameters.maxSizeCls0}
+								// minVS1={this.state.parameters.minVSCls1}
+								// maxVS1={this.state.parameters.maxVSCls1}
+								// minHS1={this.state.parameters.minHSCls1}
+								// maxHS1={this.state.parameters.maxHSCls1}
+								// handleOnSelect={this.handleOnSelect.bind(this)}
+								// measureToRate={this.state.measureToRate}
+								// selectedSymbols={
+								// 	this.state.selected[this.props.isPredictive ? 7 : 4]
+								// }
+								// selectedRelations={
+								// 	this.state.selected[this.props.isPredictive ? 8 : 5]
+								// }
 								tirps={this.state.searchResults}
-								dictionary_states={this.state.dictionary_states}
+								// dictionary_states={this.state.dictionary_states}
 							/>
-						) : (
+						{/* ) 
+						:
+						(
 							<SearchTable
 								handleOnSelect={this.handleOnSelect.bind(this)}
 								isPredictive={this.props.isPredictive}
 								tirps={this.state.searchResults}
 							/>
-						)}
-					</Col> */}
+						)
+						} */}
+					</Col>
 					<Col sm={4}>
 						<Row>
 							<Col sm={1}></Col>
