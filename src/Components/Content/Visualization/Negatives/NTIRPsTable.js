@@ -5,14 +5,14 @@ import { Card, Button, Table } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import DTirpBarPlot from './DTirpBarPlot';
-import TIRPsPie from './TIRPsPie';
+import DTirpBarPlot from '../TirpsContent/DTirpBarPlot';
+import TIRPsPie from '../TirpsContent/TIRPsPie';
 // import TirpMatrix from './TirpMatrix';
-import SymbolPop from './SymbolPop';
+import SymbolPop from '../TirpsContent/SymbolPop';
 // import SelectedTIRPTable from './SelectedTIRPTable';
 // import WeightsForm from './WeightsForm';
 import NTIRPTimeLine from './NTIRPTimeLine';
-import WeightsPop from './WeightsPop';
+import WeightsPop from '../TirpsContent/WeightsPop';
 import axios from 'axios';
 
 import SelectedNTirpsTable from './SelectedNTIRPsTable';

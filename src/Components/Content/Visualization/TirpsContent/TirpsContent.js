@@ -13,7 +13,7 @@ import RawData from './RawData';
 import App from '../../TirpsBiExploration/App';
 import SymbolsCorrelation from '../../../Content/TirpsBiExploration/CorrelationMatrixView/symbolsCorrelation';
 import RawDataTable from './RawDataTable';
-import NegativeTirps from "./NegativeTirps"
+import NegativeTirps from '../Negatives/NegativeTirps'
 /**
  * in this class you can see the content of the main navbar.
  * it has home, tutorial, Manage, register, log in, upload.

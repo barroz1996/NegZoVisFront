@@ -12,7 +12,9 @@ class NTIRPTimeLine extends Component {
 	createCustomHTMLContent(title, duration, time, fourth) {
 		return ('<div style="padding:5px 5px 5px 5px;">' +
 		// eslint-disable-next-line
-		'<b>' + title + '</b>' + '<br>' + duration + time + 
+		'<b>' + title + '</b>' + '<br>' + duration +
+		// eslint-disable-next-line
+		(time == 1 ? 1 : time) + 
 		// eslint-disable-next-line
 		(time == 1 ? " Time Unit" : fourth) +
 		'</div>')
