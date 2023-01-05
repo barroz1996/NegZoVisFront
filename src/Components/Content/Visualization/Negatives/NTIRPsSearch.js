@@ -13,6 +13,7 @@ import TIRPsPie from '../TirpsContent/TIRPsPie';
 import DTirpBarPlot from '../TirpsContent/DTirpBarPlot';
 import SymbolPop from '../TirpsContent/SymbolPop';
 import axios from 'axios';
+import NSearchIntervals from './NSearchIntervals';
 
 import {
 	getSubTree,
@@ -87,7 +88,6 @@ class NTIRPsSearch extends Component {
 	}
 
 	async open_route() {
-		console.log("HEYYYY")
 		let url = 'http://127.0.0.1:443/get_negative_data'
 		const promise = await axios.get(url)
 		this.setState({
@@ -95,8 +95,6 @@ class NTIRPsSearch extends Component {
 		})
 		let surl = 'http://127.0.0.1:443/get_negative_variables'
 		const spromise = await axios.get(surl)
-		console.log("data")
-		console.log(spromise.data)
 		this.setState({
 			vnames: spromise.data
 		})
@@ -135,8 +133,8 @@ class NTIRPsSearch extends Component {
 		}, []);
 	}
 
-	componentDidMount() {
-		this.open_route()
+	async componentDidMount() {
+		await this.open_route()
 	}
 
 	changeParameter = (event) => {
@@ -244,7 +242,7 @@ class NTIRPsSearch extends Component {
 					<Col sm={8}>
 						<Row style={{ position: 'absolute', height: '100%' }}>
 							<Col sm={4} style={{ height: '100%' }}>
-								<SearchIntervals
+								<NSearchIntervals
 									title='First'
 									output = {this.state.outputAlgoritm}
 									vnames = {this.state.vnames}
@@ -253,7 +251,7 @@ class NTIRPsSearch extends Component {
 								/>
 							</Col>
 							<Col sm={4} style={{ height: '100%' }}>
-								<SearchIntervals
+								<NSearchIntervals
 									title='Intermediate'
 									output = {this.state.outputAlgoritm}
 									vnames = {this.state.vnames}
@@ -262,7 +260,7 @@ class NTIRPsSearch extends Component {
 								/>
 							</Col>
 							<Col sm={4} style={{ height: '100%' }}>
-								<SearchIntervals
+								<NSearchIntervals
 									title='Last'
 									output = {this.state.outputAlgoritm}
 									vnames = {this.state.vnames}
