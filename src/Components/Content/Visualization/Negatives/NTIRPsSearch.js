@@ -237,10 +237,6 @@ class NTIRPsSearch extends Component {
 			}) 
 		}
 
-		console.log(this.state.endNList)
-		console.log(searchResults)
-
-
 		if(this.state.endNList.length > 0 ){
 			searchResults = searchResults.filter((row) => {
 				return row.negatives[row.elements.length - 1] ? 
@@ -251,9 +247,27 @@ class NTIRPsSearch extends Component {
 			}) 
 		}
 
+		if(this.state.containNList.length > 0 ){
+			searchResults = searchResults.filter((row) => {
+				let found = false
+				row.elements[0] = row.elements[0].slice(1)
+				row.elements[row.elements.length - 1] = row.elements[0].slice(0, row.elements.length - 1)
+
+				row.elements.forEach( (row_i, index_i) => {
+					row_i.forEach(element_j => {
+						if (!found){
+							found = row.negatives[index_i] ? 
+									this.state.containNList.includes(String.fromCharCode(172) + this.state.vnames[element_j])
+								:
+									this.state.containNList.includes(this.state.vnames[element_j])
+						}
+					})
+				})
+				return found
+			}) 
+		}
+
 		console.log(searchResults)
-
-
 
 		this.setState({ searchResults });
 		const scrollToElement = document.querySelector('.results-container');
