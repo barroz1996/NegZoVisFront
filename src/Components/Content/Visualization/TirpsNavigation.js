@@ -100,6 +100,21 @@ class TirpsNavigation extends Component {
 					</li>
 					<li className='vis-nav-links'>
 						<SimpleOverlayTrigger
+							tip={'This tab is for datasets with only one class'}
+							placement={'bottom'}
+							show={this.props.two_class}
+						>
+							<NavLink
+								activeClassName='active'
+								to={'/TirpsApp/NTIRPsSearch'}
+								{...(!this.props.two_class || disabledProps)}
+							>
+								<i className='fas fa-search'></i> NTIRPs Search
+							</NavLink>
+						</SimpleOverlayTrigger>
+					</li>
+					<li className='vis-nav-links'>
+						<SimpleOverlayTrigger
 							tip={'This tab is for datasets with two classes'}
 							placement={'bottom'}
 							show={!this.props.two_class}
