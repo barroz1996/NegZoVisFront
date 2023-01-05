@@ -14,6 +14,7 @@ import DTirpBarPlot from '../TirpsContent/DTirpBarPlot';
 import SymbolPop from '../TirpsContent/SymbolPop';
 import axios from 'axios';
 import NSearchIntervals from './NSearchIntervals';
+import SearchNLimits from './SearchNLimits';
 
 import {
 	getSubTree,
@@ -60,6 +61,7 @@ class NTIRPsSearch extends Component {
 			startList: stateIDs,
 			containList: stateIDs,
 			endList: stateIDs,
+			
 			dictionary_states: statesDict,
 			totalNumSymbols: stateIDs.length,
 
@@ -82,7 +84,24 @@ class NTIRPsSearch extends Component {
 
 			/////// OUR //////////
 			outputAlgoritm : [],
-			vnames : []
+			vnames : [],
+			startNList: [],
+			containNList: [],
+			endNList: [],
+			NmeasureToRate: {
+				vs0: 2,
+				mhs0: 2,
+				size: 2,
+			},
+			Nparameters: {
+				minSizeCls0: 1,
+				maxSizeCls0: 10,
+				minHSCls0: 1,
+				maxHSCls0: 100,
+				minVSCls0: Math.round(parseFloat(localStorage.min_ver_support) * 100),
+				maxVSCls0: 100,
+			},
+
 		};
 		this.getAllTirps();
 	}
@@ -146,6 +165,15 @@ class NTIRPsSearch extends Component {
 		this.setState({ parameters: newParameters });
 	};
 
+	changeNParameter = (event) => {
+		const parameterName = event.target.name;
+		const parameterRawValue = parseInt(event.target.value);
+		// const parameterValue = Math.max(parameterRawValue, event.target.min);
+		const parameterValue = Math.max(parameterRawValue, 1);
+		const newParameters = { ...this.state.Nparameters, [parameterName]: parameterValue };
+		this.setState({ Nparameters: newParameters });
+	};
+
 	async searchTirps() {
 		const visualizationId = sessionStorage.getItem('visualizationId');
 		const data = this.props.isPredictive
@@ -197,6 +225,42 @@ class NTIRPsSearch extends Component {
 		scrollToElement.scrollIntoView({ behavior: 'smooth' });
 	}
 
+	async searchNTirps() {
+		let searchResults = this.state.outputAlgoritm
+
+		if(this.state.startNList.length > 0){
+			searchResults = searchResults.filter((row) => {
+				return row.negatives[0] ? 
+							this.state.startNList.includes(String.fromCharCode(172) + this.state.vnames[row.elements[0][0]])
+						:
+							this.state.startNList.includes(this.state.vnames[row.elements[0][0]])
+			}) 
+		}
+
+		console.log(this.state.endNList)
+		console.log(searchResults)
+
+
+		if(this.state.endNList.length > 0 ){
+			searchResults = searchResults.filter((row) => {
+				return row.negatives[row.elements.length - 1] ? 
+							this.state.endNList.includes(String.fromCharCode(172) + this.state.vnames[row.elements[row.elements.length - 1][row.elements[row.elements.length - 1].length - 1]])
+						:
+							this.state.endNList.includes(this.state.vnames[row.elements[row.elements.length - 1][row.elements[row.elements.length - 1].length - 1]])
+				
+			}) 
+		}
+
+		console.log(searchResults)
+
+
+
+		this.setState({ searchResults });
+		const scrollToElement = document.querySelector('.results-container');
+		scrollToElement.scrollIntoView({ behavior: 'smooth' });
+	}
+
+
 	showTableOrGraph = () => {
 		const radios = ['Graph', 'Table'];
 		return (
@@ -244,38 +308,32 @@ class NTIRPsSearch extends Component {
 							<Col sm={4} style={{ height: '100%' }}>
 								<NSearchIntervals
 									title='First'
-									output = {this.state.outputAlgoritm}
 									vnames = {this.state.vnames}
-									intervals={this.state.dictionary_states}
-									changeList={(startList) => this.setState({ startList })}
+									changeList={(startNList) => this.setState({ startNList })}
 								/>
 							</Col>
 							<Col sm={4} style={{ height: '100%' }}>
 								<NSearchIntervals
 									title='Intermediate'
-									output = {this.state.outputAlgoritm}
 									vnames = {this.state.vnames}
-									intervals={this.state.dictionary_states}
-									changeList={(containList) => this.setState({ containList })}
+									changeList={(containNList) => this.setState({ containNList })}
 								/>
 							</Col>
 							<Col sm={4} style={{ height: '100%' }}>
 								<NSearchIntervals
 									title='Last'
-									output = {this.state.outputAlgoritm}
 									vnames = {this.state.vnames}
-									intervals={this.state.dictionary_states}
-									changeList={(endList) => this.setState({ endList })}
+									changeList={(endNList) => this.setState({ endNList })}
 								/>
 							</Col>
 						</Row>
 					</Col>
 					<Col sm={4}>
-						<SearchLimits
-							searchTirps={this.searchTirps.bind(this)}
-							measureToRate={this.state.measureToRate}
-							changeMeasureToRate={(measureToRate) =>
-								this.setState({ measureToRate })
+						<SearchNLimits
+							searchTirps={this.searchNTirps.bind(this)}
+							NmeasureToRate={this.state.NmeasureToRate}
+							changeMeasureToRate={(NmeasureToRate) =>
+								this.setState({ NmeasureToRate })
 							}
 							parameters={this.state.parameters}
 							changeParameter={this.changeParameter}
@@ -284,7 +342,7 @@ class NTIRPsSearch extends Component {
 					</Col>
 				</Row>
 				<Row className='results-container'>
-					<Col sm={8}>
+					{/* <Col sm={8}>
 						{this.showTableOrGraph()}
 						{this.state.showGraph ? (
 							<SearchGraph
@@ -317,7 +375,7 @@ class NTIRPsSearch extends Component {
 								tirps={this.state.searchResults}
 							/>
 						)}
-					</Col>
+					</Col> */}
 					<Col sm={4}>
 						<Row>
 							<Col sm={1}></Col>

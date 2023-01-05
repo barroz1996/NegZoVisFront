@@ -6,12 +6,12 @@ class NSearchIntervals extends Component {
 	constructor(props) {
 		super(props);
 
-		const intervals = this.props.intervals;
-		const stateIDs = Object.keys(intervals);
-		this.data = stateIDs.map((stateID) => ({ id: stateID, name: intervals[stateID] }));
+		// const intervals = this.props.intervals;
+		// const stateIDs = Object.keys(intervals);
+		// this.data = stateIDs.map((stateID) => ({ id: stateID, name: intervals[stateID] }));
 		this.state = {
 			filter: '',
-			selected: stateIDs,
+			selected: [],
             vnames: [],
 		};
 	}
@@ -26,28 +26,28 @@ class NSearchIntervals extends Component {
             allVnames.push(String.fromCharCode(172) + value)
           }
 		this.setState({
-			vnames: allVnames
+			vnames: allVnames, 
+			selected : allVnames
 		})
 	}
 
-	handleOnSelect = (selected, id) => {
+	handleOnSelect = (selected, name) => {
 		const newSelected = selected
-			? this.state.selected.filter((x) => x !== id)
-			: [...this.state.selected, id];
+			? this.state.selected.filter((x) => x !== name)
+			: [...this.state.selected, name];
 
 		this.setState({ selected: newSelected });
 		this.props.changeList(newSelected);
 	};
 
 	handleOnSelectAll = () => {
-		const allSelected = this.state.selected.length === this.data.length;
-		let newSelected = allSelected ? [] : this.data.map((r) => r.id);
+		const allSelected = this.state.selected.length === this.state.vnames.length;
+		let newSelected = allSelected ? [] : this.state.vnames;
 		this.setState({ selected: newSelected });
 		this.props.changeList(newSelected);
 	};
 
 	render() {
-		console.log(this.state.vnames)
 		return (
 			<div className='intervals'>
 				<div className='vertical-scroll-intervals'>
@@ -66,7 +66,7 @@ class NSearchIntervals extends Component {
 								>
 									<input
 										type='checkbox'
-										// checked={this.state.selected.length === this.data.length}
+										checked={this.state.selected.length === this.state.vnames.length}
 										onChange={() => this.handleOnSelectAll()}
 									/>
 								</th>
@@ -80,35 +80,31 @@ class NSearchIntervals extends Component {
 										className={'filter-input FontAwesome'}
 										style={{ color: '#d7dfdf' }}
 										placeholder='&#xF002; Filter'
-										// value={this.state.filter}
-                                        value={this.state.vnames}
-										// onChange={(e) => this.setState({ filter: e.target.value })}
+										value={this.state.filter}
+										onChange={(e) => this.setState({ filter: e.target.value })}
 									/>
 								</th>
 							</tr>
 						</thead>
 						<tbody>
 							{this.state.vnames
-								// .filter((symbol) => (symbol).toLowerCase().includes((this.state.filter).toLowerCase()))
-                                .filter((symbol) => (symbol).toLowerCase())
+								.filter((symbol) => (symbol).toLowerCase().includes((this.state.filter).toLowerCase()))
 								.map((symbol, index) => {
 									const selected = false;
-									// const checked =
-									// 	this.state.selected.find((id) => id === symbol.id) !==
-									// 	undefined;
+									const checked = this.state.selected.find((s) => symbol === s) !== undefined
 									return (
 										<tr
 											key={index}
-											// onClick={() => this.handleOnSelect(checked, symbol)}
+											onClick={() => this.handleOnSelect(checked, symbol)}
 											style={selected ? { backgroundColor: '#AED6F1' } : {}}
 										>
 											<td>
 												<input
 													type='checkbox'
-													// checked={checked}
-													// onChange={() =>
-													// 	this.handleOnSelect(checked, symbol)
-													// }
+													checked={checked}
+													onChange={() =>
+														this.handleOnSelect(checked, symbol)
+													}
 												/>
 											</td>
 											<td>{symbol}</td>
