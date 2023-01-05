@@ -246,6 +246,8 @@ class NTIRPsSearch extends Component {
 							<Col sm={4} style={{ height: '100%' }}>
 								<SearchIntervals
 									title='First'
+									output = {this.state.outputAlgoritm}
+									vnames = {this.state.vnames}
 									intervals={this.state.dictionary_states}
 									changeList={(startList) => this.setState({ startList })}
 								/>
@@ -253,6 +255,8 @@ class NTIRPsSearch extends Component {
 							<Col sm={4} style={{ height: '100%' }}>
 								<SearchIntervals
 									title='Intermediate'
+									output = {this.state.outputAlgoritm}
+									vnames = {this.state.vnames}
 									intervals={this.state.dictionary_states}
 									changeList={(containList) => this.setState({ containList })}
 								/>
@@ -260,6 +264,8 @@ class NTIRPsSearch extends Component {
 							<Col sm={4} style={{ height: '100%' }}>
 								<SearchIntervals
 									title='Last'
+									output = {this.state.outputAlgoritm}
+									vnames = {this.state.vnames}
 									intervals={this.state.dictionary_states}
 									changeList={(endList) => this.setState({ endList })}
 								/>
