@@ -7,6 +7,7 @@ import SearchAxisPop from '../TirpsContent/SearchAxisPop';
 import { Chart as ChartJS, LinearScale, PointElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bubble } from 'react-chartjs-2';
 import zoomPlugin from 'chartjs-plugin-zoom';
+import axios from 'axios';
 
 ChartJS.register(LinearScale, PointElement, zoomPlugin, Tooltip, Legend, Title);
 
@@ -48,17 +49,26 @@ class NTirp {
 }
 
 class NSearchGraph extends Component {
+	// measureToTitles = {
+	// 	vs0: `Vertical Support - ${localStorage.class_name}`,
+	// 	mhs0: `Mean Horizontal - ${localStorage.class_name}`,
+	// 	mmd0: `Mean Mean Duration - ${localStorage.class_name}`,
+	// 	vs1: `Vertical Support - ${localStorage.second_class_name}`,
+	// 	mhs1: `Mean Horizontal Support - ${localStorage.second_class_name}`,
+	// 	mmd1: `Mean Mean Duration - ${localStorage.second_class_name}`,
+	// 	dmhs: 'Delta Mean Horizontal Support',
+	// 	dmmd: 'Delta Mean Mean Duration',
+	// 	rating: 'Query Rating',
+	// };
+
 	measureToTitles = {
-		vs0: `Vertical Support - ${localStorage.class_name}`,
-		mhs0: `Mean Horizontal - ${localStorage.class_name}`,
-		mmd0: `Mean Mean Duration - ${localStorage.class_name}`,
-		vs1: `Vertical Support - ${localStorage.second_class_name}`,
-		mhs1: `Mean Horizontal Support - ${localStorage.second_class_name}`,
-		mmd1: `Mean Mean Duration - ${localStorage.second_class_name}`,
-		dmhs: 'Delta Mean Horizontal Support',
-		dmmd: 'Delta Mean Mean Duration',
-		rating: 'Query Rating',
+		vs: `Vertical Support`,
+		mhs: `Mean Horizontal`,
+		mmd: `Mean Mean Duration`,
+		size: `Num Of Events In Pattern`
 	};
+
+
 
 	state = {
 		axisToMeasure: {
@@ -67,10 +77,24 @@ class NSearchGraph extends Component {
 			[COLOR_AXIS]: 'mmd',
 			[SIZE_AXIS]: 'size',
 		},
+		vnames: [],
 	};
 
 	axisToTitle(axis) {
 		return this.measureToTitles[this.state.axisToMeasure[axis]];
+	}
+
+	async componentDidMount() {
+		let allVnames = []  
+		let surl = 'http://127.0.0.1:443/get_negative_variables'
+		const spromise = await axios.get(surl)
+		for (const [key, value] of Object.entries(spromise.data)) {
+            allVnames.push(value)
+            allVnames.push(String.fromCharCode(172) + value)
+          }
+		this.setState({
+			vnames: allVnames, 
+		})
 	}
 
 	calculatePerProperty(maxMetric, minMetric, property) {
@@ -215,8 +239,6 @@ class NSearchGraph extends Component {
 			};
 		});
 
-        console.log(data)
-
 		function pickHex(color1, color2, weight) {
 			var w1 = weight;
 			var w2 = 1 - w1;
@@ -240,9 +262,10 @@ class NSearchGraph extends Component {
 			};
 		};
 
-		const dynamicAxes = this.props.isPredictive
-			? ['vs0', 'mhs0', 'mmd0', 'vs1', 'mhs1', 'mmd1', 'dmhs', 'dmmd']
-			: ['vs0', 'mhs0', 'mmd0'];
+		const dynamicAxes = ['vs', 'mhs', 'mmd', 'size']
+		// this.props.isPredictive
+		// 	? ['vs0', 'mhs0', 'mmd0', 'vs1', 'mhs1', 'mmd1', 'dmhs', 'dmmd']
+		// 	: ['vs0', 'mhs0', 'mmd0'];
 
 		return (
 			<div>
@@ -260,83 +283,64 @@ class NSearchGraph extends Component {
 							// 		}
 							// 	},
 
-							// 	responsive: true,
-							// 	plugins: {
-							// 		legend: {
-							// 			display: false,
-							// 		},
-							// 		tooltip: {
-							// 			enabled: true,
-							// 			displayColors: false,
-							// 			callbacks: {
-							// 				title: (items) => {
-							// 					const tirp = items[0].raw;
-							// 					const symbols = tirp.symbolNames;
-							// 					const cleanedRelations = tirp.relations.slice(
-							// 						0,
-							// 						tirp.relations.length - 1
-							// 					);
-							// 					const secondPart =
-							// 						tirp.size > 1 ? ` : ${cleanedRelations}` : '';
-							// 					return `${symbols}${secondPart}`;
-							// 				},
-							// 				label: (item) => {
-							// 					const properties = this.props.isPredictive
-							// 						? {
-							// 								VS0: 'vs0',
-							// 								VS1: 'vs1',
-							// 								MHS0: 'mhs0',
-							// 								MHS1: 'mhs1',
-							// 								MMD0: 'mmd0',
-							// 								MMD1: 'mmd1',
-							// 								DMMD: 'dmmd',
-							// 								DMHS: 'dmhs',
-							// 								Rating: 'rating',
-							// 						  }
-							// 						: {
-							// 								VS: 'vs0',
-							// 								MHS: 'mhs0',
-							// 								MMD: 'mmd0',
-							// 								Rating: 'rating',
-							// 						  };
-							// 					return Object.entries(properties).map(
-							// 						([name, value]) => {
-							// 							return `${name}: ${item.raw[value].toFixed(
-							// 								2
-							// 							)}`;
-							// 						}
-							// 					);
-							// 				},
-							// 			},
-							// 		},
-							// 		zoom: {
-							// 			pan: {
-							// 				enabled: true,
-							// 				mode: 'xy',
-							// 			},
-							// 			zoom: {
-							// 				// drag: {
-							// 				// 	enabled: true,
-							// 				// },
-							// 				wheel: {
-							// 					enabled: true,
-							// 				},
-							// 				pinch: {
-							// 					enabled: true,
-							// 				},
-							// 				mode: 'xy',
-							// 			},
-							// 		},
-							// 	},
+								responsive: true,
+								plugins: {
+									legend: {
+										display: false,
+									},
+									tooltip: {
+										enabled: true,
+										displayColors: false,
+										callbacks: {
+											title: (items) => {
+												const tirp = items[0].raw;
+												const symbols = tirp.symbols;
+												const flatSymbols = symbols.flat()
+												const flatNames = flatSymbols.map(element => this.state.vnames[element])
+												return flatNames.join();
+											},
+											label: (item) => {
+												const properties = 
+														{
+															VS: 'vs',
+															MHS: 'mhs',
+															MMD: 'mmd',
+															Size: 'size',
+													  	};
+												return Object.entries(properties).map(
+													([name, value]) => {
+														return `${name}: ${item.raw[value].toFixed(
+															2
+														)}`;
+													}
+												);
+											},
+										},
+									},
+									zoom: {
+										pan: {
+											enabled: true,
+											mode: 'xy',
+										},
+										zoom: {
+											// drag: {
+											// 	enabled: true,
+											// },
+											wheel: {
+												enabled: true,
+											},
+											pinch: {
+												enabled: true,
+											},
+											mode: 'xy',
+										},
+									},
+								},
 
-							// 	scales: {
-							// 		y: axisOptions(Y_AXIS),
-							// 		x: axisOptions(X_AXIS),
-							// 	},
-							// 	// parsing: {
-							// 	// 	xAxisKey: this.state.axisToMeasure[X_AXIS],
-							// 	// 	yAxisKey: this.state.axisToMeasure[Y_AXIS],
-							// 	// },
+								scales: {
+									y: axisOptions(Y_AXIS),
+									x: axisOptions(X_AXIS),
+								},
 								elements: {
 									point: {
 										borderColor: (context) => {
@@ -416,7 +420,7 @@ class NSearchGraph extends Component {
 						[X_AXIS]: dynamicAxes,
 						[Y_AXIS]: dynamicAxes,
 						[COLOR_AXIS]: dynamicAxes,
-						[SIZE_AXIS]: ['rating'],
+						[SIZE_AXIS]: ['size'],
 					}}
 					measureToTitles={this.measureToTitles}
 					onChange={(newAxisToMeasure) => {
