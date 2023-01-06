@@ -7,8 +7,9 @@ import SearchLimits from '../TirpsContent/SearchLimits';
 import SearchTable from '../TirpsContent/SearchTable';
 import SearchMeanPresentation from '../TirpsContent/SearchMeanPresentation';
 import PsearchMeanPresentation from '../TirpsContent/PsearchMeanPresentation';
-
+import SelectedNTirpsTable from './SelectedNTIRPsTable';
 import TIRPTimeLine from '../TirpsContent/TIRPTimeLine';
+import NTIRPTimeLine from './NTIRPTimeLine'
 import TIRPsPie from '../TirpsContent/TIRPsPie';
 import DTirpBarPlot from '../TirpsContent/DTirpBarPlot';
 import SymbolPop from '../TirpsContent/SymbolPop';
@@ -26,17 +27,17 @@ class NTIRPsSearch extends Component {
 	constructor(props) {
 		super(props);
 
-		const tables = JSON.parse(localStorage.States);
-		const statesEntries = tables.States.map((state) => {
-			const part2 = state.BinLabel ?? state.BinLabel;
-			const part1 = state.TemporalPropertyName ?? state.TemporalPropertyID;
+		// const tables = JSON.parse(localStorage.States);
+		// const statesEntries = tables.States.map((state) => {
+		// 	const part2 = state.BinLabel ?? state.BinLabel;
+		// 	const part1 = state.TemporalPropertyName ?? state.TemporalPropertyID;
 
-			const name = part1 + '.' + part2;
+		// 	const name = part1 + '.' + part2;
 
-			return [state.StateID, name];
-		});
-		const statesDict = Object.fromEntries(statesEntries);
-		const stateIDs = Object.keys(statesDict);
+		// 	return [state.StateID, name];
+		// });
+		// const statesDict = Object.fromEntries(statesEntries);
+		// const stateIDs = Object.keys(statesDict);
 
 		this.open_route()
 
@@ -58,12 +59,12 @@ class NTIRPsSearch extends Component {
 			minMMD: 0,
 			maxMMD: 100,
 
-			startList: stateIDs,
-			containList: stateIDs,
-			endList: stateIDs,
+			// startList: stateIDs,
+			// containList: stateIDs,
+			// endList: stateIDs,
 			
-			dictionary_states: statesDict,
-			totalNumSymbols: stateIDs.length,
+			// dictionary_states: statesDict,
+			// totalNumSymbols: stateIDs.length,
 
 			showGraph: true,
 			canExplore: false,
@@ -101,7 +102,7 @@ class NTIRPsSearch extends Component {
 				minVSCls0: 1,
 				maxVSCls0: 100,
 			},
-
+			NSelected: []
 		};
 		this.getAllTirps();
 	}
@@ -279,8 +280,6 @@ class NTIRPsSearch extends Component {
 		)
 
 
-		console.log(searchResults)
-
 		this.setState({ searchResults });
 		const scrollToElement = document.querySelector('.results-container');
 		scrollToElement.scrollIntoView({ behavior: 'smooth' });
@@ -311,17 +310,22 @@ class NTIRPsSearch extends Component {
 	};
 
 	handleOnSelect(newSelected) {
-		const rawSymbols = newSelected[this.props.isPredictive ? 7 : 4];
-		const symbols = rawSymbols.slice(1, rawSymbols.length - 1);
-		const rawRelations = newSelected[this.props.isPredictive ? 8 : 5];
-		const relations = rawRelations.slice(0, rawRelations.length - 1);
-		const unique_name = symbols + '|' + relations;
-
 		this.setState({
-			selected: newSelected,
-			canExplore: true,
-			chosenTIRP: this.state.allTirps[unique_name],
+			NSelected: newSelected.row,
 		});
+
+
+		// const rawSymbols = newSelected[this.props.isPredictive ? 7 : 4];
+		// const symbols = rawSymbols.slice(1, rawSymbols.length - 1);
+		// const rawRelations = newSelected[this.props.isPredictive ? 8 : 5];
+		// const relations = rawRelations.slice(0, rawRelations.length - 1);
+		// const unique_name = symbols + '|' + relations;
+
+		// this.setState({
+		// 	selected: newSelected,
+		// 	canExplore: true,
+		// 	chosenTIRP: this.state.allTirps[unique_name],
+		// });
 	}
 
 	render() {
@@ -383,7 +387,7 @@ class NTIRPsSearch extends Component {
 								// maxVS1={this.state.parameters.maxVSCls1}
 								// minHS1={this.state.parameters.minHSCls1}
 								// maxHS1={this.state.parameters.maxHSCls1}
-								// handleOnSelect={this.handleOnSelect.bind(this)}
+								handleOnSelect={this.handleOnSelect.bind(this)}
 								// measureToRate={this.state.measureToRate}
 								// selectedSymbols={
 								// 	this.state.selected[this.props.isPredictive ? 7 : 4]
@@ -409,7 +413,15 @@ class NTIRPsSearch extends Component {
 						<Row>
 							<Col sm={1}></Col>
 							<Col sm={11}>
-								{this.props.isPredictive ? (
+								{Object.keys(this.state.NSelected).length > 0  && (
+									<SelectedNTirpsTable 
+										currentLevel={0}
+										currentTirp={this.state.NSelected}
+										numOfSymbolInSelctedPath={this.state.NSelected.elements.flat().length}
+								
+									></SelectedNTirpsTable> 
+								)}
+								{/* {this.props.isPredictive ? (
 									<PsearchMeanPresentation
 										canExplore={this.state.canExplore}
 										vs1={this.state.selected[1]}
@@ -433,25 +445,25 @@ class NTIRPsSearch extends Component {
 										relations={this.state.selected[5]}
 										row={this.state.selected}
 									/>
-								)}
+								)} */}
 							</Col>
 						</Row>
 					</Col>
 				</Row>
-				{this.state.chosenTIRP && (
+				{Object.keys(this.state.NSelected).length > 0 && (
 					<Row>
-						<Col sm={4}>
+						{/* <Col sm={4}>
 							<TIRPsPie row={this.state.chosenTIRP} type_of_comp={type_of_comp} />
 						</Col>
 						{this.props.isPredictive && (
 							<Col lg={3}>
 								<DTirpBarPlot row={this.state.chosenTIRP} />
 							</Col>
-						)}
-						<Col sm={this.props.isPredictive ? 5 : 8}>
-							<TIRPTimeLine
-								tirp={this.state.chosenTIRP}
-								type_of_comp={type_of_comp}
+						)} */}
+						<Col sm={5}>
+							<NTIRPTimeLine
+								tirp={this.state.NSelected}
+								vnames={this.state.vnames}
 							/>
 						</Col>
 					</Row>

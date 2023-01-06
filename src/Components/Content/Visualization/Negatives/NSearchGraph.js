@@ -36,12 +36,13 @@ class Tirp {
 }
 
 class NTirp {
-	constructor(symbols, size, vs, mhs, mmd) {
+	constructor(symbols, size, vs, mhs, mmd, row) {
 		this.symbols = symbols;
 		this.size = size;
 		this.vs = vs;
 		this.mhs = mhs;
 		this.mmd = mmd;
+		this.row = row
 
 		// this.dmhs = Math.abs(parseFloat(mhs0) - parseFloat(mhs1));
 		// this.dmmd = Math.abs(parseFloat(mmd0) - parseFloat(mmd1));
@@ -195,7 +196,8 @@ class NSearchGraph extends Component {
 				size,
 				vs,
 				mhs,
-				mmd
+				mmd,
+				result
 			);
 		});
 
@@ -203,29 +205,29 @@ class NSearchGraph extends Component {
 	}
 
 	onSelect(tirp) {
-		this.props.handleOnSelect(
-			this.props.isPredictive
-				? [
-						tirp.vs0,
-						tirp.vs1,
-						tirp.mhs0,
-						tirp.mhs1,
-						tirp.mmd0,
-						tirp.mmd1,
-						tirp.size,
-						tirp.symbols,
-						tirp.relations,
-				  ]
-				: [
-						tirp.vs0,
-						tirp.mhs0,
-						tirp.mmd0,
-						tirp.size,
-						tirp.symbols,
-						tirp.relations,
-						tirp.rating,
-				  ]
-		);
+		this.props.handleOnSelect(tirp)
+		// 	this.props.isPredictive
+		// 		? [
+		// 				tirp.vs0,
+		// 				tirp.vs1,
+		// 				tirp.mhs0,
+		// 				tirp.mhs1,
+		// 				tirp.mmd0,
+		// 				tirp.mmd1,
+		// 				tirp.size,
+		// 				tirp.symbols,
+		// 				tirp.relations,
+		// 		  ]
+		// 		: [
+		// 				tirp.vs0,
+		// 				tirp.mhs0,
+		// 				tirp.mmd0,
+		// 				tirp.size,
+		// 				tirp.symbols,
+		// 				tirp.relations,
+		// 				tirp.rating,
+		// 		  ]
+		// );
 	}
 
 	render() {
@@ -274,14 +276,14 @@ class NSearchGraph extends Component {
 						<Bubble
 							height={100}
 							options={{
-							// 	onClick: (e) => {
-							// 		const elements = e.chart.getActiveElements();
-							// 		if (elements.length > 0) {
-							// 			const index = elements[0].index;
-							// 			const tirp = tirps[index];
-							// 			this.onSelect(tirp);
-							// 		}
-							// 	},
+								onClick: (e) => {
+									const elements = e.chart.getActiveElements();
+									if (elements.length > 0) {
+										const index = elements[0].index;
+										const tirp = tirps[index];
+										this.onSelect(tirp);
+									}
+								},
 
 								responsive: true,
 								plugins: {
@@ -295,9 +297,11 @@ class NSearchGraph extends Component {
 											title: (items) => {
 												const tirp = items[0].raw;
 												const symbols = tirp.symbols;
-												const flatSymbols = symbols.flat()
-												const flatNames = flatSymbols.map(element => this.state.vnames[element])
-												return flatNames.join();
+												// const flatSymbols = symbols.flat()
+												// const flatNames = flatSymbols.map(element => this.state.vnames[element])
+												// return flatNames.join();
+												const firstSymbol = symbols.flat()[0]
+												return this.state.vnames[firstSymbol]
 											},
 											label: (item) => {
 												const properties = 
