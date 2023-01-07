@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, ToggleButtonGroup, ToggleButton, Col, Row, Button } from 'react-bootstrap';
 
 import NSearchGraph from './NSearchGraph';
+import NSearchMeanPresentation from './NSearchMeanPresentation'
 import SearchIntervals from '../TirpsContent/SearchIntervals';
 import SearchLimits from '../TirpsContent/SearchLimits';
 import SearchTable from '../TirpsContent/SearchTable';
@@ -312,6 +313,7 @@ class NTIRPsSearch extends Component {
 	handleOnSelect(newSelected) {
 		this.setState({
 			NSelected: newSelected.row,
+			canExplore: true
 		});
 
 
@@ -329,6 +331,7 @@ class NTIRPsSearch extends Component {
 	}
 
 	render() {
+		console.log(this.state.NSelected)
 		const type_of_comp = this.props.isPredictive ? 'disc' : 'tirp';
 		return (
 			<Container fluid>
@@ -414,12 +417,23 @@ class NTIRPsSearch extends Component {
 							<Col sm={1}></Col>
 							<Col sm={11}>
 								{Object.keys(this.state.NSelected).length > 0  && (
-									<SelectedNTirpsTable 
-										currentLevel={0}
-										currentTirp={this.state.NSelected}
-										numOfSymbolInSelctedPath={this.state.NSelected.elements.flat().length}
+									// <SelectedNTirpsTable 
+									// 	currentLevel={0}
+									// 	currentTirp={this.state.NSelected}
+									// 	numOfSymbolInSelctedPath={this.state.NSelected.elements.flat().length}
 								
-									></SelectedNTirpsTable> 
+									// ></SelectedNTirpsTable> 
+									<NSearchMeanPresentation
+										canExplore={this.state.canExplore}
+										tirp={this.state.NSelected}
+										// vs={this.state.NSelected['support']}
+										// mhs={this.state.NSelected['mean horizontal support']}
+										// mmd={this.state.NSelected['mean mean duration']}
+										// currentLevel={this.state.selected[3]}
+										// symbols={this.state.selected[4]}
+										// relations={this.state.selected[5]}
+										// row={this.state.NSelected.row}
+								/>
 								)}
 								{/* {this.props.isPredictive ? (
 									<PsearchMeanPresentation
@@ -453,14 +467,14 @@ class NTIRPsSearch extends Component {
 				{Object.keys(this.state.NSelected).length > 0 && (
 					<Row>
 						{/* <Col sm={4}>
-							<TIRPsPie row={this.state.chosenTIRP} type_of_comp={type_of_comp} />
-						</Col>
-						{this.props.isPredictive && (
+							<TIRPsPie row={null} type_of_comp={'disc'} />
+						</Col> */}
+						{/* {this.props.isPredictive && (
 							<Col lg={3}>
 								<DTirpBarPlot row={this.state.chosenTIRP} />
 							</Col>
 						)} */}
-						<Col sm={5}>
+						<Col sm={10}>
 							<NTIRPTimeLine
 								tirp={this.state.NSelected}
 								vnames={this.state.vnames}
