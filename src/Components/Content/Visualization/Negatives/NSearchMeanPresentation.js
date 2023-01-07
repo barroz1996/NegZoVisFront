@@ -16,29 +16,6 @@ class NSearchMeanPresentation extends Component {
 		window.pathOfTirps = this.props.tirp;
 		this.state.redirect = true;
 		this.forceUpdate();
-		// const formData = new FormData();
-		// // window.PassedFromSearch = true;
-		// localStorage.PassedFromSearch = true;
-		// formData.append('data_set_name', window.selectedDataSet);
-		// formData.append('symbols', this.props.symbols.replace('(', ''));
-		// formData.append('relations', this.props.relations);
-
-		// const visualizationId = sessionStorage.getItem('visualizationId');
-		// findPathOfTirps(
-		// 	this.props.symbols.replace('(', ''),
-		// 	this.props.relations,
-		// 	visualizationId
-		// ).then((data) => {
-		// 	let results = data['Path'];
-		// 	let path = [];
-		// 	for (let i = 0; i < results.length; i++) {
-		// 		let tirp = JSON.parse(results[i]);
-		// 		path.push(tirp);
-		// 	}
-		// 	window.pathOfTirps = path;
-		// 	this.state.redirect = true;
-		// 	this.forceUpdate();
-		// });
 	}
 
 	setModalShowSymbolPop(value) {

@@ -331,7 +331,6 @@ class NTIRPsSearch extends Component {
 	}
 
 	render() {
-		console.log(this.state.NSelected)
 		const type_of_comp = this.props.isPredictive ? 'disc' : 'tirp';
 		return (
 			<Container fluid>

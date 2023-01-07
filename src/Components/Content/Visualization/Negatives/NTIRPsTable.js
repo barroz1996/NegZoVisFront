@@ -64,8 +64,6 @@ class NTIRPsTable extends Component {
 		})
 		let surl = 'http://127.0.0.1:443/get_negative_variables'
 		const spromise = await axios.get(surl)
-		// console.log("data")
-		// console.log(spromise.data)
 		this.setState({
 			vnames: spromise.data
 		})
@@ -102,6 +100,17 @@ class NTIRPsTable extends Component {
 		} else {
 			this.setNewLevel(this.props.table, []);
 		}
+
+
+		if (window.pathOfTirps != undefined) {
+			this.setState({ 
+				path: window.pathOfTirps.elements, 
+				// currentLevel: window.pathOfTirps.elements.length,
+				// numOfSymbolInSelctedPath: window.pathOfTirps.elements.flat().length,
+			})
+			window.pathOfTirps = undefined
+		}
+	
 
 		this.open_route()
 	}
