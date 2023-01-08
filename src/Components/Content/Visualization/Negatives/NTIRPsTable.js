@@ -101,10 +101,11 @@ class NTIRPsTable extends Component {
 			this.setNewLevel(this.props.table, []);
 		}
 
-
-		if (window.pathOfTirps != undefined) {
+		if (Object.keys(window.pathOfTirps).length > 0) {
 			this.setState({ 
 				path: window.pathOfTirps.elements, 
+				tirp: window.pathOfTirps,
+				currentLevel: window.pathOfTirps.elements.flat().length
 				// currentLevel: window.pathOfTirps.elements.length,
 				// numOfSymbolInSelctedPath: window.pathOfTirps.elements.flat().length,
 			})
