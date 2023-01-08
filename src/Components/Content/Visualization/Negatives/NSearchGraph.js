@@ -171,22 +171,7 @@ class NSearchGraph extends Component {
 	calculateTirps() {
 		const tirps = this.props.tirps.map((result) => {
 			const symbols = result.elements;
-			// const symbolsNumbers = symbols.split(/[(-]+/);
-			// const cleanedSymbolsNumber = symbolsNumbers.slice(1, symbolsNumbers.length - 1);
-			// const symbolNames = cleanedSymbolsNumber.map(
-			// 	(symbolNumber) => this.props.dictionary_states[symbolNumber]
-			// );
-			// const symbolString = symbolNames.join(',');
-			// const relations = result[1];
             const size = result.elements.flat().length
-			// const size = parseInt(result[2]);
-			// const vs0 = (result[4] / parseInt(localStorage.num_of_entities)) * 100;
-			// const vs1 = (result[10] / parseInt(localStorage.num_of_entities_class_1)) * 100;
-			// const mhs0 = parseFloat(result[5]);
-			// const mhs1 = parseFloat(result[11]);
-			// const mmd0 = parseFloat(result[7]);
-			// const mmd1 = parseFloat(result[13]);
-			// const rating = this.calculateQueryRating(size, vs0, vs1, mhs0, mhs1);
             const vs = result['support']
             const mhs = result['mean horizontal support']
             const mmd = result['mean mean duration']

@@ -3,17 +3,12 @@ import { Container, ToggleButtonGroup, ToggleButton, Col, Row, Button } from 're
 
 import NSearchGraph from './NSearchGraph';
 import NSearchMeanPresentation from './NSearchMeanPresentation'
-import SearchIntervals from '../TirpsContent/SearchIntervals';
-import SearchLimits from '../TirpsContent/SearchLimits';
-import SearchTable from '../TirpsContent/SearchTable';
-import SearchMeanPresentation from '../TirpsContent/SearchMeanPresentation';
 import PsearchMeanPresentation from '../TirpsContent/PsearchMeanPresentation';
-import SelectedNTirpsTable from './SelectedNTIRPsTable';
-import TIRPTimeLine from '../TirpsContent/TIRPTimeLine';
 import NTIRPTimeLine from './NTIRPTimeLine'
 import TIRPsPie from '../TirpsContent/TIRPsPie';
 import DTirpBarPlot from '../TirpsContent/DTirpBarPlot';
 import SymbolPop from '../TirpsContent/SymbolPop';
+import NSearchTable from './NSearchTable';
 import axios from 'axios';
 import NSearchIntervals from './NSearchIntervals';
 import SearchNLimits from './SearchNLimits';
@@ -376,7 +371,7 @@ class NTIRPsSearch extends Component {
 				<Row className='results-container'>
 					<Col sm={8}>
 						{this.showTableOrGraph()}
-						{/* {this.state.showGraph ? ( */}
+						{this.state.showGraph ? (
 							<NSearchGraph
 								// isPredictive={this.props.isPredictive}
 								// minVS0={this.state.parameters.minVSCls0}
@@ -399,17 +394,15 @@ class NTIRPsSearch extends Component {
 								// }
 								tirps={this.state.searchResults}
 								// dictionary_states={this.state.dictionary_states}
-							/>
-						{/* ) 
+							/>) 
 						:
 						(
-							<SearchTable
+							<NSearchTable
 								handleOnSelect={this.handleOnSelect.bind(this)}
-								isPredictive={this.props.isPredictive}
+								// isPredictive={this.props.isPredictive}
 								tirps={this.state.searchResults}
 							/>
-						)
-						} */}
+						)}
 					</Col>
 					<Col sm={4}>
 						<Row>
@@ -473,7 +466,7 @@ class NTIRPsSearch extends Component {
 								<DTirpBarPlot row={this.state.chosenTIRP} />
 							</Col>
 						)} */}
-						<Col sm={10}>
+						<Col sm={8}>
 							<NTIRPTimeLine
 								tirp={this.state.NSelected}
 								vnames={this.state.vnames}
