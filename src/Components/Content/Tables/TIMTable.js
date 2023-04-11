@@ -26,6 +26,7 @@ const defaultValues = {
 	tirps_len: 2,
 	index: 'true',
 	negative: 'false',
+	mn: 1,
 };
 
 class TIMTable extends Component {
@@ -140,6 +141,7 @@ class TIMTable extends Component {
 			values.tirps_len,
 			values.index,
 			values.negative,
+			values.mn,
 			this.props.datasetName,
 			isVisualization
 		)
@@ -277,26 +279,13 @@ class TIMTable extends Component {
 								</Form.Control>
 							</td>
 							<td>
-								<ButtonGroup toggle={true} style={{ display: 'block' }}>
-									<ToggleButton
-										checked={this.getValues(iter.id).relations === '3'}
-										className={'btn-hugobot'}
-										onChange={(e) => this.onChange(iter.id, 'relations', e)}
-										type={'radio'}
-										value={3}
-									>
-										3
-									</ToggleButton>
-									<ToggleButton
-										checked={this.getValues(iter.id).relations === '7'}
-										className={'btn-hugobot'}
-										onChange={(e) => this.onChange(iter.id, 'relations', e)}
-										type={'radio'}
-										value={7}
-									>
-										7
-									</ToggleButton>
-								</ButtonGroup>
+								<Form.Control
+									as='select'
+									defaultValue='Choose...'
+									onChange={(e) => this.onChange(iter.id, 'mn', e)}
+								>
+									{this.renderOptions(1, 21)}
+								</Form.Control>
 							</td>
 							<td>
 								<Form.Control
