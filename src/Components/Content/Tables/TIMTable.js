@@ -180,7 +180,7 @@ class TIMTable extends Component {
 
 	//<editor-fold desc="Render functions">
 	renderAddRunHeader = () => {
-		if (this.state.selectedButton === '1') {
+		if (this.state.selectedButton === '2') {
 			return (
 				<thead>
 					<tr>
@@ -206,14 +206,14 @@ class TIMTable extends Component {
 					</tr>
 				</thead>
 			);
-		} else if (this.state.selectedButton === '2') {
+		} else if (this.state.selectedButton === '1') {
 			return (
 				<thead>
 					<tr>
-						<td className={'font-weight-bold'}>1</td>
-						<td className={'font-weight-bold'}>2</td>
-						<td className={'font-weight-bold'}>3</td>
-						<td className={'font-weight-bold'}>4</td>
+					<td className={'font-weight-bold'}>PAA</td>
+						<td className={'font-weight-bold'}>Bins</td>
+						<td className={'font-weight-bold'}>Interpolation</td>
+						<td className={'font-weight-bold'}>Method</td>
 						<td className={'font-weight-bold'}>
 							MVS (%)
 							<MyToolTip
@@ -222,11 +222,10 @@ class TIMTable extends Component {
 							/>
 						</td>
 						<td className={'font-weight-bold'}>Max Gap</td>
-						<td className={'font-weight-bold'}>Relations (#)</td>
-						<td className={'font-weight-bold'}>Epsilon</td>
-						<td className={'font-weight-bold'}>Max TIRP Length</td>
-						<td className={'font-weight-bold'}>Index Same</td>
-						{/* <td className={'font-weight-bold'}>Negative Mining</td> */}
+						<td className={'font-weight-bold'}>Maximum Negatives</td>
+						<td className={'font-weight-bold'}>OFO</td>
+						<td className={'font-weight-bold'}>AS</td>
+						<td className={'font-weight-bold'}>BC</td>
 						<td className={'font-weight-bold'}>Mine</td>
 						<td className={'font-weight-bold'}>{'Mine and Visualize'}</td>
 					</tr>
@@ -395,7 +394,7 @@ class TIMTable extends Component {
 										type={'radio'}
 										value={3}
 									>
-										5
+										3
 									</ToggleButton>
 									<ToggleButton
 										checked={this.getValues(iter.id).relations === '7'}
@@ -404,7 +403,7 @@ class TIMTable extends Component {
 										type={'radio'}
 										value={7}
 									>
-										8
+										7
 									</ToggleButton>
 								</ButtonGroup>
 							</td>
