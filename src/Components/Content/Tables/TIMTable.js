@@ -27,6 +27,9 @@ const defaultValues = {
 	index: 'true',
 	negative: 'false',
 	mn: 1,
+	ofo: 'true',
+	as: 'false',
+	bc: 'false',
 };
 
 class TIMTable extends Component {
@@ -142,6 +145,9 @@ class TIMTable extends Component {
 			values.index,
 			values.negative,
 			values.mn,
+			values.ofo,
+			values.as,
+			values.bc,
 			this.props.datasetName,
 			isVisualization
 		)
@@ -288,38 +294,64 @@ class TIMTable extends Component {
 								</Form.Control>
 							</td>
 							<td>
-								<Form.Control
-									as='select'
-									defaultValue='Choose...'
-									onChange={(e) => this.onChange(iter.id, 'epsilon', e)}
-								>
-									{this.renderOptions(0, 11)}
-								</Form.Control>
-							</td>
-							<td>
-								<Form.Control
-									as='select'
-									defaultValue='Choose...'
-									onChange={(e) => this.onChange(iter.id, 'tirps_len', e)}
-								>
-									{this.renderOptions(2, 21)}
-								</Form.Control>
-							</td>
-							<td>
 								<ButtonGroup toggle={true}>
 									<ToggleButton
-										checked={this.getValues(iter.id).index === 'true'}
+										checked={this.getValues(iter.id).ofo === 'true'}
 										className={'btn-hugobot'}
-										onChange={(e) => this.onChange(iter.id, 'index', e)}
+										onChange={(e) => this.onChange(iter.id, 'ofo', e)}
 										type={'radio'}
 										value={true}
 									>
 										True
 									</ToggleButton>
 									<ToggleButton
-										checked={this.getValues(iter.id).index === 'false'}
+										checked={this.getValues(iter.id).ofo === 'false'}
 										className={'btn-hugobot'}
-										onChange={(e) => this.onChange(iter.id, 'index', e)}
+										onChange={(e) => this.onChange(iter.id, 'ofo', e)}
+										type={'radio'}
+										value={false}
+									>
+										False
+									</ToggleButton>
+								</ButtonGroup>
+							</td>
+							<td>
+								<ButtonGroup toggle={true}>
+									<ToggleButton
+										checked={this.getValues(iter.id).as === 'true'}
+										className={'btn-hugobot'}
+										onChange={(e) => this.onChange(iter.id, 'as', e)}
+										type={'radio'}
+										value={true}
+									>
+										True
+									</ToggleButton>
+									<ToggleButton
+										checked={this.getValues(iter.id).as === 'false'}
+										className={'btn-hugobot'}
+										onChange={(e) => this.onChange(iter.id, 'as', e)}
+										type={'radio'}
+										value={false}
+									>
+										False
+									</ToggleButton>
+								</ButtonGroup>
+							</td>
+							<td>
+								<ButtonGroup toggle={true}>
+									<ToggleButton
+										checked={this.getValues(iter.id).bc === 'true'}
+										className={'btn-hugobot'}
+										onChange={(e) => this.onChange(iter.id, 'bc', e)}
+										type={'radio'}
+										value={true}
+									>
+										True
+									</ToggleButton>
+									<ToggleButton
+										checked={this.getValues(iter.id).bc === 'false'}
+										className={'btn-hugobot'}
+										onChange={(e) => this.onChange(iter.id, 'bc', e)}
 										type={'radio'}
 										value={false}
 									>
@@ -594,11 +626,32 @@ class TIMTable extends Component {
 						<Card.Text className={'h4 text-hugobot '}>
 							Add a New Time Intervals Mining Configuration
 						</Card.Text>
-					</Card.Header>
-					<div>
-      					<Button variant="primary" className="mr-2" onClick={() => this.handleButtonClick('1')}>True</Button>
-      					<Button variant="secondary" onClick={() => this.handleButtonClick('2')}>False</Button>
+						<Card.Text className={'h6 text-hugobot '}>
+							Select Positive/Negative Mining
+						</Card.Text>
+						<div>
+						<ButtonGroup toggle={true}>
+								<ToggleButton
+									checked={this.state.selectedButton === '1'}
+									className={'btn-hugobot'}
+									onClick={() => this.handleButtonClick('1')}
+									type={'radio'}
+									value={true}
+								>
+									Positive
+								</ToggleButton>
+								<ToggleButton
+									checked={this.state.selectedButton === '2'}
+									className={'btn-hugobot'}
+									onClick={() => this.handleButtonClick('2')}
+									type={'radio'}
+									value={false}
+								>
+									Negative
+								</ToggleButton>
+						</ButtonGroup>
     				</div>
+					</Card.Header>
 					{this.HeadElement('')}
 					<Card.Body>
 						<Table hover>
