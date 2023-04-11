@@ -12,6 +12,7 @@ export function addTIM(
 	numRelations,
 	maxTirpLength,
 	indexSame,
+	negativeMining,
 	datasetName,
 	isVisualization,
 ) {
@@ -28,6 +29,7 @@ export function addTIM(
 		second_class_name: 'Control',
 		timestamp: 'Minutes',
 		comments: 'no comments',
+		negative_mining: negativeMining,
 		to_visualize: isVisualization,
 	};
 	return post('addTIM', params);

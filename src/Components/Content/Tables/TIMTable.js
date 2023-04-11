@@ -25,6 +25,7 @@ const defaultValues = {
 	epsilon: 0,
 	tirps_len: 2,
 	index: 'true',
+	negative: 'false',
 };
 
 class TIMTable extends Component {
@@ -34,7 +35,7 @@ class TIMTable extends Component {
 		this.state = {
 			Allen: new Map(),
 			Class: new Map(),
-
+			selectedButton: 0,
 			tims: {},
 		};
 
@@ -42,6 +43,7 @@ class TIMTable extends Component {
 		this.handleDownloadRequest = this.handleDownloadRequest.bind(this);
 		this.handleDownloadRequest0 = this.handleDownloadRequest0.bind(this);
 		this.handleDownloadRequest1 = this.handleDownloadRequest1.bind(this);
+		this.handleButtonClick = this.handleButtonClick.bind(this);
 	}
 
 	handleDownloadRequest(e) {
@@ -137,6 +139,7 @@ class TIMTable extends Component {
 			values.relations,
 			values.tirps_len,
 			values.index,
+			values.negative,
 			this.props.datasetName,
 			isVisualization
 		)
@@ -148,6 +151,14 @@ class TIMTable extends Component {
 			)
 			.catch(errorAlert);
 	};
+
+	handleButtonClick(buttonType) {
+		// this.setState({
+		//   selectedButton: buttonType,
+		// });
+
+		console.log(this.state.selectedButton)
+	}
 
 	HeadElement = (Heading) => {
 		return (
@@ -169,30 +180,64 @@ class TIMTable extends Component {
 
 	//<editor-fold desc="Render functions">
 	renderAddRunHeader = () => {
-		return (
-			<thead>
-				<tr>
-					<td className={'font-weight-bold'}>PAA</td>
-					<td className={'font-weight-bold'}>Bins</td>
-					<td className={'font-weight-bold'}>Interpolation</td>
-					<td className={'font-weight-bold'}>Method</td>
-					<td className={'font-weight-bold'}>
-						MVS (%)
-						<MyToolTip
-							icon={'fa-exclamation-circle'}
-							tip={'Minimum Vertical Support'}
-						/>
-					</td>
-					<td className={'font-weight-bold'}>Max Gap</td>
-					<td className={'font-weight-bold'}>Relations (#)</td>
-					<td className={'font-weight-bold'}>Epsilon</td>
-					<td className={'font-weight-bold'}>Max TIRP Length</td>
-					<td className={'font-weight-bold'}>Index Same</td>
-					<td className={'font-weight-bold'}>Mine</td>
-					<td className={'font-weight-bold'}>{'Mine and Visualize'}</td>
-				</tr>
-			</thead>
-		);
+		if (this.state.selectedButton === 'True') {
+			return (
+				<thead>
+					<tr>
+						<td className={'font-weight-bold'}>PAA</td>
+						<td className={'font-weight-bold'}>Bins</td>
+						<td className={'font-weight-bold'}>Interpolation</td>
+						<td className={'font-weight-bold'}>Method</td>
+						<td className={'font-weight-bold'}>
+							MVS (%)
+							<MyToolTip
+								icon={'fa-exclamation-circle'}
+								tip={'Minimum Vertical Support'}
+							/>
+						</td>
+						<td className={'font-weight-bold'}>Max Gap</td>
+						<td className={'font-weight-bold'}>Relations (#)</td>
+						<td className={'font-weight-bold'}>Epsilon</td>
+						<td className={'font-weight-bold'}>Max TIRP Length</td>
+						<td className={'font-weight-bold'}>Index Same</td>
+						{/* <td className={'font-weight-bold'}>Negative Mining</td> */}
+						<td className={'font-weight-bold'}>Mine</td>
+						<td className={'font-weight-bold'}>{'Mine and Visualize'}</td>
+					</tr>
+				</thead>
+			);
+		} else if (this.state.selectedButton === 'False') {
+			return (
+				<thead>
+					<tr>
+						<td className={'font-weight-bold'}>1</td>
+						<td className={'font-weight-bold'}>2</td>
+						<td className={'font-weight-bold'}>3</td>
+						<td className={'font-weight-bold'}>4</td>
+						<td className={'font-weight-bold'}>
+							MVS (%)
+							<MyToolTip
+								icon={'fa-exclamation-circle'}
+								tip={'Minimum Vertical Support'}
+							/>
+						</td>
+						<td className={'font-weight-bold'}>Max Gap</td>
+						<td className={'font-weight-bold'}>Relations (#)</td>
+						<td className={'font-weight-bold'}>Epsilon</td>
+						<td className={'font-weight-bold'}>Max TIRP Length</td>
+						<td className={'font-weight-bold'}>Index Same</td>
+						{/* <td className={'font-weight-bold'}>Negative Mining</td> */}
+						<td className={'font-weight-bold'}>Mine</td>
+						<td className={'font-weight-bold'}>{'Mine and Visualize'}</td>
+					</tr>
+				</thead>
+			);
+		} else {
+			return (
+				<thead>
+				</thead>
+			);
+		}
 	};
 
 	renderOptions(min, arraySize) {
@@ -207,113 +252,224 @@ class TIMTable extends Component {
 		return this.props.discretizations
 			.filter((iter) => iter.status.finished && iter.status.success)
 			.map((iter, index) => {
-				return (
-					<tr key={index}>
-						<td>{iter['PAAWindowSize']}</td>
-						<td>{iter['BinsNumber']}</td>
-						<td>{iter['InterpolationGap']}</td>
-						<td>{iter['MethodOfDiscretization']}</td>
-						<td>
-							<Form.Control
-								as='select'
-								defaultValue='Choose...'
-								onChange={(e) => this.onChange(iter.id, 'mvs', e)}
-							>
-								{this.renderOptions(0, 100)}
-							</Form.Control>
-						</td>
-						<td>
-							<Form.Control
-								as='select'
-								defaultValue='Choose...'
-								onChange={(e) => this.onChange(iter.id, 'gap', e)}
-							>
-								{this.renderOptions(1, 21)}
-							</Form.Control>
-						</td>
-						<td>
-							<ButtonGroup toggle={true} style={{ display: 'block' }}>
-								<ToggleButton
-									checked={this.getValues(iter.id).relations === '3'}
-									className={'btn-hugobot'}
-									onChange={(e) => this.onChange(iter.id, 'relations', e)}
-									type={'radio'}
-									value={3}
+				if (this.state.selectedButton) {
+					return (
+						<tr key={index}>
+							<td>{iter['PAAWindowSize']}</td>
+							<td>{iter['BinsNumber']}</td>
+							<td>{iter['InterpolationGap']}</td>
+							<td>{iter['MethodOfDiscretization']}</td>
+							<td>
+								<Form.Control
+									as='select'
+									defaultValue='Choose...'
+									onChange={(e) => this.onChange(iter.id, 'mvs', e)}
 								>
-									3
-								</ToggleButton>
-								<ToggleButton
-									checked={this.getValues(iter.id).relations === '7'}
-									className={'btn-hugobot'}
-									onChange={(e) => this.onChange(iter.id, 'relations', e)}
-									type={'radio'}
-									value={7}
+									{this.renderOptions(0, 100)}
+								</Form.Control>
+							</td>
+							<td>
+								<Form.Control
+									as='select'
+									defaultValue='Choose...'
+									onChange={(e) => this.onChange(iter.id, 'gap', e)}
 								>
-									7
-								</ToggleButton>
-							</ButtonGroup>
-						</td>
-						<td>
-							<Form.Control
-								as='select'
-								defaultValue='Choose...'
-								onChange={(e) => this.onChange(iter.id, 'epsilon', e)}
-							>
-								{this.renderOptions(0, 11)}
-							</Form.Control>
-						</td>
-						<td>
-							<Form.Control
-								as='select'
-								defaultValue='Choose...'
-								onChange={(e) => this.onChange(iter.id, 'tirps_len', e)}
-							>
-								{this.renderOptions(2, 21)}
-							</Form.Control>
-						</td>
-						<td>
-							<ButtonGroup toggle={true}>
-								<ToggleButton
-									checked={this.getValues(iter.id).index === 'true'}
-									className={'btn-hugobot'}
-									onChange={(e) => this.onChange(iter.id, 'index', e)}
-									type={'radio'}
-									value={true}
+									{this.renderOptions(1, 21)}
+								</Form.Control>
+							</td>
+							<td>
+								<ButtonGroup toggle={true} style={{ display: 'block' }}>
+									<ToggleButton
+										checked={this.getValues(iter.id).relations === '3'}
+										className={'btn-hugobot'}
+										onChange={(e) => this.onChange(iter.id, 'relations', e)}
+										type={'radio'}
+										value={3}
+									>
+										3
+									</ToggleButton>
+									<ToggleButton
+										checked={this.getValues(iter.id).relations === '7'}
+										className={'btn-hugobot'}
+										onChange={(e) => this.onChange(iter.id, 'relations', e)}
+										type={'radio'}
+										value={7}
+									>
+										7
+									</ToggleButton>
+								</ButtonGroup>
+							</td>
+							<td>
+								<Form.Control
+									as='select'
+									defaultValue='Choose...'
+									onChange={(e) => this.onChange(iter.id, 'epsilon', e)}
 								>
-									True
-								</ToggleButton>
-								<ToggleButton
-									checked={this.getValues(iter.id).index === 'false'}
-									className={'btn-hugobot'}
-									onChange={(e) => this.onChange(iter.id, 'index', e)}
-									type={'radio'}
-									value={false}
+									{this.renderOptions(0, 11)}
+								</Form.Control>
+							</td>
+							<td>
+								<Form.Control
+									as='select'
+									defaultValue='Choose...'
+									onChange={(e) => this.onChange(iter.id, 'tirps_len', e)}
 								>
-									False
-								</ToggleButton>
-							</ButtonGroup>
-						</td>
-						<td>
-							<Button
-								className={'btn btn-hugobot'}
-								onClick={() => this.handleSubmit(iter.id, false)}
-							>
-								Mine
-								<i className={'fas fa-play ml-2'} style={{ fontSize: 15 }} />
-							</Button>
-						</td>
+									{this.renderOptions(2, 21)}
+								</Form.Control>
+							</td>
+							<td>
+								<ButtonGroup toggle={true}>
+									<ToggleButton
+										checked={this.getValues(iter.id).index === 'true'}
+										className={'btn-hugobot'}
+										onChange={(e) => this.onChange(iter.id, 'index', e)}
+										type={'radio'}
+										value={true}
+									>
+										True
+									</ToggleButton>
+									<ToggleButton
+										checked={this.getValues(iter.id).index === 'false'}
+										className={'btn-hugobot'}
+										onChange={(e) => this.onChange(iter.id, 'index', e)}
+										type={'radio'}
+										value={false}
+									>
+										False
+									</ToggleButton>
+								</ButtonGroup>
+							</td>
+							<td>
+								<Button
+									className={'btn btn-hugobot'}
+									onClick={() => this.handleSubmit(iter.id, false)}
+								>
+									Mine
+									<i className={'fas fa-play ml-2'} style={{ fontSize: 15 }} />
+								</Button>
+							</td>
 
-						<td>
-							<Button
-								className={'btn btn-hugobot'}
-								onClick={() => this.handleSubmit(iter.id, true)}
-							>
-								{'Mine&Visualize'}
-								<i className={'fas fa-play ml-2'} style={{ fontSize: 15 }} />
-							</Button>
-						</td>
-					</tr>
-				);
+							<td>
+								<Button
+									className={'btn btn-hugobot'}
+									onClick={() => this.handleSubmit(iter.id, true)}
+								>
+									{'Mine&Visualize'}
+									<i className={'fas fa-play ml-2'} style={{ fontSize: 15 }} />
+								</Button>
+							</td>
+						</tr>
+					);
+				}
+				else {
+					return (
+						<tr key={index}>
+							<td>{iter['PAAWindowSize']}</td>
+							<td>{iter['BinsNumber']}</td>
+							<td>{iter['InterpolationGap']}</td>
+							<td>{iter['MethodOfDiscretization']}</td>
+							<td>
+								<Form.Control
+									as='select'
+									defaultValue='Choose...'
+									onChange={(e) => this.onChange(iter.id, 'mvs', e)}
+								>
+									{this.renderOptions(0, 100)}
+								</Form.Control>
+							</td>
+							<td>
+								<Form.Control
+									as='select'
+									defaultValue='Choose...'
+									onChange={(e) => this.onChange(iter.id, 'gap', e)}
+								>
+									{this.renderOptions(1, 21)}
+								</Form.Control>
+							</td>
+							<td>
+								<ButtonGroup toggle={true} style={{ display: 'block' }}>
+									<ToggleButton
+										checked={this.getValues(iter.id).relations === '3'}
+										className={'btn-hugobot'}
+										onChange={(e) => this.onChange(iter.id, 'relations', e)}
+										type={'radio'}
+										value={3}
+									>
+										5
+									</ToggleButton>
+									<ToggleButton
+										checked={this.getValues(iter.id).relations === '7'}
+										className={'btn-hugobot'}
+										onChange={(e) => this.onChange(iter.id, 'relations', e)}
+										type={'radio'}
+										value={7}
+									>
+										8
+									</ToggleButton>
+								</ButtonGroup>
+							</td>
+							<td>
+								<Form.Control
+									as='select'
+									defaultValue='Choose...'
+									onChange={(e) => this.onChange(iter.id, 'epsilon', e)}
+								>
+									{this.renderOptions(0, 11)}
+								</Form.Control>
+							</td>
+							<td>
+								<Form.Control
+									as='select'
+									defaultValue='Choose...'
+									onChange={(e) => this.onChange(iter.id, 'tirps_len', e)}
+								>
+									{this.renderOptions(2, 21)}
+								</Form.Control>
+							</td>
+							<td>
+								<ButtonGroup toggle={true}>
+									<ToggleButton
+										checked={this.getValues(iter.id).index === 'true'}
+										className={'btn-hugobot'}
+										onChange={(e) => this.onChange(iter.id, 'index', e)}
+										type={'radio'}
+										value={true}
+									>
+										True
+									</ToggleButton>
+									<ToggleButton
+										checked={this.getValues(iter.id).index === 'false'}
+										className={'btn-hugobot'}
+										onChange={(e) => this.onChange(iter.id, 'index', e)}
+										type={'radio'}
+										value={false}
+									>
+										False
+									</ToggleButton>
+								</ButtonGroup>
+							</td>
+							<td>
+								<Button
+									className={'btn btn-hugobot'}
+									onClick={() => this.handleSubmit(iter.id, false)}
+								>
+									Mine
+									<i className={'fas fa-play ml-2'} style={{ fontSize: 15 }} />
+								</Button>
+							</td>
+
+							<td>
+								<Button
+									className={'btn btn-hugobot'}
+									onClick={() => this.handleSubmit(iter.id, true)}
+								>
+									{'Mine&Visualize'}
+									<i className={'fas fa-play ml-2'} style={{ fontSize: 15 }} />
+								</Button>
+							</td>
+						</tr>
+					);
+				}
 			});
 	};
 
@@ -448,6 +604,10 @@ class TIMTable extends Component {
 							Add a New Time Intervals Mining Configuration
 						</Card.Text>
 					</Card.Header>
+					<div>
+      					<Button variant="primary" className="mr-2" onClick={() => this.handleButtonClick('True')}>True</Button>
+      					<Button variant="secondary" onClick={() => this.handleButtonClick('False')}>False</Button>
+    				</div>
 					{this.HeadElement('')}
 					<Card.Body>
 						<Table hover>

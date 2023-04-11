@@ -20,6 +20,10 @@ class NTIRPTimeLine extends Component {
 		'</div>')
 	}
 
+	computeStyle(row) {
+		console.log(row)
+	}
+
     computeNDataset = (vnames, elements, negatives, timezone, gap) => {
         const columns = [
             { type: "string", id: "Elements" },
@@ -77,7 +81,9 @@ class NTIRPTimeLine extends Component {
             hAxis: {
               ticks: intervals.map(([label, start, end]) => [start, end]),
             },
-			timeline: { colorByRowLabel: true },
+			timeline: { 
+				colorByRowLabel: true,
+			},
 			tooltip: {isHtml: true},
           };
 		return (

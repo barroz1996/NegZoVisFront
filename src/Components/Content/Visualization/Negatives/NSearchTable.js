@@ -149,10 +149,10 @@ class NSearchTable extends Component {
 											style={selected ? { backgroundColor: '#AED6F1' } : {}}
 										>
 											<td>{tirp.size}</td>
-											<td>{tirp.symbols.map(symbol => this.state.vnames[symbol]).join()}</td>
+											<td>{tirp.symbols.map(symbol => this.state.vnames[symbol]).join("\r\n")}</td>
 											<td>{tirp.vs}</td>
-											<td>{tirp.mhs}</td>
-											<td>{tirp.mmd}</td>
+											<td>{tirp.mhs.toFixed(2)}</td>
+											<td>{tirp.mmd.toFixed(2)}</td>
 										</tr>
 									);
 								})}
