@@ -40,6 +40,7 @@ class TIMTable extends Component {
 			Allen: new Map(),
 			Class: new Map(),
 			selectedButton: 0,
+			negative: "",
 			tims: {},
 		};
 
@@ -143,7 +144,7 @@ class TIMTable extends Component {
 			values.relations,
 			values.tirps_len,
 			values.index,
-			values.negative,
+			this.state.negative,
 			values.mn,
 			values.ofo,
 			values.as,
@@ -163,9 +164,8 @@ class TIMTable extends Component {
 	handleButtonClick(buttonType) {
 		this.setState({
 		  selectedButton: buttonType,
+		  negative: buttonType
 		});
-
-		console.log(this.state.selectedButton)
 	}
 
 	HeadElement = (Heading) => {
@@ -188,7 +188,7 @@ class TIMTable extends Component {
 
 	//<editor-fold desc="Render functions">
 	renderAddRunHeader = () => {
-		if (this.state.selectedButton === '2') {
+		if (this.state.selectedButton === 'false') {
 			return (
 				<thead>
 					<tr>
@@ -214,7 +214,7 @@ class TIMTable extends Component {
 					</tr>
 				</thead>
 			);
-		} else if (this.state.selectedButton === '1') {
+		} else if (this.state.selectedButton === 'true') {
 			return (
 				<thead>
 					<tr>
@@ -259,7 +259,7 @@ class TIMTable extends Component {
 		return this.props.discretizations
 			.filter((iter) => iter.status.finished && iter.status.success)
 			.map((iter, index) => {
-				if (this.state.selectedButton === '1') {
+				if (this.state.selectedButton === 'true') {
 					return (
 						<tr key={index}>
 							<td>{iter['PAAWindowSize']}</td>
@@ -290,7 +290,7 @@ class TIMTable extends Component {
 									defaultValue='Choose...'
 									onChange={(e) => this.onChange(iter.id, 'mn', e)}
 								>
-									{this.renderOptions(1, 21)}
+									{this.renderOptions(0, 21)}
 								</Form.Control>
 							</td>
 							<td>
@@ -381,7 +381,7 @@ class TIMTable extends Component {
 						</tr>
 					);
 				}
-				else if (this.state.selectedButton === '2'){
+				else if (this.state.selectedButton === 'false'){
 					return (
 						<tr key={index}>
 							<td>{iter['PAAWindowSize']}</td>
@@ -491,7 +491,9 @@ class TIMTable extends Component {
 					);
 				}
 				else {
+					return (<tr>
 
+					</tr>)
 				}
 			});
 	};
@@ -632,27 +634,27 @@ class TIMTable extends Component {
 						<div>
 						<ButtonGroup toggle={true}>
 								<ToggleButton
-									checked={this.state.selectedButton === '1'}
+									checked={this.state.selectedButton === 'false'}
 									className={'btn-hugobot'}
-									onClick={() => this.handleButtonClick('1')}
+									onClick={() => this.handleButtonClick('false')}
 									type={'radio'}
-									value={true}
+									value={false}
 								>
 									Positive
 								</ToggleButton>
 								<ToggleButton
-									checked={this.state.selectedButton === '2'}
+									checked={this.state.selectedButton === 'true'}
 									className={'btn-hugobot'}
-									onClick={() => this.handleButtonClick('2')}
+									onClick={() => this.handleButtonClick('true')}
 									type={'radio'}
-									value={false}
+									value={true}
 								>
 									Negative
 								</ToggleButton>
 						</ButtonGroup>
     				</div>
 					</Card.Header>
-					{this.HeadElement('')}
+					{/* {this.HeadElement('')} */}
 					<Card.Body>
 						<Table hover>
 							{this.renderAddRunHeader()}

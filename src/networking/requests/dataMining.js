@@ -13,6 +13,10 @@ export function addTIM(
 	maxTirpLength,
 	indexSame,
 	negativeMining,
+	maximumNegative,
+	ofo,
+	as,
+	bc,
 	datasetName,
 	isVisualization,
 ) {
@@ -30,6 +34,10 @@ export function addTIM(
 		timestamp: 'Minutes',
 		comments: 'no comments',
 		negative_mining: negativeMining,
+		maximum_negatives: maximumNegative,
+		ofo: ofo,
+		as: as,
+		bc: bc,
 		to_visualize: isVisualization,
 	};
 	return post('addTIM', params);
