@@ -153,9 +153,9 @@ class TIMTable extends Component {
 	};
 
 	handleButtonClick(buttonType) {
-		// this.setState({
-		//   selectedButton: buttonType,
-		// });
+		this.setState({
+		  selectedButton: buttonType,
+		});
 
 		console.log(this.state.selectedButton)
 	}
@@ -180,7 +180,7 @@ class TIMTable extends Component {
 
 	//<editor-fold desc="Render functions">
 	renderAddRunHeader = () => {
-		if (this.state.selectedButton === 'True') {
+		if (this.state.selectedButton === '1') {
 			return (
 				<thead>
 					<tr>
@@ -206,7 +206,7 @@ class TIMTable extends Component {
 					</tr>
 				</thead>
 			);
-		} else if (this.state.selectedButton === 'False') {
+		} else if (this.state.selectedButton === '2') {
 			return (
 				<thead>
 					<tr>
@@ -252,7 +252,7 @@ class TIMTable extends Component {
 		return this.props.discretizations
 			.filter((iter) => iter.status.finished && iter.status.success)
 			.map((iter, index) => {
-				if (this.state.selectedButton) {
+				if (this.state.selectedButton === '1') {
 					return (
 						<tr key={index}>
 							<td>{iter['PAAWindowSize']}</td>
@@ -361,7 +361,7 @@ class TIMTable extends Component {
 						</tr>
 					);
 				}
-				else {
+				else if (this.state.selectedButton === '2'){
 					return (
 						<tr key={index}>
 							<td>{iter['PAAWindowSize']}</td>
@@ -469,6 +469,9 @@ class TIMTable extends Component {
 							</td>
 						</tr>
 					);
+				}
+				else {
+
 				}
 			});
 	};
@@ -605,8 +608,8 @@ class TIMTable extends Component {
 						</Card.Text>
 					</Card.Header>
 					<div>
-      					<Button variant="primary" className="mr-2" onClick={() => this.handleButtonClick('True')}>True</Button>
-      					<Button variant="secondary" onClick={() => this.handleButtonClick('False')}>False</Button>
+      					<Button variant="primary" className="mr-2" onClick={() => this.handleButtonClick('1')}>True</Button>
+      					<Button variant="secondary" onClick={() => this.handleButtonClick('2')}>False</Button>
     				</div>
 					{this.HeadElement('')}
 					<Card.Body>
