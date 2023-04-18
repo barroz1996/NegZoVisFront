@@ -40,6 +40,7 @@ class TIMTable extends Component {
 			Allen: new Map(),
 			Class: new Map(),
 			selectedButton: 0,
+			selectedSecondButton: 0,
 			negative: "",
 			tims: {},
 		};
@@ -164,6 +165,13 @@ class TIMTable extends Component {
 	handleButtonClick(buttonType) {
 		this.setState({
 		  selectedButton: buttonType,
+		  negative: buttonType
+		});
+	}
+
+	handleSecondButtonClick(buttonType) {
+		this.setState({
+		  selectedSecondButton: buttonType,
 		  negative: buttonType
 		});
 	}
@@ -499,124 +507,250 @@ class TIMTable extends Component {
 	};
 
 	renderExistingRunsHeader = () => {
-		return (
-			<thead>
-				<tr>
-					<td className={'font-weight-bold'}>PAA</td>
-					<td className={'font-weight-bold'}>Bins</td>
-					<td className={'font-weight-bold'}>Interpolation</td>
-					<td className={'font-weight-bold'}>Method</td>
-					<td className={'font-weight-bold'} style={{ width: 60 }}>
-						MVS (%)
-						<MyToolTip
-							icon={'fa-exclamation-circle'}
-							tip={'Minimum Vertical Support'}
-						/>
-					</td>
-					<td className={'font-weight-bold'}>Max Gap</td>
-					<td className={'font-weight-bold'}>No. of Relations</td>
-					<td className={'font-weight-bold'}>Epsilon</td>
-					<td className={'font-weight-bold'}>Max TIRP Length</td>
-					<td className={'font-weight-bold'}>Index Same</td>
-					<td className={'font-weight-bold'}>Download class0</td>
-					<td className={'font-weight-bold'}>Download class1</td>
-					<td className={'font-weight-bold'}>Download Both</td>
-				</tr>
-			</thead>
-		);
+		if (this.state.selectedSecondButton === 'false') {
+			return (
+				<thead>
+					<tr>
+						<td className={'font-weight-bold'}>PAA</td>
+						<td className={'font-weight-bold'}>Bins</td>
+						<td className={'font-weight-bold'}>Interpolation</td>
+						<td className={'font-weight-bold'}>Method</td>
+						<td className={'font-weight-bold'} style={{ width: 60 }}>
+							MVS (%)
+							<MyToolTip
+								icon={'fa-exclamation-circle'}
+								tip={'Minimum Vertical Support'}
+							/>
+						</td>
+						<td className={'font-weight-bold'}>Max Gap</td>
+						<td className={'font-weight-bold'}>No. of Relations</td>
+						<td className={'font-weight-bold'}>Epsilon</td>
+						<td className={'font-weight-bold'}>Max TIRP Length</td>
+						<td className={'font-weight-bold'}>Index Same</td>
+						<td className={'font-weight-bold'}>Download class0</td>
+						<td className={'font-weight-bold'}>Download class1</td>
+						<td className={'font-weight-bold'}>Download Both</td>
+					</tr>
+				</thead>
+			);
+		} else if (this.state.selectedSecondButton === 'true') {
+			return (
+				<thead>
+					<tr>
+						<td className={'font-weight-bold'}>PAA</td>
+						<td className={'font-weight-bold'} style={{ width: 60 }}>
+							MS (%)
+							<MyToolTip
+								icon={'fa-exclamation-circle'}
+								tip={'Minimum Vertical Support'}
+							/>
+						</td>
+						<td className={'font-weight-bold'}>Max Gap</td>
+						<td className={'font-weight-bold'}>Maximun Negatives</td>
+						<td className={'font-weight-bold'}>OFO</td>
+						<td className={'font-weight-bold'}>AS</td>
+						<td className={'font-weight-bold'}>BC</td>
+						<td className={'font-weight-bold'}>Download class0</td>
+						<td className={'font-weight-bold'}>Download class1</td>
+						<td className={'font-weight-bold'}>Download Both</td>
+					</tr>
+				</thead>
+			);
+		} else {
+			return (
+				<thead>
+				</thead>
+			);
+		}
 	};
 
 	renderExistingRunsData = () => {
-		return this.props.TIMTable.map((iter, index) => {
-			return (
-				<tr key={index}>
-					<td>
-						<div className='more-btn-container mr-2'>
-							<i
-								className='fas fa-trash more-btn'
-								onClick={(e) => {
-									irreversibleOperationAlert(
-										`Are you sure you want to delete KarmaLego for "${this.props.datasetName}"?`,
-										'Yes, delete',
-										'No, cancel'
-									).then((result) => {
-										if (result.isConfirmed) {
-											deleteKarmaLego(iter, this.props.datasetName)
-												.then(() => this.props.removeKarmaLego(iter))
-												.then(() => {
-													successAlert(
-														'Deleted',
-														`The KarmaLego for "${this.props.datasetName}" was deleted successfully`
-													);
-												})
-												.catch(errorAlert);
-										}
-									});
-									e.stopPropagation();
-								}}
-							/>
-						</div>
+		if (this.state.selectedSecondButton === 'false') {
+			return this.props.TIMTable.map((iter, index) => {
+				return (
+					<tr key={index}>
+						<td>
+							<div className='more-btn-container mr-2'>
+								<i
+									className='fas fa-trash more-btn'
+									onClick={(e) => {
+										irreversibleOperationAlert(
+											`Are you sure you want to delete KarmaLego for "${this.props.datasetName}"?`,
+											'Yes, delete',
+											'No, cancel'
+										).then((result) => {
+											if (result.isConfirmed) {
+												deleteKarmaLego(iter, this.props.datasetName)
+													.then(() => this.props.removeKarmaLego(iter))
+													.then(() => {
+														successAlert(
+															'Deleted',
+															`The KarmaLego for "${this.props.datasetName}" was deleted successfully`
+														);
+													})
+													.catch(errorAlert);
+											}
+										});
+										e.stopPropagation();
+									}}
+								/>
+							</div>
 
-						{iter['PAAWindowSize']}
-					</td>
-					<td>{iter['BinsNumber']}</td>
-					<td>{iter['InterpolationGap']}</td>
-					<td>{iter['MethodOfDiscretization']}</td>
-					<td>{iter['VerticalSupport'] * 100}</td>
-					<td>{iter['MaxGap']}</td>
-					<td>{iter['numRelations']}</td>
-					<td>{Number.parseFloat(iter['epsilon']).toFixed(0)}</td>
-					<td>{iter['maxTirpLength']}</td>
-					<td>{iter['indexSame']}</td>
-					{iter.status.finished && iter.status.success ? (
-						<>
-							<td>
-								<Button
-									className='bg-hugobot'
-									id={'download0-' + index}
-									onClick={this.handleDownloadRequest0}
-								>
-									<i className='fas fa-download' id={'downloadIcon0-' + index} />{' '}
-									Download
-								</Button>
-							</td>
-							<td>
-								<Button
-									className='bg-hugobot'
-									id={'download1-' + index}
-									onClick={this.handleDownloadRequest1}
-								>
-									<i className='fas fa-download' id={'downloadIcon1-' + index} />{' '}
-									Download
-								</Button>
-							</td>
-							<td>
-								<Button
-									className='bg-hugobot'
-									id={'download2-' + index}
-									onClick={this.handleDownloadRequest}
-								>
-									<i className='fas fa-download' id={'downloadIcon2-' + index} />{' '}
-									Download
-								</Button>
-							</td>
-						</>
-					) : iter.status.finished ? (
-						<>
-							<td>Karmalego failed</td>
-							<td>Karmalego failed</td>
-							<td>Karmalego failed</td>
-						</>
-					) : (
-						<>
-							<td>Karmalego inprogress</td>
-							<td>Karmalego inprogress</td>
-							<td>Karmalego inprogress</td>
-						</>
-					)}
-				</tr>
+							{iter['PAAWindowSize']}
+						</td>
+						<td>{iter['BinsNumber']}</td>
+						<td>{iter['InterpolationGap']}</td>
+						<td>{iter['MethodOfDiscretization']}</td>
+						<td>{iter['VerticalSupport'] * 100}</td>
+						<td>{iter['MaxGap']}</td>
+						<td>{iter['numRelations']}</td>
+						<td>{Number.parseFloat(iter['epsilon']).toFixed(0)}</td>
+						<td>{iter['maxTirpLength']}</td>
+						<td>{iter['indexSame']}</td>
+						{iter.status.finished && iter.status.success ? (
+							<>
+								<td>
+									<Button
+										className='bg-hugobot'
+										id={'download0-' + index}
+										onClick={this.handleDownloadRequest0}
+									>
+										<i className='fas fa-download' id={'downloadIcon0-' + index} />{' '}
+										Download
+									</Button>
+								</td>
+								<td>
+									<Button
+										className='bg-hugobot'
+										id={'download1-' + index}
+										onClick={this.handleDownloadRequest1}
+									>
+										<i className='fas fa-download' id={'downloadIcon1-' + index} />{' '}
+										Download
+									</Button>
+								</td>
+								<td>
+									<Button
+										className='bg-hugobot'
+										id={'download2-' + index}
+										onClick={this.handleDownloadRequest}
+									>
+										<i className='fas fa-download' id={'downloadIcon2-' + index} />{' '}
+										Download
+									</Button>
+								</td>
+							</>
+						) : iter.status.finished ? (
+							<>
+								<td>Karmalego failed</td>
+								<td>Karmalego failed</td>
+								<td>Karmalego failed</td>
+							</>
+						) : (
+							<>
+								<td>Karmalego inprogress</td>
+								<td>Karmalego inprogress</td>
+								<td>Karmalego inprogress</td>
+							</>
+						)}
+					</tr>
+				);
+			});
+		} else if (this.state.selectedSecondButton === 'true') {
+			return this.props.NegativesTable.map((iter, index) => {
+				return (
+					<tr key={index}>
+						<td>
+							<div className='more-btn-container mr-2'>
+								<i
+									className='fas fa-trash more-btn'
+									onClick={(e) => {
+										irreversibleOperationAlert(
+											`Are you sure you want to delete KarmaLego for "${this.props.datasetName}"?`,
+											'Yes, delete',
+											'No, cancel'
+										).then((result) => {
+											if (result.isConfirmed) {
+												deleteKarmaLego(iter, this.props.datasetName)
+													.then(() => this.props.removeKarmaLego(iter))
+													.then(() => {
+														successAlert(
+															'Deleted',
+															`The KarmaLego for "${this.props.datasetName}" was deleted successfully`
+														);
+													})
+													.catch(errorAlert);
+											}
+										});
+										e.stopPropagation();
+									}}
+								/>
+							</div>
+
+							{iter['PAAWindowSize']}
+						</td>
+						<td>{iter['VerticalSupport'] * 100}</td>
+						<td>{iter['MaxGap']}</td>
+						<td>{iter['MaximumNegatives']}</td>
+						<td>{iter['ofo']}</td>
+						<td>{iter['as']}</td>
+						<td>{iter['bc']}</td>
+
+						{iter.status.finished && iter.status.success ? (
+							<>
+								<td>
+									<Button
+										className='bg-hugobot'
+										id={'download0-' + index}
+										onClick={this.handleDownloadRequest0}
+									>
+										<i className='fas fa-download' id={'downloadIcon0-' + index} />{' '}
+										Download
+									</Button>
+								</td>
+								<td>
+									<Button
+										className='bg-hugobot'
+										id={'download1-' + index}
+										onClick={this.handleDownloadRequest1}
+									>
+										<i className='fas fa-download' id={'downloadIcon1-' + index} />{' '}
+										Download
+									</Button>
+								</td>
+								<td>
+									<Button
+										className='bg-hugobot'
+										id={'download2-' + index}
+										onClick={this.handleDownloadRequest}
+									>
+										<i className='fas fa-download' id={'downloadIcon2-' + index} />{' '}
+										Download
+									</Button>
+								</td>
+							</>
+						) : iter.status.finished ? (
+							<>
+								<td>Karmalego failed</td>
+								<td>Karmalego failed</td>
+								<td>Karmalego failed</td>
+							</>
+						) : (
+							<>
+								<td>Karmalego inprogress</td>
+								<td>Karmalego inprogress</td>
+								<td>Karmalego inprogress</td>
+							</>
+						)}
+					</tr>
+				);
+			});
+		} else {
+			return (
+				<thead>
+				</thead>
 			);
-		});
+		}
 	};
 	//</editor-fold>
 
@@ -665,6 +799,31 @@ class TIMTable extends Component {
 				<Card style={{ width: 'auto' }}>
 					<Card.Header className={'bg-hugobot'}>
 						<Card.Text className={'h4 text-hugobot '}>Discovered Patterns</Card.Text>
+						<Card.Text className={'h6 text-hugobot '}>
+							Select Positive/Negative Patterns
+						</Card.Text>
+						<div>
+						<ButtonGroup toggle={true}>
+								<ToggleButton
+									checked={this.state.selectedSecondButton === 'false'}
+									className={'btn-hugobot'}
+									onClick={() => this.handleSecondButtonClick('false')}
+									type={'radio'}
+									value={false}
+								>
+									Positive
+								</ToggleButton>
+								<ToggleButton
+									checked={this.state.selectedSecondButton === 'true'}
+									className={'btn-hugobot'}
+									onClick={() => this.handleSecondButtonClick('true')}
+									type={'radio'}
+									value={true}
+								>
+									Negative
+								</ToggleButton>
+						</ButtonGroup>
+    				</div>
 					</Card.Header>
 					<Card.Body>
 						<Table hover>

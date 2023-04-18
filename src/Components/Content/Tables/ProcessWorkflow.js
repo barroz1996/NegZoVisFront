@@ -15,13 +15,14 @@ function ProcessWorkflow(props) {
 	const [datasetName, setDatasetName] = useState(props.datasetName);
 	const [discretizations, setDiscretizations] = useState([]);
 	const [tims, setTims] = useState([]);
+	const [negatives, setNegatives] = useState([]);
 	useEffect(() => {
 		setDatasetName(datasetName);
 		getDataOnDataset(datasetName)
 			.then((data) => {
 				setDiscretizations(data['disc']);
 				setTims(data['karma']);
-
+				setNegatives(data['negative']);
 				window.open(`#/Process/${datasetName}/Info`, '_self');
 			})
 			.catch((e) => {
@@ -78,6 +79,7 @@ function ProcessWorkflow(props) {
 					<TIMTable
 						discretizations={discretizations}
 						TIMTable={tims}
+						NegativesTable = {negatives}
 						datasetName={datasetName}
 						removeKarmaLego={removeKarmaLego}
 					/>
