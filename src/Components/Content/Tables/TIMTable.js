@@ -172,7 +172,6 @@ class TIMTable extends Component {
 	handleSecondButtonClick(buttonType) {
 		this.setState({
 		  selectedSecondButton: buttonType,
-		  negative: buttonType
 		});
 	}
 
@@ -538,6 +537,9 @@ class TIMTable extends Component {
 				<thead>
 					<tr>
 						<td className={'font-weight-bold'}>PAA</td>
+						<td className={'font-weight-bold'}>Bins</td>
+						<td className={'font-weight-bold'}>Interpolation</td>
+						<td className={'font-weight-bold'}>Method</td>
 						<td className={'font-weight-bold'} style={{ width: 60 }}>
 							MS (%)
 							<MyToolTip
@@ -550,9 +552,9 @@ class TIMTable extends Component {
 						<td className={'font-weight-bold'}>OFO</td>
 						<td className={'font-weight-bold'}>AS</td>
 						<td className={'font-weight-bold'}>BC</td>
-						<td className={'font-weight-bold'}>Download class0</td>
-						<td className={'font-weight-bold'}>Download class1</td>
-						<td className={'font-weight-bold'}>Download Both</td>
+						{/* <td className={'font-weight-bold'}>Download class0</td>
+						<td className={'font-weight-bold'}>Download class1</td> */}
+						<td className={'font-weight-bold'}>Download</td>
 					</tr>
 				</thead>
 			);
@@ -689,6 +691,9 @@ class TIMTable extends Component {
 
 							{iter['PAAWindowSize']}
 						</td>
+						<td>{iter['BinsNumber']}</td>
+						<td>{iter['InterpolationGap']}</td>
+						<td>{iter['MethodOfDiscretization']}</td>
 						<td>{iter['VerticalSupport'] * 100}</td>
 						<td>{iter['MaxGap']}</td>
 						<td>{iter['MaximumNegatives']}</td>
@@ -698,7 +703,7 @@ class TIMTable extends Component {
 
 						{iter.status.finished && iter.status.success ? (
 							<>
-								<td>
+								{/* <td>
 									<Button
 										className='bg-hugobot'
 										id={'download0-' + index}
@@ -717,7 +722,7 @@ class TIMTable extends Component {
 										<i className='fas fa-download' id={'downloadIcon1-' + index} />{' '}
 										Download
 									</Button>
-								</td>
+								</td> */}
 								<td>
 									<Button
 										className='bg-hugobot'
