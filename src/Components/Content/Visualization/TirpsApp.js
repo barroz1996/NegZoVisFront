@@ -47,13 +47,22 @@ class TirpsApp extends Component {
 	async getRoot(visualizationId) {
 		const data = await initiateTirps(visualizationId);
 
-		const arrOfRoot = data.Root;
-		let jsons = [];
-		for (let i = 0; i < arrOfRoot.length; i++) {
-			let tirp = arrOfRoot[i];
-			jsons.push(tirp);
+		console.log(data.root)
+
+		if (data.NegativeData) {
+			localStorage.rootElement = JSON.stringify(data);
+			localStorage.negative = true
 		}
-		localStorage.rootElement = JSON.stringify(jsons);
+		else {
+			const arrOfRoot = data.Root;
+			let jsons = [];
+			for (let i = 0; i < arrOfRoot.length; i++) {
+				let tirp = arrOfRoot[i];
+				jsons.push(tirp);
+			}
+			localStorage.rootElement = JSON.stringify(jsons);
+			localStorage.negative = false
+		}
 	}
 
 	//Entities

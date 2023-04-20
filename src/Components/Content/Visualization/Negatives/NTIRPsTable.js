@@ -111,7 +111,15 @@ class NTIRPsTable extends Component {
 			})
 			window.pathOfTirps = undefined
 		}
-	
+
+		// if (localStorage.negative) {
+		// 	const myDict = JSON.parse(localStorage.getItem('rootElement'));
+		// 	const myProperty = myDict.NegativeData;
+		// 	// console.log("data is: " + localStorage.rootElement["Root"])
+		// 	this.setState({
+		// 		outputAlgoritm: myProperty
+		// 	})
+		// }
 
 		this.open_route()
 	}
@@ -404,7 +412,8 @@ class NTIRPsTable extends Component {
 	  }
 	
 
-	getNextLevel(){ 
+	getNextLevel(){
+		console.log(this.state.outputAlgoritm) 
 		const nextPatterns = this.state.outputAlgoritm.filter((row) => {
 			if (row.elements.length === this.state.path.length + 1 && row.elements[this.state.path.length].length === 1){
 				for(let i = 0; i < this.state.path.length; i++){
@@ -435,6 +444,7 @@ class NTIRPsTable extends Component {
 			}
 			return false
 		} )
+		console.log("nextPatterns: " + nextPatterns)
 		return nextPatterns
 	}
 
@@ -524,6 +534,7 @@ class NTIRPsTable extends Component {
 										hover={true}
 										style={{ tableLayout: 'fixed', textAlign: 'center' }}
 									>
+										
 										<thead>
 											<tr>
 												<th>Next</th>
@@ -537,13 +548,16 @@ class NTIRPsTable extends Component {
 										</thead>
 										<tbody>
 											{this.getNextLevel().map((tirp, index) => {
+												console.log(tirp)
 												return (
 													<tr
 														key={index}
 														onClick={() => {
 															
 															let numOfEntites = this.getNextLevelByElements(tirp.elements).length
+															console.log("numOfEntites: " + numOfEntites)
 															let newCurrentTirp = this.state.currentTirp
+															console.log("newCurrentTirp" + newCurrentTirp)
 															newCurrentTirp[this.state.currentLevel + 1] = tirp
 
 															this.setState({ 

@@ -85,7 +85,10 @@ function ProcessWorkflow(props) {
 					/>
 				</Route>
 				<Route path={'/Process/:discretizationId/Visualization'}>
-					<Visualization TIMTable={tims} datasetName={datasetName} />
+					<Visualization 
+					TIMTable={tims}
+					NegativesTable = {negatives}
+					datasetName={datasetName} />
 				</Route>
 				<Redirect
 					from='/Process/:discretizationId'
