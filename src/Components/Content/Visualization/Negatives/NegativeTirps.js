@@ -6,7 +6,7 @@ class NegativeTirps extends Component {
 	render() {
 		return (
 			<Container fluid>
-				<NTIRPsTable table={JSON.parse(localStorage.rootElement)} discriminative={false} />
+				<NTIRPsTable ntable={JSON.parse(localStorage.rootElement)} discriminative={false} />
 			</Container>
 		);
 	}

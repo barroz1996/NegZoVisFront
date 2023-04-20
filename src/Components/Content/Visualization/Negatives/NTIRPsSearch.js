@@ -35,6 +35,14 @@ class NTIRPsSearch extends Component {
 		// const statesDict = Object.fromEntries(statesEntries);
 		// const stateIDs = Object.keys(statesDict);
 
+		if (localStorage.negative) {
+			const myDict = JSON.parse(localStorage.getItem('rootElement'));
+			const myProperty = myDict.NegativeData;
+			this.setState({
+				outputAlgoritm: myProperty
+			})
+		}
+
 		this.open_route()
 
 		this.state = {
@@ -104,11 +112,11 @@ class NTIRPsSearch extends Component {
 	}
 
 	async open_route() {
-		let url = 'http://127.0.0.1:443/get_negative_data'
-		const promise = await axios.get(url)
-		this.setState({
-			outputAlgoritm: promise.data
-		})
+		// let url = 'http://127.0.0.1:443/get_negative_data'
+		// const promise = await axios.get(url)
+		// this.setState({
+		// 	outputAlgoritm: promise.data
+		// })
 		let surl = 'http://127.0.0.1:443/get_negative_variables'
 		const spromise = await axios.get(surl)
 		this.setState({
@@ -150,6 +158,13 @@ class NTIRPsSearch extends Component {
 	}
 
 	async componentDidMount() {
+		if (localStorage.negative) {
+			const myDict = JSON.parse(localStorage.getItem('rootElement'));
+			const myProperty = myDict.NegativeData;
+			this.setState({
+				outputAlgoritm: myProperty
+			})
+		}
 		await this.open_route()
 	}
 

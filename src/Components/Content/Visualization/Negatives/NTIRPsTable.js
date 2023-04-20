@@ -57,11 +57,11 @@ class NTIRPsTable extends Component {
 	};
 
 	async open_route() {
-		let url = 'http://127.0.0.1:443/get_negative_data'
-		const promise = await axios.get(url)
-		this.setState({
-			outputAlgoritm: promise.data
-		})
+		// let url = 'http://127.0.0.1:443/get_negative_data'
+		// const promise = await axios.get(url)
+		// this.setState({
+		// 	outputAlgoritm: promise.data
+		// })
 		let surl = 'http://127.0.0.1:443/get_negative_variables'
 		const spromise = await axios.get(surl)
 		this.setState({
@@ -98,7 +98,7 @@ class NTIRPsTable extends Component {
 			const selectedTirp = window.pathOfTirps[window.pathOfTirps.length - 1];
 			this.searchTirp(currentPath, selectedTirp);
 		} else {
-			this.setNewLevel(this.props.table, []);
+			this.setNewLevel(this.props.ntable, []);
 		}
 
 		if (Object.keys(window.pathOfTirps).length > 0) {
@@ -112,14 +112,13 @@ class NTIRPsTable extends Component {
 			window.pathOfTirps = undefined
 		}
 
-		// if (localStorage.negative) {
-		// 	const myDict = JSON.parse(localStorage.getItem('rootElement'));
-		// 	const myProperty = myDict.NegativeData;
-		// 	// console.log("data is: " + localStorage.rootElement["Root"])
-		// 	this.setState({
-		// 		outputAlgoritm: myProperty
-		// 	})
-		// }
+		if (localStorage.negative) {
+			const myDict = JSON.parse(localStorage.getItem('rootElement'));
+			const myProperty = myDict.NegativeData;
+			this.setState({
+				outputAlgoritm: myProperty
+			})
+		}
 
 		this.open_route()
 	}
@@ -132,37 +131,37 @@ class NTIRPsTable extends Component {
 		);
 	}
 
-	async searchTirp(currentPath, selectedTirp) {
-		if (currentPath.length === 0) {
-			// We are searching for something in the root
-			this.setNewLevel(this.props.table, []);
-		} else {
-			const currentTirp = currentPath[currentPath.length - 1];
-			if (currentPath.length === 1) {
-				const visualizationId = sessionStorage.getItem('visualizationId');
-				await getSubTreeRequest(currentTirp._TIRP__symbols[0], visualizationId).then(
-					(data) => {
-						const tirpWithChildren = data['TIRPs'];
-						const children = this.getExistedChildren(tirpWithChildren);
+	// async searchTirp(currentPath, selectedTirp) {
+	// 	if (currentPath.length === 0) {
+	// 		// We are searching for something in the root
+	// 		this.setNewLevel(this.props.table, []);
+	// 	} else {
+	// 		const currentTirp = currentPath[currentPath.length - 1];
+	// 		if (currentPath.length === 1) {
+	// 			const visualizationId = sessionStorage.getItem('visualizationId');
+	// 			await getSubTreeRequest(currentTirp._TIRP__symbols[0], visualizationId).then(
+	// 				(data) => {
+	// 					const tirpWithChildren = data['TIRPs'];
+	// 					const children = this.getExistedChildren(tirpWithChildren);
 
-						this.setNewLevel(children, [currentTirp]);
-					}
-				);
-			} else {
-				const children = this.getExistedChildren(currentTirp);
-				this.setNewLevel(children, currentPath);
-			}
-		}
-		const unique_name = selectedTirp._TIRP__unique_name;
+	// 					this.setNewLevel(children, [currentTirp]);
+	// 				}
+	// 			);
+	// 		} else {
+	// 			const children = this.getExistedChildren(currentTirp);
+	// 			this.setNewLevel(children, currentPath);
+	// 		}
+	// 	}
+	// 	const unique_name = selectedTirp._TIRP__unique_name;
 
-		this.setState((oldState) => {
-			const found = oldState.currentTirps.find(
-				(tirp) => tirp._TIRP__unique_name === unique_name
-			);
+	// 	this.setState((oldState) => {
+	// 		const found = oldState.currentTirps.find(
+	// 			(tirp) => tirp._TIRP__unique_name === unique_name
+	// 		);
 
-			return found ? { selectedTirp } : {};
-		});
-	}
+	// 		return found ? { selectedTirp } : {};
+	// 	});
+	// }
 
 	toPercentage(amount, total) {
 		return ((amount * 100) / total).toFixed(2);
@@ -263,29 +262,29 @@ class NTIRPsTable extends Component {
 		});
 	}
 
-	toRoot() {
-		this.setNewLevel(this.props.table, []);
-	}
+	// toRoot() {
+	// 	this.setNewLevel(this.props.table, []);
+	// }
 
-	toLevel(levelNum) {
-		if (levelNum === 0) {
-			this.toRoot();
-		} else {
-			const tirp = this.state.currentPath[levelNum - 1];
-			if (levelNum === 1) {
-				const visualizationId = sessionStorage.getItem('visualizationId');
-				getSubTreeRequest(tirp._TIRP__symbols[0], visualizationId).then((data) => {
-					const tirpWithChildren = data['TIRPs'];
-					const children = this.getExistedChildren(tirpWithChildren);
+	// toLevel(levelNum) {
+	// 	if (levelNum === 0) {
+	// 		this.toRoot();
+	// 	} else {
+	// 		const tirp = this.state.currentPath[levelNum - 1];
+	// 		if (levelNum === 1) {
+	// 			const visualizationId = sessionStorage.getItem('visualizationId');
+	// 			getSubTreeRequest(tirp._TIRP__symbols[0], visualizationId).then((data) => {
+	// 				const tirpWithChildren = data['TIRPs'];
+	// 				const children = this.getExistedChildren(tirpWithChildren);
 
-					this.setNewLevel(children, [tirp]);
-				});
-			} else {
-				const children = this.getExistedChildren(tirp);
-				this.setNewLevel(children, this.state.currentPath.slice(0, levelNum));
-			}
-		}
-	}
+	// 				this.setNewLevel(children, [tirp]);
+	// 			});
+	// 		} else {
+	// 			const children = this.getExistedChildren(tirp);
+	// 			this.setNewLevel(children, this.state.currentPath.slice(0, levelNum));
+	// 		}
+	// 	}
+	// }
 
 	toNLevel(level) {
 	// eslint-disable-next-line
@@ -413,7 +412,6 @@ class NTIRPsTable extends Component {
 	
 
 	getNextLevel(){
-		console.log(this.state.outputAlgoritm) 
 		const nextPatterns = this.state.outputAlgoritm.filter((row) => {
 			if (row.elements.length === this.state.path.length + 1 && row.elements[this.state.path.length].length === 1){
 				for(let i = 0; i < this.state.path.length; i++){
@@ -444,7 +442,6 @@ class NTIRPsTable extends Component {
 			}
 			return false
 		} )
-		console.log("nextPatterns: " + nextPatterns)
 		return nextPatterns
 	}
 
@@ -527,14 +524,13 @@ class NTIRPsTable extends Component {
 								</Card.Text>
 							</Card.Header>
 							<Card.Body className={'text-hugobot'}>
-								<div className='vertical-scroll-tirp' style={{ height: '100%' }}>
+								<div className='vertical-scroll-tirp' style={{ minHeight: '100%'}}>
 									<Table
 										striped={true}
 										bordered={true}
 										hover={true}
 										style={{ tableLayout: 'fixed', textAlign: 'center' }}
 									>
-										
 										<thead>
 											<tr>
 												<th>Next</th>
@@ -548,16 +544,13 @@ class NTIRPsTable extends Component {
 										</thead>
 										<tbody>
 											{this.getNextLevel().map((tirp, index) => {
-												console.log(tirp)
 												return (
 													<tr
 														key={index}
 														onClick={() => {
 															
 															let numOfEntites = this.getNextLevelByElements(tirp.elements).length
-															console.log("numOfEntites: " + numOfEntites)
 															let newCurrentTirp = this.state.currentTirp
-															console.log("newCurrentTirp" + newCurrentTirp)
 															newCurrentTirp[this.state.currentLevel + 1] = tirp
 
 															this.setState({ 
@@ -587,7 +580,7 @@ class NTIRPsTable extends Component {
 						</Card>
 					</Col>
 					<Col sm={3}>
-						{this.state.selectedTirp && (
+						{ (
 							<>
 							{this.state.tirp && (
 								<SelectedNTirpsTable 
@@ -647,12 +640,12 @@ class NTIRPsTable extends Component {
 								>
 									Explore Symbols
 								</Button>
-								<SymbolPop
+								{/* <SymbolPop
 									show={this.state.modalShowSymbolPop}
 									row={this.state.selectedTirp}
 									onHide={() => this.setState({ modalShowSymbolPop: false })}
 									type={this.props.discriminative ? 'BPTirps' : 'BTirps'}
-								/>
+								/> */}
 								<Button
 									className={'tirp-table-buttons'}
 									variant='primary'
@@ -662,13 +655,13 @@ class NTIRPsTable extends Component {
 								>
 									See Raw Data
 								</Button>
-								<SymbolPop
+								{/* <SymbolPop
 									show={this.state.modalShowRawPop}
 									path={this.state.currentPath}
 									row={this.state.selectedTirp}
 									onHide={() => this.setState({ modalShowRawPop: false })}
 									type={this.props.discriminative ? 'RawData' : 'RawData'}
-								/>
+								/> */}
 							</>
 						)}
 					</Col>

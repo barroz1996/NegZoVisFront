@@ -47,8 +47,6 @@ class TirpsApp extends Component {
 	async getRoot(visualizationId) {
 		const data = await initiateTirps(visualizationId);
 
-		console.log(data.root)
-
 		if (data.NegativeData) {
 			localStorage.rootElement = JSON.stringify(data);
 			localStorage.negative = true
