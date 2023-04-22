@@ -57,12 +57,12 @@ class TirpsNavigation extends Component {
 						<SimpleOverlayTrigger
 							tip={'This tab is for datasets with only one class'}
 							placement={'bottom'}
-							show={this.props.two_class}
+							show={this.props.two_class && this.props.negative}
 						>
 							<NavLink
 								activeClassName='active'
 								to={'/TirpsApp/TIRPs'}
-								{...(!this.props.two_class || disabledProps)}
+								{...((!this.props.two_class && !this.props.negative) || disabledProps)}
 							>
 								<i className='fas fa-tree'></i> TIRPs
 							</NavLink>
@@ -92,7 +92,7 @@ class TirpsNavigation extends Component {
 							<NavLink
 								activeClassName='active'
 								to={'/TirpsApp/TIRPsSearch'}
-								{...(!this.props.two_class || disabledProps)}
+								{...((!this.props.two_class && !this.props.negative) || disabledProps)}
 							>
 								<i className='fas fa-search'></i> TIRPs Search
 							</NavLink>
@@ -100,14 +100,14 @@ class TirpsNavigation extends Component {
 					</li>
 					<li className='vis-nav-links'>
 						<SimpleOverlayTrigger
-							tip={'This tab is for datasets with only one class'}
+							tip={'This tab is for negative sequential datasets'}
 							placement={'bottom'}
-							show={this.props.two_class}
+							show={!this.props.negative}
 						>
 							<NavLink
 								activeClassName='active'
 								to={'/TirpsApp/NTIRPsSearch'}
-								{...(!this.props.two_class || disabledProps)}
+								{...(this.props.negative || disabledProps)}
 							>
 								<i className='fas fa-search'></i> NTIRPs Search
 							</NavLink>
@@ -137,7 +137,7 @@ class TirpsNavigation extends Component {
 							<NavLink
 								activeClassName='active'
 								to={'/TirpsApp/Tali/BTirps'}
-								{...(!this.props.two_class || disabledProps)}
+								{...((!this.props.two_class && !this.props.negative) || disabledProps)}
 							>
 								<i className='fas fa-network-wired'></i> Bidirectional Tirps
 							</NavLink>
@@ -160,14 +160,14 @@ class TirpsNavigation extends Component {
 					</li>
 					<li className='vis-nav-links'>
 						<SimpleOverlayTrigger
-							tip={'This tab is for datasets with only one class'}
+							tip={'This tab is for negative sequential datasets'}
 							placement={'bottom'}
-							show={this.props.two_class}
+							show={!this.props.negative}
 						>
 							<NavLink
 								activeClassName='active'
 								to={'/TirpsApp/NegativeTirps'}
-								{...(!this.props.two_class || disabledProps)}
+								{...(this.props.negative || disabledProps)}
 							>
 								<i className='fas fa-tree'></i> NegativeTirps
 							</NavLink>

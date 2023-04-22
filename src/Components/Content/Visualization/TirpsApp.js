@@ -13,6 +13,7 @@ class TirpsApp extends Component {
 	state = {
 		two_class: false,
 		entities: false,
+		negative: false,
 	};
 	
 	componentDidMount() {
@@ -46,15 +47,21 @@ class TirpsApp extends Component {
 	//get root for the TIRPs page
 	async getRoot(visualizationId) {
 		const data = await initiateTirps(visualizationId);
-		const entitiesFile = await getEntitiesFile(visualizationId)
+		const VMAPFile = await getEntitiesFile(visualizationId)
 
 		
 		if (data.NegativeData) {
 			localStorage.rootElement = JSON.stringify(data);
 			localStorage.negative = true
-			localStorage.entitiesFile = JSON.stringify(entitiesFile)
+			this.setState({
+				negative: true
+			});
+			localStorage.entitiesFile = JSON.stringify(VMAPFile)
 		}
 		else {
+			this.setState({
+				negative: false
+			});
 			const arrOfRoot = data.Root;
 			let jsons = [];
 			for (let i = 0; i < arrOfRoot.length; i++) {
@@ -87,7 +94,7 @@ class TirpsApp extends Component {
 	render() {
 		return (
 			<div className='TirpsApp'>
-				<TirpsNavigation entities={this.state.entities} two_class={this.state.two_class} />
+				<TirpsNavigation entities={this.state.entities} two_class={this.state.two_class} negative={this.state.negative} />
 				<TiprsContent />
 			</div>
 		);
