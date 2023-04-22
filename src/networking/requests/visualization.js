@@ -15,6 +15,12 @@ export function getEntities(visualizationId) {
 	return post('getEntities', params);
 }
 
+export function getEntitiesFile(visualizationId) {
+	const params = { visualization: visualizationId };
+	return post('getEntitiesFileFromVisualization', params);
+}
+
+
 export function getStates(visualizationId) {
 	const params = { visualization: visualizationId };
 	return post('getStates', params);

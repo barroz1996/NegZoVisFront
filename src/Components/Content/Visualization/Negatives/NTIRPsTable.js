@@ -62,11 +62,11 @@ class NTIRPsTable extends Component {
 		// this.setState({
 		// 	outputAlgoritm: promise.data
 		// })
-		let surl = 'http://127.0.0.1:443/get_negative_variables'
-		const spromise = await axios.get(surl)
-		this.setState({
-			vnames: spromise.data
-		})
+		// let surl = 'http://127.0.0.1:443/get_negative_variables'
+		// const spromise = await axios.get(surl)
+		// this.setState({
+		// 	vnames: spromise.data
+		// })
 		let symbolLevel0 = this.getRoorEntitiesSize()
 		this.setState({
 			numOfSymbolInSelctedPath: symbolLevel0,
@@ -115,8 +115,10 @@ class NTIRPsTable extends Component {
 		if (localStorage.negative) {
 			const myDict = JSON.parse(localStorage.getItem('rootElement'));
 			const myProperty = myDict.NegativeData;
+			const entities = JSON.parse(localStorage.entitiesFile)
 			this.setState({
-				outputAlgoritm: myProperty
+				outputAlgoritm: myProperty,
+				vnames: entities
 			})
 		}
 
@@ -255,10 +257,17 @@ class NTIRPsTable extends Component {
 	}
 
 	setNewLevel(tirps, path) {
+		const firstLevelTirps = tirps.NegativeData.filter((row) => {
+			if (row.elements.length === 1) {
+				return true
+			} else {
+				return false
+			}
+		})
 		this.setState({
 			currentTirps: tirps,
 			currentPath: path,
-			selectedTirp: tirps[0],
+			selectedTirp: firstLevelTirps[0][0],
 		});
 	}
 
@@ -524,7 +533,7 @@ class NTIRPsTable extends Component {
 								</Card.Text>
 							</Card.Header>
 							<Card.Body className={'text-hugobot'}>
-								<div className='vertical-scroll-tirp' style={{ minHeight: '100%'}}>
+								<div className='vertical-scroll-tirp' style={{ height: '100%'}}>
 									<Table
 										striped={true}
 										bordered={true}
@@ -580,7 +589,7 @@ class NTIRPsTable extends Component {
 						</Card>
 					</Col>
 					<Col sm={3}>
-						{ (
+						{(
 							<>
 							{this.state.tirp && (
 								<SelectedNTirpsTable 

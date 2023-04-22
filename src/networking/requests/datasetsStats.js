@@ -14,6 +14,7 @@ export function getDataOnDataset(datasetName) {
 	return get('getDataOnDataset', params);
 }
 
+
 export function getVisualizationDetails(visualizationID) {
 	const params = { visualization_id: visualizationID };
 	return get('getVisualizationDetails', params);

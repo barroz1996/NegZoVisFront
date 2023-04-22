@@ -30,7 +30,6 @@ function ProcessWorkflow(props) {
 					window.open(`#/Process`, '_self');
 				});
 			});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [datasetName]);
 
 	function addDiscretization(id, NumStates, InterpolationGap, AbMethod, PAA) {
@@ -86,9 +85,9 @@ function ProcessWorkflow(props) {
 				</Route>
 				<Route path={'/Process/:discretizationId/Visualization'}>
 					<Visualization 
-					TIMTable={tims}
-					NegativesTable = {negatives}
-					datasetName={datasetName} />
+						TIMTable={tims}
+						NegativesTable = {negatives}
+						datasetName={datasetName} />
 				</Route>
 				<Redirect
 					from='/Process/:discretizationId'

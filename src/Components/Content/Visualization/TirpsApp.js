@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import TiprsContent from './TirpsContent/TirpsContent';
 import TirpsNavigation from './TirpsNavigation';
 
-import { getEntities, getStates, initiateTirps } from '../../../networking/requests/visualization';
+import { getEntities, getStates, initiateTirps, getEntitiesFile } from '../../../networking/requests/visualization';
 import { getVisualizationInfo } from '../../../networking/requests/datasetsStats';
 
 /**
@@ -46,10 +46,13 @@ class TirpsApp extends Component {
 	//get root for the TIRPs page
 	async getRoot(visualizationId) {
 		const data = await initiateTirps(visualizationId);
+		const entitiesFile = await getEntitiesFile(visualizationId)
 
+		
 		if (data.NegativeData) {
 			localStorage.rootElement = JSON.stringify(data);
 			localStorage.negative = true
+			localStorage.entitiesFile = JSON.stringify(entitiesFile)
 		}
 		else {
 			const arrOfRoot = data.Root;
