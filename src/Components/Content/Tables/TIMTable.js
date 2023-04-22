@@ -238,9 +238,27 @@ class TIMTable extends Component {
 						</td>
 						<td className={'font-weight-bold'}>Max Gap</td>
 						<td className={'font-weight-bold'}>Maximum Negatives</td>
-						<td className={'font-weight-bold'}>OFO</td>
-						<td className={'font-weight-bold'}>AS</td>
-						<td className={'font-weight-bold'}>BC</td>
+						<td className={'font-weight-bold'}>
+							OFO
+							<MyToolTip
+								icon={'fa-exclamation-circle'}
+								tip={'One for One'}
+							/>
+						</td>
+						<td className={'font-weight-bold'}>
+							AS
+							<MyToolTip
+								icon={'fa-exclamation-circle'}
+								tip={'Allow Same'}
+							/>
+						</td>
+						<td className={'font-weight-bold'}>
+							BC
+							<MyToolTip
+								icon={'fa-exclamation-circle'}
+								tip={'Boundry Constraint'}
+							/>
+						</td>
 						<td className={'font-weight-bold'}>Mine</td>
 						<td className={'font-weight-bold'}>{'Mine and Visualize'}</td>
 					</tr>

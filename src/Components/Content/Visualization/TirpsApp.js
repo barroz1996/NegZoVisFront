@@ -94,7 +94,7 @@ class TirpsApp extends Component {
 	render() {
 		return (
 			<div className='TirpsApp'>
-				<TirpsNavigation entities={this.state.entities} two_class={this.state.two_class} negative={this.state.negative} />
+				<TirpsNavigation entities={this.state.entities} two_class={this.state.two_class} negative={localStorage.negative} />
 				<TiprsContent />
 			</div>
 		);
