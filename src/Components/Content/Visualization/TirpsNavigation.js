@@ -11,7 +11,6 @@ import { SimpleOverlayTrigger } from '../../MyToolTip';
 class TirpsNavigation extends Component {
 	render() {
 		const datasetName = sessionStorage.getItem('datasetReadyName');
-
 		const disabledProps = {
 			className: 'disabled',
 			onClick: (e) => {
@@ -62,7 +61,7 @@ class TirpsNavigation extends Component {
 							<NavLink
 								activeClassName='active'
 								to={'/TirpsApp/TIRPs'}
-								{...((!this.props.two_class && !this.props.negative) || disabledProps)}
+								{...((this.props.two_class && !this.props.negative) || this.props.negative ? disabledProps : !disabledProps)}
 							>
 								<i className='fas fa-tree'></i> TIRPs
 							</NavLink>
@@ -92,7 +91,7 @@ class TirpsNavigation extends Component {
 							<NavLink
 								activeClassName='active'
 								to={'/TirpsApp/TIRPsSearch'}
-								{...((!this.props.two_class && !this.props.negative) || disabledProps)}
+								{...((this.props.two_class && !this.props.negative) || this.props.negative ? disabledProps : !disabledProps)}
 							>
 								<i className='fas fa-search'></i> TIRPs Search
 							</NavLink>
