@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import TiprsContent from './TirpsContent/TirpsContent';
 import TirpsNavigation from './TirpsNavigation';
 
-import { getEntities, getStates, initiateTirps, getEntitiesFile } from '../../../networking/requests/visualization';
+import { getEntities, getStates, initiateTirps, getVMapFile } from '../../../networking/requests/visualization';
 import { getVisualizationInfo } from '../../../networking/requests/datasetsStats';
 
 /**
@@ -47,7 +47,7 @@ class TirpsApp extends Component {
 	//get root for the TIRPs page
 	async getRoot(visualizationId) {
 		const data = await initiateTirps(visualizationId);
-		const VMAPFile = await getEntitiesFile(visualizationId)
+		const VMAPFile = await getVMapFile(visualizationId)
 
 		
 		if (data.NegativeData) {
@@ -56,7 +56,7 @@ class TirpsApp extends Component {
 			this.setState({
 				negative: true
 			});
-			localStorage.entitiesFile = JSON.stringify(VMAPFile)
+			localStorage.VMapFile = JSON.stringify(VMAPFile)
 		}
 		else {
 			this.setState({
