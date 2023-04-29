@@ -8,12 +8,11 @@ import Col from 'react-bootstrap/Col';
 import DTirpBarPlot from '../TirpsContent/DTirpBarPlot';
 import TIRPsPie from '../TirpsContent/TIRPsPie';
 // import TirpMatrix from './TirpMatrix';
-import SymbolPop from '../TirpsContent/SymbolPop';
+// import SymbolPop from '../TirpsContent/SymbolPop';
 // import SelectedTIRPTable from './SelectedTIRPTable';
 // import WeightsForm from './WeightsForm';
 import NTIRPTimeLine from './NTIRPTimeLine';
 import WeightsPop from '../TirpsContent/WeightsPop';
-import axios from 'axios';
 
 import SelectedNTirpsTable from './SelectedNTIRPsTable';
 
@@ -67,14 +66,14 @@ class NTIRPsTable extends Component {
 		// this.setState({
 		// 	vnames: spromise.data
 		// })
-		let symbolLevel0 = this.getRoorEntitiesSize()
+		let symbolLevel0 = this.getRootEntitiesSize()
 		this.setState({
 			numOfSymbolInSelctedPath: symbolLevel0,
 			numOfSymbolsInLevel0: symbolLevel0
 		})
 	}
 
-	getRoorEntitiesSize(){
+	getRootEntitiesSize(){
 		const firstSymbol = this.state.outputAlgoritm.filter((row) => {
 			if(row.elements.length === 1 && row.elements[0].length === 1){
 				return true
@@ -115,7 +114,7 @@ class NTIRPsTable extends Component {
 		if (localStorage.negative) {
 			const myDict = JSON.parse(localStorage.getItem('rootElement'));
 			const myProperty = myDict.NegativeData;
-			const entities = JSON.parse(localStorage.entitiesFile)
+			const entities = JSON.parse(localStorage.VMapFile)
 			this.setState({
 				outputAlgoritm: myProperty,
 				vnames: entities
@@ -692,7 +691,7 @@ class NTIRPsTable extends Component {
 							)}
 						</Col>
 					)}
-					<Col xl={4} lg={6}>
+					<Col xl={9} lg={6}>
 						{Object.keys(this.state.tirp).length > 0 && (
 							<NTIRPTimeLine
 								tirp={this.state.tirp}
