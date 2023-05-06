@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Button, ButtonGroup, Card, Form, Table, ToggleButton } from 'react-bootstrap';
 
-import { addTIM, getTIM, deleteKarmaLego } from '../../../networking/requests/dataMining';
+import { addTIM, getTIM, deleteKarmaLego, getNegativeTIM } from '../../../networking/requests/dataMining';
 import MyToolTip from '../../MyToolTip';
 import {
 	errorAlert,
@@ -49,6 +49,7 @@ class TIMTable extends Component {
 		this.handleDownloadRequest = this.handleDownloadRequest.bind(this);
 		this.handleDownloadRequest0 = this.handleDownloadRequest0.bind(this);
 		this.handleDownloadRequest1 = this.handleDownloadRequest1.bind(this);
+		this.handleNegativeDownloadRequest = this.handleNegativeDownloadRequest.bind(this);
 		this.handleButtonClick = this.handleButtonClick.bind(this);
 	}
 
@@ -68,6 +69,31 @@ class TIMTable extends Component {
 				let url = window.URL.createObjectURL(blob);
 				a.href = url;
 				a.download = 'KL.txt';
+
+				a.click();
+
+				window.URL.revokeObjectURL(url);
+			})
+			.catch(errorAlert);
+	}
+
+	handleNegativeDownloadRequest(e) {
+		let idx = parseInt(e.target.id.split('-')[1]);
+		let tim = this.props.NegativesTable
+		let id = tim[idx]['karma_id'];
+
+		getNegativeTIM(id)
+			.then((data) => {
+				console.log(data)
+				let blob = new Blob([data], { type: 'text/plain' });
+
+				let a = document.createElement('a');
+				a.style = 'display: none';
+				document.body.appendChild(a);
+
+				let url = window.URL.createObjectURL(blob);
+				a.href = url;
+				a.download = 'negative_output.json';
 
 				a.click();
 
@@ -744,8 +770,8 @@ class TIMTable extends Component {
 								<td>
 									<Button
 										className='bg-hugobot'
-										id={'download2-' + index}
-										onClick={this.handleDownloadRequest}
+										id={'downloadNegative-' + index}
+										onClick={this.handleNegativeDownloadRequest}
 									>
 										<i className='fas fa-download' id={'downloadIcon2-' + index} />{' '}
 										Download

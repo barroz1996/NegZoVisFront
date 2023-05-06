@@ -4,6 +4,10 @@ export function getTIM(kl_id, class_num) {
 	const params = { kl_id, class_num };
 	return post('getTIM', params);
 }
+export function getNegativeTIM(kl_id) {
+	const params = { kl_id };
+	return post('getNegativeTIM', params);
+}
 export function addTIM(
 	discretizationId,
 	epsilon,
