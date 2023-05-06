@@ -84,18 +84,18 @@ class TIMTable extends Component {
 
 		getNegativeTIM(id)
 			.then((data) => {
-				console.log(data)
-				let blob = new Blob([data], { type: 'text/plain' });
-
-				let a = document.createElement('a');
-				a.style = 'display: none';
-				document.body.appendChild(a);
+				let blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
 
 				let url = window.URL.createObjectURL(blob);
-				a.href = url;
-				a.download = 'negative_output.json';
 
-				a.click();
+				let link = document.createElement('a');
+				link.href = url;
+				link.download = 'negative_output.json';
+				document.body.appendChild(link);
+
+				link.click();
+
+				document.body.removeChild(link)
 
 				window.URL.revokeObjectURL(url);
 			})
