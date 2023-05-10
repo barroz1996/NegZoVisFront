@@ -62,7 +62,7 @@ class Workflow extends Component {
 							onClick={this.changeTab}
 							to={`/Process/${this.props.discretizationId}/TIM`}
 						>
-							Time Intervals Mining
+							Pattern Mining
 						</Link>
 					</div>
 					<div className='flex-fill'>

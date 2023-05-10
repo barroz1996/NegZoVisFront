@@ -39,9 +39,9 @@ class TIMTable extends Component {
 		this.state = {
 			Allen: new Map(),
 			Class: new Map(),
-			selectedButton: 0,
-			selectedSecondButton: 0,
-			negative: "",
+			selectedButton: 'false',
+			selectedSecondButton: 'false',
+			negative: "false",
 			tims: {},
 		};
 
@@ -191,15 +191,16 @@ class TIMTable extends Component {
 	handleButtonClick(buttonType) {
 		this.setState({
 		  selectedButton: buttonType,
-		  negative: buttonType
-		});
-	}
-
-	handleSecondButtonClick(buttonType) {
-		this.setState({
+		  negative: buttonType,
 		  selectedSecondButton: buttonType,
 		});
 	}
+
+	// handleSecondButtonClick(buttonType) {
+	// 	this.setState({
+		  
+	// 	});
+	// }
 
 	HeadElement = (Heading) => {
 		return (
@@ -807,35 +808,31 @@ class TIMTable extends Component {
 		return (
 			<small>
 				<Card style={{ width: 'auto' }}>
+					<ButtonGroup toggle={true}>
+						<ToggleButton
+							checked={this.state.selectedButton === 'false'}
+							className={'btn-hugobot'}
+							onClick={() => this.handleButtonClick('false')}
+							type={'radio'}
+							value={false}
+						>
+							Time Intervals
+						</ToggleButton>
+						<ToggleButton
+							checked={this.state.selectedButton === 'true'}
+							className={'btn-hugobot'}
+							onClick={() => this.handleButtonClick('true')}
+							type={'radio'}
+							value={true}
+						>
+							Sequential
+						</ToggleButton>
+					</ButtonGroup>
 					<Card.Header className={'bg-hugobot'}>
 						<Card.Text className={'h4 text-hugobot '}>
-							Add a New Time Intervals Mining Configuration
+							Add a New Pattern Mining Configuration
 						</Card.Text>
-						<Card.Text className={'h6 text-hugobot '}>
-							Select Positive/Negative Mining
-						</Card.Text>
-						<div>
-						<ButtonGroup toggle={true}>
-								<ToggleButton
-									checked={this.state.selectedButton === 'false'}
-									className={'btn-hugobot'}
-									onClick={() => this.handleButtonClick('false')}
-									type={'radio'}
-									value={false}
-								>
-									Positive
-								</ToggleButton>
-								<ToggleButton
-									checked={this.state.selectedButton === 'true'}
-									className={'btn-hugobot'}
-									onClick={() => this.handleButtonClick('true')}
-									type={'radio'}
-									value={true}
-								>
-									Negative
-								</ToggleButton>
-						</ButtonGroup>
-    				</div>
+
 					</Card.Header>
 					{/* {this.HeadElement('')} */}
 					<Card.Body>
@@ -848,31 +845,6 @@ class TIMTable extends Component {
 				<Card style={{ width: 'auto' }}>
 					<Card.Header className={'bg-hugobot'}>
 						<Card.Text className={'h4 text-hugobot '}>Discovered Patterns</Card.Text>
-						<Card.Text className={'h6 text-hugobot '}>
-							Select Positive/Negative Patterns
-						</Card.Text>
-						<div>
-						<ButtonGroup toggle={true}>
-								<ToggleButton
-									checked={this.state.selectedSecondButton === 'false'}
-									className={'btn-hugobot'}
-									onClick={() => this.handleSecondButtonClick('false')}
-									type={'radio'}
-									value={false}
-								>
-									Positive
-								</ToggleButton>
-								<ToggleButton
-									checked={this.state.selectedSecondButton === 'true'}
-									className={'btn-hugobot'}
-									onClick={() => this.handleSecondButtonClick('true')}
-									type={'radio'}
-									value={true}
-								>
-									Negative
-								</ToggleButton>
-						</ButtonGroup>
-    				</div>
 					</Card.Header>
 					<Card.Body>
 						<Table hover>
