@@ -27,17 +27,18 @@ class NSearchTable extends Component {
         vnames: []
 	};
 
-    async componentDidMount() {
+	componentDidMount() {
 		let allVnames = []  
-		let surl = 'http://127.0.0.1:443/get_negative_variables'
-		const spromise = await axios.get(surl)
-		for (const [key, value] of Object.entries(spromise.data)) {
-            allVnames.push(value)
-            allVnames.push(String.fromCharCode(172) + value)
-          }
-		this.setState({
-			vnames: allVnames, 
-		})
+		if (localStorage.negative) {
+			const entities = JSON.parse(localStorage.VMapFile);
+			for (const [key, value] of Object.entries(entities)) {
+				allVnames.push(value)
+				allVnames.push(String.fromCharCode(172) + value)
+			}
+			this.setState({
+				vnames: allVnames,
+			});
+		}
 	}
 
 	computeStates() {

@@ -1,34 +1,30 @@
 import React, { Component } from 'react';
 import { Table } from 'react-bootstrap';
-import axios from 'axios';
 
 class NSearchIntervals extends Component {
 	constructor(props) {
 		super(props);
-
-		// const intervals = this.props.intervals;
-		// const stateIDs = Object.keys(intervals);
-		// this.data = stateIDs.map((stateID) => ({ id: stateID, name: intervals[stateID] }));
 		this.state = {
 			filter: '',
 			selected: [],
-            vnames: [],
+      vnames: [],
 		};
 	}
 
 
-    async componentDidMount() {
-		let allVnames = []  
-		let surl = 'http://127.0.0.1:443/get_negative_variables'
-		const spromise = await axios.get(surl)
-		for (const [key, value] of Object.entries(spromise.data)) {
-            allVnames.push(value)
-            allVnames.push(String.fromCharCode(172) + value)
-          }
-		this.setState({
-			vnames: allVnames, 
-			selected : allVnames
-		})
+    componentDidMount() {
+			let allVnames = []  
+			if (localStorage.negative) {
+				const entities = JSON.parse(localStorage.VMapFile);
+				for (const [key, value] of Object.entries(entities)) {
+					allVnames.push(value)
+					allVnames.push(String.fromCharCode(172) + value)
+				}
+				this.setState({
+					vnames: allVnames,
+					selected: allVnames
+				});
+			}
 	}
 
 	handleOnSelect = (selected, name) => {

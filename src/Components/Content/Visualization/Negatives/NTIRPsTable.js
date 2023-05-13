@@ -13,11 +13,11 @@ import TIRPsPie from '../TirpsContent/TIRPsPie';
 // import WeightsForm from './WeightsForm';
 import NTIRPTimeLine from './NTIRPTimeLine';
 import WeightsPop from '../TirpsContent/WeightsPop';
-
+import NTirpMatrix from './NTIRPMatrix';
 import SelectedNTirpsTable from './SelectedNTIRPsTable';
 
 import { getSubTree as getSubTreeRequest } from '../../../../networking/requests/visualization';
-import NTirpMatrix from './NTIRPMatrix';
+
 
 const headerSortingStyle = { backgroundColor: '#c8e6c9' };
 

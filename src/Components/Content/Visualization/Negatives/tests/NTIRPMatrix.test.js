@@ -1,7 +1,7 @@
 import React from 'react';
 import Enzyme from 'enzyme';
 import { mount } from 'enzyme';
-import NTirpMatrix from '../NTirpMatrix';
+import NTirpMatrix from '../NTIRPMatrix';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 
 Enzyme.configure({ adapter: new Adapter() });
