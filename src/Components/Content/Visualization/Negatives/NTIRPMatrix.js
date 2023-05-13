@@ -6,17 +6,17 @@ class NTirpMatrix extends Component {
 	state = {
 		matrix: [],
 		tirp: {},
-        currentLevel: 0,
+        currentlevel: 0,
 		vnames: [], 
 	};
 	constructor(props) {
 		super(props);
 		this.state.tirp = this.props.tirp;
-        this.state.currentLevel = this.props.currentLevel
+        this.state.currentlevel = this.props.currentlevel
 	}
 
 	componentDidMount() {
-		if (this.props.show && this.props.currentLevel > 0) {
+		if (this.props.show && this.props.currentlevel > 0) {
 			this.DrawMatrix();
 		}
 		if (localStorage.negative) {
@@ -28,7 +28,7 @@ class NTirpMatrix extends Component {
 	}
 	DrawMatrix = () => {
     let currTirp = this.props.tirp;
-		let symbols = this.props.currentLevel > 0 ? currTirp.elements : [[]];
+		let symbols = this.props.currentlevel > 0 ? currTirp.elements : [[]];
         const elements = [].concat(...symbols);
 
 		const mapping = symbols.reduce((acc, innerArray, arrayIndex) => {

@@ -13,13 +13,13 @@ const dom = new JSDOM('<!doctype html><html><body></body></html>', {
 global.window = dom.window;
 global.document = dom.window.document;
 
-describe.skip('NTirpMatrix', () => {
+describe('NTirpMatrix', () => {
     const props = {
         show: true,
         tirp: {
             elements: [[1, 2], [3, 4]],
         },
-        currentLevel: 1,
+        currentlevel: 1,
     };
     const localStorageMock = {
         negative: true,
@@ -78,7 +78,7 @@ describe.skip('NTirpMatrix', () => {
       const wrapper = mount(<NTirpMatrix {...props} />);
       wrapper.setProps({
         tirp: { elements: [['1'], ['2'], ['3']] },
-        currentLevel: 2,
+        currentlevel: 2,
       });
       expect(wrapper.state('matrix')).toEqual([
         ['', 'B', 'C'],
