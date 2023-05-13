@@ -20,10 +20,6 @@ class NTIRPTimeLine extends Component {
 		'</div>')
 	}
 
-	computeStyle(row) {
-		console.log(row)
-	}
-
     computeNDataset = (vnames, elements, negatives, timezone, gap) => {
         const columns = [
             { type: "string", id: "Elements" },

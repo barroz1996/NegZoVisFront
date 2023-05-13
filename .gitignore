@@ -12,7 +12,7 @@ package-lock.json
 
 # testing
 /coverage
-src/Components/Content/Visualization/Negatives/tests/
+src/Components/Content/Visualization/Negatives/tests/__snapshots__/
 
 # production
 /build

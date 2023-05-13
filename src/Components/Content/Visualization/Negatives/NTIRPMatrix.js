@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Card } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
-import axios from 'axios';
 
 class NTirpMatrix extends Component {
 	state = {
@@ -14,26 +13,21 @@ class NTirpMatrix extends Component {
 		super(props);
 		this.state.tirp = this.props.tirp;
         this.state.currentLevel = this.props.currentLevel
-		this.state.vnames = this.props.vnames
-		if (this.props.show && this.props.currentLevel > 0) {
-			this.DrawMatrix();
-		}
-	}
-
-	async renderData() {
-		let surl = 'http://127.0.0.1:443/get_negative_variables'
-		const spromise = await axios.get(surl)
-		this.setState({
-			vnames: spromise.data
-		})
 	}
 
 	componentDidMount() {
-		this.renderData()
+		if (this.props.show && this.props.currentLevel > 0) {
+			this.DrawMatrix();
+		}
+		if (localStorage.negative) {
+			const entities = JSON.parse(localStorage.VMapFile);
+			this.setState({
+				vnames: entities
+			});
+		}
 	}
-
 	DrawMatrix = () => {
-        let currTirp = this.props.tirp;
+    let currTirp = this.props.tirp;
 		let symbols = this.props.currentLevel > 0 ? currTirp.elements : [[]];
         const elements = [].concat(...symbols);
 
@@ -110,7 +104,7 @@ class NTirpMatrix extends Component {
 				centered
 			>
 				<Modal.Header className={'bg-hugobot'} closeButton>
-					<Card.Text className={'text-hugobot text-hugoob-advanced'}>Relations</Card.Text>
+					<Card.Text id="relations-header" className={'text-hugobot text-hugoob-advanced'}>Relations</Card.Text>
 				</Modal.Header>
 				<Modal.Body>
 					<table
@@ -120,7 +114,9 @@ class NTirpMatrix extends Component {
 							borderStyle: 'solid',
 						}}
 					>
-						{this.draw()}
+						<tbody>
+							{this.draw()}
+						</tbody>
 					</table>
 				</Modal.Body>
 			</Modal>

@@ -7,7 +7,6 @@
 		"@cantonjs/react-scroll-view": "^0.4.2",
 		"@coreui/react": "^4.1.2",
 		"@material-ui/core": "^4.12.3",
-		"@testing-library/jest-dom": "^5.11.9",
 		"@testing-library/react": "^11.2.5",
 		"@testing-library/user-event": "^12.7.1",
 		"@types/google.visualization": "0.0.66",
@@ -36,7 +35,9 @@
 		"sweetalert2": "^11.3.10"
 	},
 	"devDependencies": {
+		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/react-hooks": "^8.0.1",
+		"@wojtekmaj/enzyme-adapter-react-17": "^0.8.0",
 		"autoprefixer": "^10.4.4",
 		"jest": "^27.5.1",
 		"jest-localstorage-mock": "^2.4.26",
