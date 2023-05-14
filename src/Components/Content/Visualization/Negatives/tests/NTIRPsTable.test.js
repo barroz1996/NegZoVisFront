@@ -3,6 +3,7 @@ import Enzyme from 'enzyme';
 import { mount } from 'enzyme';
 import NTIRPsTable from '../NTIRPsTable'
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import mockData from './mocks/mockData.json'
 import 'jest-localstorage-mock';
 
 Enzyme.configure({ adapter: new Adapter() });
@@ -15,18 +16,7 @@ global.window = dom.window;
 global.document = dom.window.document;
 
 const props = {
-  ntable: {NegativeData: [{"durations":[1.0,15.381336127261717],"elements":[[8],[8]],"gaps":[0.0],"mean horizontal support":2.794022790797678,"mean mean duration":16.381336127261733,"negatives":[false,true],"support":4651},
-  {"durations":[1.0,10.719659081750578],"elements":[[8],[18]],"gaps":[0.0],"mean horizontal support":2.7938077832724146,"mean mean duration":11.719659081750569,"negatives":[false,true],"support":4651},
-  {"durations":[1.0],"elements":[[8]],"gaps":[],"mean horizontal support":2.794022790797678,"mean mean duration":1.0,"negatives":[false],"support":4651},
-  {"durations":[1.0,16.065497515127483],"elements":[[18],[18]],"gaps":[0.0],"mean horizontal support":2.1912580943570767,"mean mean duration":17.065497515127486,"negatives":[false,true],"support":4324},
-  {"durations":[1.0],"elements":[[18]],"gaps":[],"mean horizontal support":2.192094313453537,"mean mean duration":1.0,"negatives":[false],"support":4326},
-  {"durations":[5.648990156899009,1.0,15.409204292381236],"elements":[[18],[8],[8]],"gaps":[0.0,0.0],"mean horizontal support":2.38248436103664,"mean mean duration":22.058194449280204,"negatives":[true,false,true],"support":4476},
-  {"durations":[5.647649674325282,1.0,10.224972589097929],"elements":[[18],[8],[18]],"gaps":[0.0,0.0],"mean horizontal support":2.382260947274352,"mean mean duration":16.87262226342322,"negatives":[true,false,true],"support":4476},
-  {"durations":[5.648990156899009,1.0],"elements":[[18],[8]],"gaps":[0.0],"mean horizontal support":2.38248436103664,"mean mean duration":6.648990156899009,"negatives":[true,false],"support":4476},
-  {"durations":[2.66390407],"elements":[[18]],"gaps":[],"mean horizontal support":2.5339389784024684,"mean mean duration":2.66390407,"negatives":[true],"support":5834},
-  {"durations":[3.2364430798851314,1.0,16.0646683449945],"elements":[[8],[18],[18]],"gaps":[0.0,0.0],"mean horizontal support":2.1908396946564888,"mean mean duration":20.30111142487965,"negatives":[true,false,true],"support":4323},
-  {"durations":[3.23989443568634,1.0],"elements":[[8],[18]],"gaps":[0.0],"mean horizontal support":2.1916763005780346,"mean mean duration":4.239894435686342,"negatives":[true,false],"support":4325},
-  {"durations":[2.27890518],"elements":[[8]],"gaps":[],"mean horizontal support":3.115872471717518,"mean mean duration":2.27890518,"negatives":[true],"support":5834}]},
+  ntable: mockData,
 };
 
 const emptyProps = {
@@ -110,5 +100,17 @@ describe('Component', () => {
     expect(wrapper.find('th').at(11).text()).toEqual('Mean horizontal_support');
     expect(wrapper.find('th').at(12).text()).toEqual('Mean mean duration');
     expect(wrapper.find('th').at(13).text()).toEqual('Entities');
+  });
+
+  it('should render the table rows again after next button is pressed', () => {
+    expect(wrapper.find('td').at(4).text()).toEqual('4651');
+    wrapper.find('td').at(0).find('button').simulate('click')
+    expect(wrapper.find('td').at(4).text()).toEqual('4851');
+  });
+
+  it('should render the timeline only after row is clicked', () => {
+    expect(wrapper.text().includes('NTIRPTimeLine')).toBe(false);
+    wrapper.find('td').at(0).find('button').simulate('click')
+    expect(wrapper.text().includes('NTIRPTimeLine')).toBe(true);
   });
 });
