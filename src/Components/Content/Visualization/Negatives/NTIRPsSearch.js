@@ -3,47 +3,15 @@ import { Container, ToggleButtonGroup, ToggleButton, Col, Row, Button } from 're
 
 import NSearchGraph from './NSearchGraph';
 import NSearchMeanPresentation from './NSearchMeanPresentation'
-import PsearchMeanPresentation from '../TirpsContent/PsearchMeanPresentation';
 import NTIRPTimeLine from './NTIRPTimeLine'
-import TIRPsPie from '../TirpsContent/TIRPsPie';
-import DTirpBarPlot from '../TirpsContent/DTirpBarPlot';
-import SymbolPop from '../TirpsContent/SymbolPop';
 import NSearchTable from './NSearchTable';
-import axios from 'axios';
 import NSearchIntervals from './NSearchIntervals';
 import SearchNLimits from './SearchNLimits';
 
-import {
-	getSubTree,
-	searchTirps1Class,
-	searchTirps2Class,
-} from '../../../../networking/requests/visualization';
 
 class NTIRPsSearch extends Component {
 	constructor(props) {
 		super(props);
-
-		// const tables = JSON.parse(localStorage.States);
-		// const statesEntries = tables.States.map((state) => {
-		// 	const part2 = state.BinLabel ?? state.BinLabel;
-		// 	const part1 = state.TemporalPropertyName ?? state.TemporalPropertyID;
-
-		// 	const name = part1 + '.' + part2;
-
-		// 	return [state.StateID, name];
-		// });
-		// const statesDict = Object.fromEntries(statesEntries);
-		// const stateIDs = Object.keys(statesDict);
-
-		if (localStorage.negative) {
-			const myDict = JSON.parse(localStorage.getItem('rootElement'));
-			const myProperty = myDict.NegativeData;
-			const entities = JSON.parse(localStorage.VMapFile)
-			this.setState({
-				outputAlgoritm: myProperty,
-				vnames: entities
-			})
-		}
 
 		this.state = {
 			parameters: {
@@ -62,13 +30,6 @@ class NTIRPsSearch extends Component {
 
 			minMMD: 0,
 			maxMMD: 100,
-
-			// startList: stateIDs,
-			// containList: stateIDs,
-			// endList: stateIDs,
-			
-			// dictionary_states: statesDict,
-			// totalNumSymbols: stateIDs.length,
 
 			showGraph: true,
 			canExplore: false,
@@ -108,61 +69,19 @@ class NTIRPsSearch extends Component {
 			},
 			NSelected: []
 		};
-		this.getAllTirps();
 	}
 
-	async getAllTirps() {
-		const visualizationId = sessionStorage.getItem('visualizationId');
-		const firstLevel = JSON.parse(localStorage.rootElement);
-		const subTreesPromises = firstLevel.map(async (tirp) => {
-			if (tirp._TIRP__childes.length === 0) return [];
-
-			const data = await getSubTree(tirp._TIRP__symbols[0], visualizationId);
-			const tirpsFamily = data['TIRPs'];
-			const tirpChildrenArr = tirpsFamily['_TIRP__childes'];
-			return tirpChildrenArr;
-		});
-		const subTressArray = await Promise.all(subTreesPromises);
-		const subTress = subTressArray.map((subTree) =>
-			this.flatTree(subTree, (tirp) => tirp['_TIRP__childes'])
-		);
-		const childrenTirps = subTress.flat();
-
-		const allTirps = firstLevel.concat(childrenTirps);
-		const allTirpsEntries = allTirps.map((tirp) => [tirp['_TIRP__unique_name'], tirp]);
-
-		this.setState({
-			allTirps: Object.fromEntries(allTirpsEntries),
-		});
-	}
-
-	flatTree(tree, getChildren) {
-		return tree.reduce((acc, curr) => {
-			const children = getChildren(curr);
-			const subTree = this.flatTree(children, getChildren);
-			return acc.concat([curr, ...subTree]);
-		}, []);
-	}
-
-	async componentDidMount() {
+	componentDidMount() {
 		if (localStorage.negative) {
-			const myDict = JSON.parse(localStorage.getItem('rootElement'));
+			const myDict = JSON.parse(localStorage.rootElement);
 			const myProperty = myDict.NegativeData;
+			const entities = JSON.parse(localStorage.VMapFile)
 			this.setState({
-				outputAlgoritm: myProperty
+				outputAlgoritm: myProperty,
+				vnames: entities
 			})
 		}
-		await this.open_route()
 	}
-
-	changeParameter = (event) => {
-		const parameterName = event.target.name;
-		const parameterRawValue = parseInt(event.target.value);
-		// const parameterValue = Math.max(parameterRawValue, event.target.min);
-		const parameterValue = Math.max(parameterRawValue, 1);
-		const newParameters = { ...this.state.parameters, [parameterName]: parameterValue };
-		this.setState({ parameters: newParameters });
-	};
 
 	changeNParameter = (event) => {
 		const parameterName = event.target.name;
@@ -172,57 +91,6 @@ class NTIRPsSearch extends Component {
 		const newParameters = { ...this.state.Nparameters, [parameterName]: parameterValue };
 		this.setState({ Nparameters: newParameters });
 	};
-
-	async searchTirps() {
-		const visualizationId = sessionStorage.getItem('visualizationId');
-		const data = this.props.isPredictive
-			? await searchTirps2Class(
-					true,
-					this.state.startList,
-					this.state.containList,
-					this.state.endList,
-					this.state.parameters.minHSCls0,
-					this.state.parameters.maxHSCls0,
-					this.state.parameters.minVSCls0,
-					this.state.parameters.maxVSCls0,
-					this.state.parameters.minHSCls1,
-					this.state.parameters.maxHSCls1,
-					this.state.parameters.minVSCls1,
-					this.state.parameters.maxVSCls1,
-					visualizationId,
-					this.state.startList.length !== this.state.totalNumSymbols,
-					this.state.containList.length !== this.state.totalNumSymbols,
-					this.state.endList.length !== this.state.totalNumSymbols
-			  )
-			: await searchTirps1Class(
-					'',
-					this.state.startList,
-					this.state.containList,
-					this.state.endList,
-					this.state.parameters.minHSCls0,
-					this.state.parameters.maxHSCls0,
-					this.state.parameters.minVSCls0,
-					this.state.parameters.maxVSCls0,
-					visualizationId,
-					this.state.startList.length !== this.state.totalNumSymbols,
-					this.state.containList.length !== this.state.totalNumSymbols,
-					this.state.endList.length !== this.state.totalNumSymbols
-			  );
-
-		// const SIZE_IDX = 2;
-		const searchResults = data['Results'].map((result) => result.split(','));
-		// .filter(
-		// 	(result) =>
-		// 		parseInt(result[SIZE_IDX]) >= this.state.parameters.minSizeCls0 &&
-		// 		parseInt(result[SIZE_IDX]) <= this.state.parameters.maxSizeCls0 &&
-		// 		parseInt(result[SIZE_IDX]) >= this.state.parameters.minSizeCls1 &&
-		// 		parseInt(result[SIZE_IDX]) <= this.state.parameters.maxSizeCls1
-		// );
-
-		this.setState({ searchResults });
-		const scrollToElement = document.querySelector('.results-container');
-		scrollToElement.scrollIntoView({ behavior: 'smooth' });
-	}
 
 	async searchNTirps() {
 		let searchResults = this.state.outputAlgoritm
@@ -312,19 +180,6 @@ class NTIRPsSearch extends Component {
 			NSelected: newSelected.row,
 			canExplore: true
 		});
-
-
-		// const rawSymbols = newSelected[this.props.isPredictive ? 7 : 4];
-		// const symbols = rawSymbols.slice(1, rawSymbols.length - 1);
-		// const rawRelations = newSelected[this.props.isPredictive ? 8 : 5];
-		// const relations = rawRelations.slice(0, rawRelations.length - 1);
-		// const unique_name = symbols + '|' + relations;
-
-		// this.setState({
-		// 	selected: newSelected,
-		// 	canExplore: true,
-		// 	chosenTIRP: this.state.allTirps[unique_name],
-		// });
 	}
 
 	render() {
@@ -375,33 +230,13 @@ class NTIRPsSearch extends Component {
 						{this.showTableOrGraph()}
 						{this.state.showGraph ? (
 							<NSearchGraph
-								// isPredictive={this.props.isPredictive}
-								// minVS0={this.state.parameters.minVSCls0}
-								// maxVS0={this.state.parameters.maxVSCls0}
-								// minHS0={this.state.parameters.minHSCls0}
-								// maxHS0={this.state.parameters.maxHSCls0}
-								// minSize0={this.state.parameters.minSizeCls0}
-								// maxSize0={this.state.parameters.maxSizeCls0}
-								// minVS1={this.state.parameters.minVSCls1}
-								// maxVS1={this.state.parameters.maxVSCls1}
-								// minHS1={this.state.parameters.minHSCls1}
-								// maxHS1={this.state.parameters.maxHSCls1}
 								handleOnSelect={this.handleOnSelect.bind(this)}
-								// measureToRate={this.state.measureToRate}
-								// selectedSymbols={
-								// 	this.state.selected[this.props.isPredictive ? 7 : 4]
-								// }
-								// selectedRelations={
-								// 	this.state.selected[this.props.isPredictive ? 8 : 5]
-								// }
 								tirps={this.state.searchResults}
-								// dictionary_states={this.state.dictionary_states}
 							/>) 
 						:
 						(
 							<NSearchTable
 								handleOnSelect={this.handleOnSelect.bind(this)}
-								// isPredictive={this.props.isPredictive}
 								tirps={this.state.searchResults}
 							/>
 						)}
@@ -411,22 +246,9 @@ class NTIRPsSearch extends Component {
 							<Col sm={1}></Col>
 							<Col sm={11}>
 								{Object.keys(this.state.NSelected).length > 0  && (
-									// <SelectedNTirpsTable 
-									// 	currentLevel={0}
-									// 	currentTirp={this.state.NSelected}
-									// 	numOfSymbolInSelctedPath={this.state.NSelected.elements.flat().length}
-								
-									// ></SelectedNTirpsTable> 
 									<NSearchMeanPresentation
 										canExplore={this.state.canExplore}
 										tirp={this.state.NSelected}
-										// vs={this.state.NSelected['support']}
-										// mhs={this.state.NSelected['mean horizontal support']}
-										// mmd={this.state.NSelected['mean mean duration']}
-										// currentLevel={this.state.selected[3]}
-										// symbols={this.state.selected[4]}
-										// relations={this.state.selected[5]}
-										// row={this.state.NSelected.row}
 								/>
 								)}
 								{/* {this.props.isPredictive ? (

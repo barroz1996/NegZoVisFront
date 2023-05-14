@@ -14,7 +14,7 @@ import TIRPsPie from '../TirpsContent/TIRPsPie';
 import NTIRPTimeLine from './NTIRPTimeLine';
 import WeightsPop from '../TirpsContent/WeightsPop';
 import NTirpMatrix from './NTIRPMatrix';
-import SelectedNTirpsTable from './SelectedNTIRPsTable';
+import SelectedNTirpsTable from './SelectedNTIRPsTable'
 
 import { getSubTree as getSubTreeRequest } from '../../../../networking/requests/visualization';
 
@@ -82,6 +82,28 @@ class NTIRPsTable extends Component {
 		})
 		return firstSymbol.length
 	}
+
+	findAllPreviousPatterns(pathOfTirps) {
+		const myDict = JSON.parse(localStorage.rootElement);
+		const myProperty = myDict.NegativeData;
+		let previousPatterns;
+
+		previousPatterns = myProperty.filter((row) => {
+			for (let i = 0; i < row.elements.length; i++) {
+				if (row.elements[i].length > pathOfTirps.elements[i].length) {
+				return false;
+				}
+				for (let j = 0; j < row.elements[i].length; j++) {
+				if (row.elements[i][j] !== pathOfTirps.elements[i][j]) {
+					return false;
+				}
+				}
+			}
+			return true;
+		})
+		
+		return previousPatterns
+	}
 	
 	componentDidMount() {
 		if (!Cookies.get('auth-token')) {
@@ -100,25 +122,30 @@ class NTIRPsTable extends Component {
 			this.setNewLevel(this.props.ntable, []);
 		}
 
-		if (Object.keys(window.pathOfTirps).length > 0) {
-			this.setState({ 
-				path: window.pathOfTirps.elements, 
-				tirp: window.pathOfTirps,
-				currentLevel: window.pathOfTirps.elements.flat().length
-				// currentLevel: window.pathOfTirps.elements.length,
-				// numOfSymbolInSelctedPath: window.pathOfTirps.elements.flat().length,
-			})
-			window.pathOfTirps = undefined
-		}
+
 
 		if (localStorage.negative) {
-			const myDict = JSON.parse(localStorage.getItem('rootElement'));
+			const myDict = JSON.parse(localStorage.rootElement);
 			const myProperty = myDict.NegativeData;
 			const entities = JSON.parse(localStorage.VMapFile)
 			this.setState({
 				outputAlgoritm: myProperty,
 				vnames: entities
 			})
+		}
+
+		if (Object.keys(window.pathOfTirps).length > 0) {
+			const previousPatterns = this.findAllPreviousPatterns(window.pathOfTirps)
+			this.setState({ 
+				path: window.pathOfTirps.elements, 
+				tirp: window.pathOfTirps,
+				currentLevel: window.pathOfTirps.elements.flat().length,
+				currentTirp: {
+					0: [], 
+					...previousPatterns
+				}
+			})
+			window.pathOfTirps = undefined
 		}
 
 		this.open_route()
@@ -131,38 +158,6 @@ class NTIRPsTable extends Component {
 				(child._TIRP__exist_in_class1 && this.props.discriminative)
 		);
 	}
-
-	// async searchTirp(currentPath, selectedTirp) {
-	// 	if (currentPath.length === 0) {
-	// 		// We are searching for something in the root
-	// 		this.setNewLevel(this.props.table, []);
-	// 	} else {
-	// 		const currentTirp = currentPath[currentPath.length - 1];
-	// 		if (currentPath.length === 1) {
-	// 			const visualizationId = sessionStorage.getItem('visualizationId');
-	// 			await getSubTreeRequest(currentTirp._TIRP__symbols[0], visualizationId).then(
-	// 				(data) => {
-	// 					const tirpWithChildren = data['TIRPs'];
-	// 					const children = this.getExistedChildren(tirpWithChildren);
-
-	// 					this.setNewLevel(children, [currentTirp]);
-	// 				}
-	// 			);
-	// 		} else {
-	// 			const children = this.getExistedChildren(currentTirp);
-	// 			this.setNewLevel(children, currentPath);
-	// 		}
-	// 	}
-	// 	const unique_name = selectedTirp._TIRP__unique_name;
-
-	// 	this.setState((oldState) => {
-	// 		const found = oldState.currentTirps.find(
-	// 			(tirp) => tirp._TIRP__unique_name === unique_name
-	// 		);
-
-	// 		return found ? { selectedTirp } : {};
-	// 	});
-	// }
 
 	toPercentage(amount, total) {
 		return ((amount * 100) / total).toFixed(2);
@@ -207,7 +202,6 @@ class NTIRPsTable extends Component {
 						key={tirp.id}
 						onClick={() => {
 							this.toNLevel([["Root"], ...this.state.path].slice(0, index + 1))
-
 							let newTirp = Object.fromEntries(Object.entries(this.state.currentTirp).slice(0, index+1))
 							this.setState({
 								currentLevel: index, 
@@ -226,7 +220,6 @@ class NTIRPsTable extends Component {
 								key={sub.id}
 								onClick={() => {
 									this.toNLevelSub([["Root"], ...this.state.path].slice(0, index + 1), jndex)
-
 									let newTirp = Object.fromEntries(Object.entries(this.state.currentTirp).slice(0, index+1))
 									this.setState({
 										currentLevel: index, 
@@ -269,30 +262,6 @@ class NTIRPsTable extends Component {
 			selectedTirp: firstLevelTirps[0][0],
 		});
 	}
-
-	// toRoot() {
-	// 	this.setNewLevel(this.props.table, []);
-	// }
-
-	// toLevel(levelNum) {
-	// 	if (levelNum === 0) {
-	// 		this.toRoot();
-	// 	} else {
-	// 		const tirp = this.state.currentPath[levelNum - 1];
-	// 		if (levelNum === 1) {
-	// 			const visualizationId = sessionStorage.getItem('visualizationId');
-	// 			getSubTreeRequest(tirp._TIRP__symbols[0], visualizationId).then((data) => {
-	// 				const tirpWithChildren = data['TIRPs'];
-	// 				const children = this.getExistedChildren(tirpWithChildren);
-
-	// 				this.setNewLevel(children, [tirp]);
-	// 			});
-	// 		} else {
-	// 			const children = this.getExistedChildren(tirp);
-	// 			this.setNewLevel(children, this.state.currentPath.slice(0, levelNum));
-	// 		}
-	// 	}
-	// }
 
 	toNLevel(level) {
 	// eslint-disable-next-line
@@ -635,7 +604,7 @@ class NTIRPsTable extends Component {
 									show={this.state.NmodalShow}
 									tirp={this.state.tirp}
 									vnames={this.state.vnames}
-									currentLevel={this.state.currentLevel}
+									currentlevel={this.state.currentLevel}
 									onHide={() => this.setState({ NmodalShow: false })}
 								/>
 

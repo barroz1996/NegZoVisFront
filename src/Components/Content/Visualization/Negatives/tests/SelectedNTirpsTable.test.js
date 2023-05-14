@@ -1,6 +1,6 @@
 import React from 'react';
 import Enzyme, { mount } from 'enzyme';
-import SelectedNTirpsTable from '../SelectedNTirpsTable';
+import SelectedNTirpsTable from '../SelectedNTIRPsTable';
 import { Card, Table } from 'react-bootstrap';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 

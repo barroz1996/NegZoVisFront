@@ -8,6 +8,7 @@ class NTIRPTimeLine extends Component {
 	state = {
 		classMode: 0,
 	};
+	
 
 	createCustomHTMLContent(title, duration, time, fourth) {
 		return ('<div style="padding:5px 5px 5px 5px;">' +
