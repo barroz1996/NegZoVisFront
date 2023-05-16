@@ -135,6 +135,10 @@ class NTIRPsTable extends Component {
 		}
 
 		if (Object.keys(window.pathOfTirps).length > 0) {
+			console.log("check path of tirps")
+			console.log(window.pathOfTirps)
+			let lastArray = window.pathOfTirps[window.pathOfTirps.length - 1];
+			lastArray.pop();
 			const previousPatterns = this.findAllPreviousPatterns(window.pathOfTirps)
 			this.setState({ 
 				path: window.pathOfTirps.elements, 
