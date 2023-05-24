@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
 test('NTIRPs Search filtering', async ({ page }) => {
     // Expect a title "to contain" a substring.
     await page.getByRole('button', { name: " Visualize Your Data" }).click()
-    await page.getByText("test6").click()
+    await page.getByText("test1").click()
     await page.waitForTimeout(3000)
     await page.getByText("NTIRPs Search").click()
     await page.locator('.col-sm-4').nth(1).locator('th').first().locator("input[type=checkbox]").click({ force: true })

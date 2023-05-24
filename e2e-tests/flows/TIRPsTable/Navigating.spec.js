@@ -8,7 +8,7 @@ test.beforeEach(async ({ page }) => {
 test('test Mean Presentation Graph displayed', async ({ page }) => {
     // Expect a title "to contain" a substring.
     await page.getByRole('button', {name: " Visualize Your Data"}).click()
-    await page.getByText("test6").click()
+    await page.getByText("test1").click()
     await page.waitForTimeout(3000)
     await page.getByText("NegativeTirps").click()
     await page.locator('tr').nth(1).click()
@@ -18,7 +18,7 @@ test('test Mean Presentation Graph displayed', async ({ page }) => {
 test('test massive navigating', async ({ page }) => {
   // Expect a title "to contain" a substring.
   await page.getByRole('button', {name: " Visualize Your Data"}).click()
-  await page.getByText("test6").click()
+  await page.getByText("test1").click()
   await page.waitForTimeout(3000)
   await page.getByText("NegativeTirps").click()
   for (let i = 0; i < 50; i++) {
