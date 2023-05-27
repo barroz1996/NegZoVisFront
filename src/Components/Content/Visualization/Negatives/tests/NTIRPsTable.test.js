@@ -20,7 +20,7 @@ const props = {
 };
 
 const emptyProps = {
-  ntable : {NegativeData: []}
+  ntable : []
 }
 
 // Mock the window.pathOfTirps property

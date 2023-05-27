@@ -8,7 +8,8 @@ import Info from './infoComponents/Info';
 import Visualization from './Visualization';
 import Workflow from './Workflow';
 import TIMTable from './TIMTable';
-import { getDataOnDataset } from '../../../networking/requests/datasetsStats';
+import SequentialTIMTable from './SequentialTIMTable';
+import { getDataOnDataset, getIsSequential } from '../../../networking/requests/datasetsStats';
 import { errorAlert } from '../../SweetAlerts';
 
 function ProcessWorkflow(props) {
@@ -16,6 +17,7 @@ function ProcessWorkflow(props) {
 	const [discretizations, setDiscretizations] = useState([]);
 	const [tims, setTims] = useState([]);
 	const [negatives, setNegatives] = useState([]);
+	const [isSequential, setIsSequential] = useState(false)
 	useEffect(() => {
 		setDatasetName(datasetName);
 		getDataOnDataset(datasetName)
@@ -30,6 +32,11 @@ function ProcessWorkflow(props) {
 					window.open(`#/Process`, '_self');
 				});
 			});
+		getIsSequential(datasetName)
+			.then((data) => {
+				console.log(data)
+				setIsSequential(data['answer'])
+			})
 	}, [datasetName]);
 
 	function addDiscretization(id, NumStates, InterpolationGap, AbMethod, PAA) {
@@ -58,7 +65,7 @@ function ProcessWorkflow(props) {
 
 	return (
 		<>
-			<Workflow datasetName={datasetName} />
+			<Workflow datasetName={datasetName} isSequential={isSequential} />
 			<Switch>
 				<Route path={'/Process/:discretizationId/Info'}>
 					<Info datasetName={datasetName} />
@@ -74,15 +81,27 @@ function ProcessWorkflow(props) {
 						removeDiscretization={removeDiscretization}
 					/>
 				</Route>
-				<Route path={'/Process/:discretizationId/TIM'}>
-					<TIMTable
-						discretizations={discretizations}
-						TIMTable={tims}
-						NegativesTable = {negatives}
-						datasetName={datasetName}
-						removeKarmaLego={removeKarmaLego}
-					/>
-				</Route>
+				{isSequential ? (
+					<Route path={'/Process/:discretizationId/TIM'}>
+						<SequentialTIMTable
+							discretizations={discretizations}
+							TIMTable={tims}
+							NegativesTable = {negatives}
+							datasetName={datasetName}
+							removeKarmaLego={removeKarmaLego}
+						/>
+					</Route>
+				) : ( 
+					<Route path={'/Process/:discretizationId/TIM'}>
+						<TIMTable
+							discretizations={discretizations}
+							TIMTable={tims}
+							NegativesTable = {negatives}
+							datasetName={datasetName}
+							removeKarmaLego={removeKarmaLego}
+						/>
+					</Route>
+				)}
 				<Route path={'/Process/:discretizationId/Visualization'}>
 					<Visualization 
 						TIMTable={tims}

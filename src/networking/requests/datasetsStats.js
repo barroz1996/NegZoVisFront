@@ -15,6 +15,11 @@ export function getDataOnDataset(datasetName) {
 }
 
 
+export function getIsSequential(datasetName) {
+	const params = { datasetName: datasetName };
+	return get('getIsSequential', params);
+}
+
 export function getVisualizationDetails(visualizationID) {
 	const params = { visualization_id: visualizationID };
 	return get('getVisualizationDetails', params);

@@ -24,7 +24,9 @@ class TirpsApp extends Component {
 	initilizeRootScope = (visualizationId) => {
 		this.getRoot(visualizationId);
 		this.getFullEntities(visualizationId);
-		this.getFullStates(visualizationId);
+		if (localStorage.negative = false) {
+			this.getFullStates(visualizationId);
+		}
 		this.getMetaData(visualizationId);
 		localStorage.States = [];
 		window.pathOfTirps = [];
@@ -50,7 +52,7 @@ class TirpsApp extends Component {
 		const VMAPFile = await getVMapFile(visualizationId)
 
 		
-		if (data.NegativeData) {
+		if (data) {
 			localStorage.rootElement = JSON.stringify(data);
 			localStorage.negative = true
 			this.setState({

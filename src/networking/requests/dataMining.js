@@ -47,6 +47,31 @@ export function addTIM(
 	return post('addTIM', params);
 }
 
+export function addSequentialTIM(
+	gap,
+	minVerSupport,
+	negativeMining,
+	maximumNegative,
+	ofo,
+	as,
+	bc,
+	datasetName,
+	isVisualization,
+) {
+	const params = {
+		'Max Gap': gap,
+		min_ver_support: minVerSupport,
+		datasetName: datasetName,
+		negative_mining: negativeMining,
+		maximum_negatives: maximumNegative,
+		ofo: ofo,
+		as: as,
+		bc: bc,
+		to_visualize: isVisualization,
+	};
+	return post('addSequentialTIM', params);
+}
+
 export function deleteKarmaLego(iter, datasetName){
 	const params = {
 		karma_id: iter['karma_id'],

@@ -13,7 +13,7 @@ global.window = dom.window;
 global.document = dom.window.document;
 
 const props = {
-    ntable: {NegativeData: [{"durations":[1.0,15.381336127261717],"elements":[[8],[8]],"gaps":[0.0],"mean horizontal support":2.794022790797678,"mean mean duration":16.381336127261733,"negatives":[false,true],"support":4651},
+    ntable: [{"durations":[1.0,15.381336127261717],"elements":[[8],[8]],"gaps":[0.0],"mean horizontal support":2.794022790797678,"mean mean duration":16.381336127261733,"negatives":[false,true],"support":4651},
     {"durations":[1.0,10.719659081750578],"elements":[[8],[18]],"gaps":[0.0],"mean horizontal support":2.7938077832724146,"mean mean duration":11.719659081750569,"negatives":[false,true],"support":4651},
     {"durations":[1.0],"elements":[[8]],"gaps":[],"mean horizontal support":2.794022790797678,"mean mean duration":1.0,"negatives":[false],"support":4651},
     {"durations":[1.0,16.065497515127483],"elements":[[18],[18]],"gaps":[0.0],"mean horizontal support":2.1912580943570767,"mean mean duration":17.065497515127486,"negatives":[false,true],"support":4324},
@@ -24,7 +24,7 @@ const props = {
     {"durations":[2.66390407],"elements":[[18]],"gaps":[],"mean horizontal support":2.5339389784024684,"mean mean duration":2.66390407,"negatives":[true],"support":5834},
     {"durations":[3.2364430798851314,1.0,16.0646683449945],"elements":[[8],[18],[18]],"gaps":[0.0,0.0],"mean horizontal support":2.1908396946564888,"mean mean duration":20.30111142487965,"negatives":[true,false,true],"support":4323},
     {"durations":[3.23989443568634,1.0],"elements":[[8],[18]],"gaps":[0.0],"mean horizontal support":2.1916763005780346,"mean mean duration":4.239894435686342,"negatives":[true,false],"support":4325},
-    {"durations":[2.27890518],"elements":[[8]],"gaps":[],"mean horizontal support":3.115872471717518,"mean mean duration":2.27890518,"negatives":[true],"support":5834}]},
+    {"durations":[2.27890518],"elements":[[8]],"gaps":[],"mean horizontal support":3.115872471717518,"mean mean duration":2.27890518,"negatives":[true],"support":5834}],
 };
 
 const localStorageMock = {
@@ -92,7 +92,7 @@ it('initializes state correctly', () => {
     expect(wrapper.state('showGraph')).toBe(true);
     expect(wrapper.state('canExplore')).toBe(false);
     expect(wrapper.state('searchResults')).toEqual([]);
-    expect(wrapper.state('outputAlgoritm')).toEqual(props.ntable.NegativeData);
+    expect(wrapper.state('outputAlgoritm')).toEqual(props.ntable);
     expect(wrapper.state('vnames')).toEqual(localStorageMock.VMapFile);
     expect(wrapper.state('startNList')).toEqual([]);
     expect(wrapper.state('containNList')).toEqual([]);
@@ -126,14 +126,14 @@ it('renders the NSearchGraph component', () => {
 /// Need To Add Functionality
 it('renders the NSearchMeanPresentation component', () => {
   expect(wrapper.text()).not.toContain('NSearchMeanPresentationMock');
-  wrapper.setState({ NSelected: props.ntable.NegativeData[0]})
+  wrapper.setState({ NSelected: props.ntable[0]})
   expect(wrapper.text()).toContain('NSearchMeanPresentationMock');
 });
 
 /// Need To Add Functionality
 it('renders the NTIRPTimeLine component', () => {
   expect(wrapper.text()).not.toContain('NTIRPTimeLineMock');
-  wrapper.setState({ NSelected: props.ntable.NegativeData[0]})
+  wrapper.setState({ NSelected: props.ntable[0]})
   expect(wrapper.text()).toContain('NTIRPTimeLineMock');
 });
 

@@ -85,10 +85,9 @@ class NTIRPsTable extends Component {
 
 	findAllPreviousPatterns(pathOfTirps) {
 		const myDict = JSON.parse(localStorage.rootElement);
-		const myProperty = myDict.NegativeData;
 		let previousPatterns;
 
-		previousPatterns = myProperty.filter((row) => {
+		previousPatterns = myDict.filter((row) => {
 			for (let i = 0; i < row.elements.length; i++) {
 				if (row.elements[i].length > pathOfTirps.elements[i].length) {
 				return false;
@@ -126,10 +125,9 @@ class NTIRPsTable extends Component {
 
 		if (localStorage.negative) {
 			const myDict = JSON.parse(localStorage.rootElement);
-			const myProperty = myDict.NegativeData;
 			const entities = JSON.parse(localStorage.VMapFile)
 			this.setState({
-				outputAlgoritm: myProperty,
+				outputAlgoritm: myDict,
 				vnames: entities
 			})
 		}
@@ -249,7 +247,7 @@ class NTIRPsTable extends Component {
 	}
 
 	setNewLevel(tirps, path) {
-		const firstLevelTirps = tirps.NegativeData.filter((row) => {
+		const firstLevelTirps = tirps.filter((row) => {
 			if (row.elements.length === 1) {
 				return true
 			} else {
