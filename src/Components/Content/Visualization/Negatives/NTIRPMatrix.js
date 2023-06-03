@@ -113,6 +113,7 @@ class NTirpMatrix extends Component {
 							borderColor: '#aaaaaa',
 							borderStyle: 'solid',
 						}}
+						data-testid='test-matrix'
 					>
 						<tbody>
 							{this.draw()}
