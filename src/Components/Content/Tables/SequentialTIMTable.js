@@ -196,7 +196,6 @@ class SequentialTIMTable extends Component {
 	onChange(key, e) {
 		const current_values = this.state.tims
 		const new_values = { ...current_values, [key]: e.target.value };
-		console.log(new_values)
 		this.setState({ tims: new_values });
 	}
 

@@ -13,7 +13,6 @@ class NSearchMeanPresentation extends Component {
 	};
 
 	findTirp() {
-		console.log(this.props.tirp)
 		window.pathOfTirps = this.props.tirp;
 		this.state.redirect = true;
 		this.forceUpdate();

@@ -34,7 +34,6 @@ function ProcessWorkflow(props) {
 			});
 		getIsSequential(datasetName)
 			.then((data) => {
-				console.log(data)
 				setIsSequential(data['answer'])
 			})
 	}, [datasetName]);
@@ -57,7 +56,6 @@ function ProcessWorkflow(props) {
 	}
 
 	function removeDiscretization(iter) {
-		console.log(discretizations);
 		setDiscretizations((oldDescrits) =>
 			oldDescrits.filter((descriteRow) => descriteRow.id !== iter.id)
 		);

@@ -252,10 +252,6 @@ class TIMTable extends Component {
 			return (
 				<thead>
 					<tr>
-					<td className={'font-weight-bold'}>PAA</td>
-						<td className={'font-weight-bold'}>Bins</td>
-						<td className={'font-weight-bold'}>Interpolation</td>
-						<td className={'font-weight-bold'}>Method</td>
 						<td className={'font-weight-bold'}>
 							MVS (%)
 							<MyToolTip
@@ -311,13 +307,9 @@ class TIMTable extends Component {
 		return this.props.discretizations
 			.filter((iter) => iter.status.finished && iter.status.success)
 			.map((iter, index) => {
-				if (this.state.selectedButton === 'true') {
+				if (this.state.selectedButton === 'true' && iter['MethodOfDiscretization'] === 'Sequential') {
 					return (
 						<tr key={index}>
-							<td>{iter['PAAWindowSize']}</td>
-							<td>{iter['BinsNumber']}</td>
-							<td>{iter['InterpolationGap']}</td>
-							<td>{iter['MethodOfDiscretization']}</td>
 							<td>
 								<Form.Control
 									as='select'
@@ -433,7 +425,7 @@ class TIMTable extends Component {
 						</tr>
 					);
 				}
-				else if (this.state.selectedButton === 'false'){
+				else if (this.state.selectedButton === 'false' && iter['MethodOfDiscretization'] !== 'Sequential'){
 					return (
 						<tr key={index}>
 							<td>{iter['PAAWindowSize']}</td>
@@ -612,8 +604,10 @@ class TIMTable extends Component {
 	};
 
 	renderExistingRunsData = () => {
+		// const filteredTIMTable = this.props.TIMTable.filter((iter) => iter['MethodOfDiscretization'] !== 'Sequential')
 		if (this.state.selectedSecondButton === 'false') {
 			return this.props.TIMTable.map((iter, index) => {
+				if (iter['MethodOfDiscretization'] === 'Sequential') return <></>
 				return (
 					<tr key={index}>
 						<td>
@@ -704,7 +698,7 @@ class TIMTable extends Component {
 				);
 			});
 		} else if (this.state.selectedSecondButton === 'true') {
-			return this.props.NegativesTable.map((iter, index) => {
+			return this.props.NegativesTable.filter((iter) => iter['MethodOfDiscretization'] === 'Sequential').map((iter, index) => {
 				return (
 					<tr key={index}>
 						<td>
