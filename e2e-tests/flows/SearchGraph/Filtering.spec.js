@@ -89,9 +89,42 @@ test.only('NTIRPs click on bubble', async ({ page }) => {
   await page.locator('.col-sm-4').nth(2).locator('th').first().locator("input[type=checkbox]").click({ force: true })
   await page.getByRole("button", { name: "Search" }).click()
 
-  const canvas = page.locator('canvas')
+  await page.waitForTimeout(3000)
+
+
+  page.on('console', (msg) => {
+    for (let i = 0; i < msg.args().length; ++i) {
+      console.log(`${i}: ${msg.args()[i]}`);
+    }
+  });
+
+  const canvas = page.locator('[test_id="bubble graph"]')
+  for(let i = 1; i < 50; i++){
+    for(let j = 1; j < 50; j++){
+      console.log(i, j)
+      canvas.click({position: {x:i, y:j}})
+    }
+  }
   const canvasBoundingBox = await canvas.boundingBox()
   const { x, y, width, height } = canvasBoundingBox;
+
+  // const coordinates = await page.evaluate(() => {
+  //   const canvas = document.querySelector('[test_id="bubble graph"]');
+  //   canvas.click({position : })
+  
+  //   const rect = canvas.getBoundingClientRect();
+  //   const x = rect.left - window.scrollX;
+  //   const y = rect.top - window.scrollY;
+  //   const width = canvas.clientWidth;
+  //   const height = canvas.clientHeight;
+
+  //   return  { x: x, y: y, width: width, height: height };
+  // });
+
+  // const x = coordinates.x;
+  // const y = coordinates.y;
+  // const width = coordinates.width;
+  // const height = coordinates.height
 
   await page.waitForTimeout(3000)
 
