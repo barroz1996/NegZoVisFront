@@ -56,16 +56,6 @@ class NTIRPsTable extends Component {
 	};
 
 	async open_route() {
-		// let url = 'http://127.0.0.1:443/get_negative_data'
-		// const promise = await axios.get(url)
-		// this.setState({
-		// 	outputAlgoritm: promise.data
-		// })
-		// let surl = 'http://127.0.0.1:443/get_negative_variables'
-		// const spromise = await axios.get(surl)
-		// this.setState({
-		// 	vnames: spromise.data
-		// })
 		let symbolLevel0 = this.getRootEntitiesSize()
 		this.setState({
 			numOfSymbolInSelctedPath: symbolLevel0,
@@ -88,17 +78,22 @@ class NTIRPsTable extends Component {
 		let previousPatterns;
 
 		previousPatterns = myDict.filter((row) => {
-			for (let i = 0; i < row.elements.length; i++) {
-				if (row.elements[i].length > pathOfTirps.elements[i].length) {
-				return false;
+			if (row !== undefined) {
+				if (row.elements.length > pathOfTirps.elements.length) {
+					return false
 				}
-				for (let j = 0; j < row.elements[i].length; j++) {
-				if (row.elements[i][j] !== pathOfTirps.elements[i][j]) {
-					return false;
+				for (let i = 0; i < row.elements.length; i++) {
+					if (row.elements[i].length > pathOfTirps.elements[i].length) {
+						return false;
+					}
+					for (let j = 0; j < row.elements[i].length; j++) {
+						if (row.elements[i][j] !== pathOfTirps.elements[i][j]) {
+							return false;
+						}
+					}
 				}
-				}
+				return true;
 			}
-			return true;
 		})
 		
 		return previousPatterns
@@ -133,6 +128,8 @@ class NTIRPsTable extends Component {
 		}
 
 		if ((window.pathOfTirps) && Object.keys(window.pathOfTirps).length > 0) {
+			console.log("pathof tirps: ")
+			console.log(window.pathOfTirps)
 			const previousPatterns = this.findAllPreviousPatterns(window.pathOfTirps)
 			this.setState({ 
 				path: window.pathOfTirps.elements, 

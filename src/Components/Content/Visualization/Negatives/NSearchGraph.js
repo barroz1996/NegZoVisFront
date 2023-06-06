@@ -7,7 +7,6 @@ import SearchAxisPop from '../TirpsContent/SearchAxisPop';
 import { Chart as ChartJS, LinearScale, PointElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bubble } from 'react-chartjs-2';
 import zoomPlugin from 'chartjs-plugin-zoom';
-import axios from 'axios';
 
 ChartJS.register(LinearScale, PointElement, zoomPlugin, Tooltip, Legend, Title);
 
@@ -16,24 +15,24 @@ const Y_AXIS = 'Y_AXIS';
 const COLOR_AXIS = 'Bubble Color';
 const SIZE_AXIS = 'Bubble Size';
 
-class Tirp {
-	constructor(symbols, symbolNames, relations, size, vs0, mhs0, mmd0, vs1, mhs1, mmd1, rating) {
-		this.symbols = symbols;
-		this.symbolNames = symbolNames;
-		this.relations = relations;
-		this.size = size;
-		this.vs0 = vs0;
-		this.mhs0 = mhs0;
-		this.mmd0 = mmd0;
-		this.vs1 = vs1;
-		this.mhs1 = mhs1;
-		this.mmd1 = mmd1;
-		this.rating = rating;
+// class Tirp {
+// 	constructor(symbols, symbolNames, relations, size, vs0, mhs0, mmd0, vs1, mhs1, mmd1, rating) {
+// 		this.symbols = symbols;
+// 		this.symbolNames = symbolNames;
+// 		this.relations = relations;
+// 		this.size = size;
+// 		this.vs0 = vs0;
+// 		this.mhs0 = mhs0;
+// 		this.mmd0 = mmd0;
+// 		this.vs1 = vs1;
+// 		this.mhs1 = mhs1;
+// 		this.mmd1 = mmd1;
+// 		this.rating = rating;
 
-		this.dmhs = Math.abs(parseFloat(mhs0) - parseFloat(mhs1));
-		this.dmmd = Math.abs(parseFloat(mmd0) - parseFloat(mmd1));
-	}
-}
+// 		this.dmhs = Math.abs(parseFloat(mhs0) - parseFloat(mhs1));
+// 		this.dmmd = Math.abs(parseFloat(mmd0) - parseFloat(mmd1));
+// 	}
+// }
 
 class NTirp {
 	constructor(symbols, size, vs, mhs, mmd, row) {

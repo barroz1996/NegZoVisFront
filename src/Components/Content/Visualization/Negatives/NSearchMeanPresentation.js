@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { Card, Table, Button } from 'react-bootstrap';
 
 import { Redirect } from 'react-router-dom';
-import { findPathOfTirps } from '../../../../networking/requests/visualization';
 
 class NSearchMeanPresentation extends Component {
 	state = {
