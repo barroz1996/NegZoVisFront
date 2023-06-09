@@ -257,8 +257,8 @@ class NSearchGraph extends Component {
 		return (
 			<div>
 				<Row>
-					<Col>
-						<Bubble
+					<Col >
+						<Bubble test_id="bubble graph"
 							height={100}
 							options={{
 								onClick: (e) => {
