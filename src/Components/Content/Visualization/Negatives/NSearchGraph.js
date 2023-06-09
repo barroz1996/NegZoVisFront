@@ -86,7 +86,7 @@ class NSearchGraph extends Component {
 
 	componentDidMount() {
 		let allVnames = []  
-		if (localStorage.negative) {
+		if (localStorage.negative === 'true') {
 			const entities = JSON.parse(localStorage.VMapFile);
 			for (const [key, value] of Object.entries(entities)) {
 				allVnames.push(value)

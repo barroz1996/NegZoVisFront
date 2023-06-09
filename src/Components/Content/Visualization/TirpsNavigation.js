@@ -36,12 +36,12 @@ class TirpsNavigation extends Component {
 						<SimpleOverlayTrigger
 							tip={'This tab is for time intervals datasets'}
 							placement={'bottom'}
-							show={this.props.negative}
+							show={this.props.negative === 'true'}
 						>
 							<NavLink 
 								activeClassName='active' 
 								to={'/TirpsApp/States'}
-								{...((this.props.two_class && !this.props.negative) || this.props.negative ? disabledProps : !disabledProps)}
+								{...((this.props.two_class && this.props.negative === 'false' ) || this.props.negative === 'true' ? disabledProps : !disabledProps)}
 								>
 								<i className='fas fa-bars'></i> States
 							</NavLink>
@@ -66,12 +66,12 @@ class TirpsNavigation extends Component {
 						<SimpleOverlayTrigger
 							tip={'This tab is for time intervals datasets with only one class'}
 							placement={'bottom'}
-							show={this.props.two_class || this.props.negative}
+							show={this.props.two_class || this.props.negative === 'true'}
 						>
 							<NavLink
 								activeClassName='active'
 								to={'/TirpsApp/TIRPs'}
-								{...((this.props.two_class && !this.props.negative) || this.props.negative ? disabledProps : !disabledProps)}
+								{...((this.props.two_class && this.props.negative === 'false') || this.props.negative === 'true' ? disabledProps : !disabledProps)}
 							>
 								<i className='fas fa-tree'></i> TIRPs
 							</NavLink>
@@ -96,12 +96,12 @@ class TirpsNavigation extends Component {
 						<SimpleOverlayTrigger
 							tip={'This tab is for negative sequential datasets'}
 							placement={'bottom'}
-							show={!this.props.negative}
+							show={this.props.negative === 'false'}
 						>
 							<NavLink
 								activeClassName='active'
 								to={'/TirpsApp/NegativeTirps'}
-								{...(this.props.negative || disabledProps)}
+								{...(this.props.negative === 'true' || disabledProps)}
 							>
 								<i className='fas fa-tree'></i> NegativeTirps
 							</NavLink>
@@ -111,12 +111,12 @@ class TirpsNavigation extends Component {
 						<SimpleOverlayTrigger
 							tip={'This tab is for time intervals datasets with only one class'}
 							placement={'bottom'}
-							show={this.props.two_class || this.props.negative}
+							show={this.props.two_class || this.props.negative === 'true'}
 						>
 							<NavLink
 								activeClassName='active'
 								to={'/TirpsApp/TIRPsSearch'}
-								{...((this.props.two_class && !this.props.negative) || this.props.negative ? disabledProps : !disabledProps)}
+								{...((this.props.two_class && this.props.negative === 'false') || this.props.negative === 'true' ? disabledProps : !disabledProps)}
 							>
 								<i className='fas fa-search'></i> TIRPs Search
 							</NavLink>
@@ -141,12 +141,12 @@ class TirpsNavigation extends Component {
 						<SimpleOverlayTrigger
 							tip={'This tab is for negative sequential datasets'}
 							placement={'bottom'}
-							show={!this.props.negative}
+							show={this.props.negative === 'false'}
 						>
 							<NavLink
 								activeClassName='active'
 								to={'/TirpsApp/NTIRPsSearch'}
-								{...(this.props.negative || disabledProps)}
+								{...(this.props.negative === 'true' || disabledProps)}
 							>
 								<i className='fas fa-search'></i> NTIRPs Search
 							</NavLink>
@@ -161,7 +161,7 @@ class TirpsNavigation extends Component {
 							<NavLink
 								activeClassName='active'
 								to={'/TirpsApp/Tali/BTirps'}
-								{...((!this.props.two_class && !this.props.negative) || disabledProps)}
+								{...((!this.props.two_class && this.props.negative === 'false') || disabledProps)}
 							>
 								<i className='fas fa-network-wired'></i> Bidirectional Tirps
 							</NavLink>

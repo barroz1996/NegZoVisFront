@@ -19,7 +19,7 @@ class NTirpMatrix extends Component {
 		if (this.props.show && this.props.currentlevel > 0) {
 			this.DrawMatrix();
 		}
-		if (localStorage.negative) {
+		if (localStorage.negative === 'true') {
 			const entities = JSON.parse(localStorage.VMapFile);
 			this.setState({
 				vnames: entities

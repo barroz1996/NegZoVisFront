@@ -24,7 +24,7 @@ class TirpsApp extends Component {
 	initilizeRootScope = (visualizationId) => {
 		this.getRoot(visualizationId);
 		this.getFullEntities(visualizationId);
-		if (localStorage.negative = false) {
+		if (localStorage.negative === 'false') {
 			this.getFullStates(visualizationId);
 		}
 		this.getMetaData(visualizationId);
@@ -49,20 +49,26 @@ class TirpsApp extends Component {
 	//get root for the TIRPs page
 	async getRoot(visualizationId) {
 		const data = await initiateTirps(visualizationId);
+
+		let negative = true;
+		const stringied = JSON.parse(JSON.stringify(data));
+		console.log(typeof stringied)
+		if (stringied.hasOwnProperty('Root')) {
+			negative = false
+		}
 		const VMAPFile = await getVMapFile(visualizationId)
 
-		
-		if (data) {
+		if (negative) {
 			localStorage.rootElement = JSON.stringify(data);
-			localStorage.negative = true
+			localStorage.negative = 'true'
 			this.setState({
-				negative: true
+				negative: 'true'
 			});
 			localStorage.VMapFile = JSON.stringify(VMAPFile)
 		}
 		else {
 			this.setState({
-				negative: false
+				negative: 'false'
 			});
 			const arrOfRoot = data.Root;
 			let jsons = [];
@@ -71,7 +77,7 @@ class TirpsApp extends Component {
 				jsons.push(tirp);
 			}
 			localStorage.rootElement = JSON.stringify(jsons);
-			localStorage.negative = false
+			localStorage.negative = 'false'
 		}
 	}
 
@@ -87,6 +93,7 @@ class TirpsApp extends Component {
 	//States
 	getFullStates(visualizationId) {
 		getStates(visualizationId).then((data) => {
+			console.log(data)
 			let table = JSON.stringify(data);
 			localStorage.States = table;
 			this.forceUpdate();

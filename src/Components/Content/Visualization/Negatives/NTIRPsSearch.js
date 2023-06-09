@@ -72,7 +72,7 @@ class NTIRPsSearch extends Component {
 	}
 
 	componentDidMount() {
-		if (localStorage.negative) {
+		if (localStorage.negative === 'true') {
 			const myDict = JSON.parse(localStorage.rootElement);
 			const entities = JSON.parse(localStorage.VMapFile)
 			this.setState({

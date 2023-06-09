@@ -118,7 +118,7 @@ class NTIRPsTable extends Component {
 
 
 
-		if (localStorage.negative) {
+		if (localStorage.negative === 'true') {
 			const myDict = JSON.parse(localStorage.rootElement);
 			const entities = JSON.parse(localStorage.VMapFile)
 			this.setState({

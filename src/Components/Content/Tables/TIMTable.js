@@ -574,8 +574,6 @@ class TIMTable extends Component {
 				<thead>
 					<tr>
 						<td className={'font-weight-bold'}>PAA</td>
-						<td className={'font-weight-bold'}>Bins</td>
-						<td className={'font-weight-bold'}>Interpolation</td>
 						<td className={'font-weight-bold'}>Method</td>
 						<td className={'font-weight-bold'} style={{ width: 60 }}>
 							MS (%)
@@ -730,8 +728,6 @@ class TIMTable extends Component {
 
 							{iter['PAAWindowSize']}
 						</td>
-						<td>{iter['BinsNumber']}</td>
-						<td>{iter['InterpolationGap']}</td>
 						<td>{iter['MethodOfDiscretization']}</td>
 						<td>{iter['VerticalSupport'] * 100}</td>
 						<td>{iter['MaxGap']}</td>
