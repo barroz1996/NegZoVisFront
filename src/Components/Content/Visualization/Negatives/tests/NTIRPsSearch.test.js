@@ -29,7 +29,7 @@ const props = {
 
 const localStorageMock = {
     rootElement: {},
-    negative: true,
+    negative: 'true',
     VMapFile: {
       1: 'A',
       2: 'B',

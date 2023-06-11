@@ -1,4 +1,5 @@
 import React from 'react';
+import Swal from 'sweetalert2';
 import Enzyme from 'enzyme';
 import { mount } from 'enzyme';
 import NTIRPsTable from '../NTIRPsTable'
@@ -42,9 +43,11 @@ jest.mock('../NTIRPTimeLine', () => {
   return NTIRPTimeLineMock;
 });
 
+jest.mock('sweetalert2')
+
 const localStorageMock = {
   rootElement: props.ntable,
-  negative: true,
+  negative: 'true',
   VMapFile: {
     8: 'A',
     18: 'B',
@@ -112,5 +115,11 @@ describe('Component', () => {
     expect(wrapper.text().includes('NTIRPTimeLine')).toBe(false);
     wrapper.find('td').at(0).find('button').simulate('click')
     expect(wrapper.text().includes('NTIRPTimeLine')).toBe(true);
+  });
+
+  it('should render the component with empty props', () => {
+    Swal.fire.mockReturnValueOnce("Got Error");
+    wrapper = mount(<NTIRPsTable {...emptyProps}/>);
+    expect(wrapper.exists()).toBeTruthy();
   });
 });

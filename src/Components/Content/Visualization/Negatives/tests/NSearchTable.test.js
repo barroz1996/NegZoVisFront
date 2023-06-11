@@ -31,7 +31,7 @@ describe('NSearchTable', () => {
   ];
 
   const localStorageMock = {
-        negative: true,
+        negative: 'true',
         VMapFile: JSON.stringify({
             1: 'A',
             2: 'B',

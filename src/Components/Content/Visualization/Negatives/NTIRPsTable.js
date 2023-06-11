@@ -15,6 +15,7 @@ import NTIRPTimeLine from './NTIRPTimeLine';
 import WeightsPop from '../TirpsContent/WeightsPop';
 import NTirpMatrix from './NTIRPMatrix';
 import SelectedNTirpsTable from './SelectedNTIRPsTable'
+import { errorAlert } from '../../../SweetAlerts';
 
 import { getSubTree as getSubTreeRequest } from '../../../../networking/requests/visualization';
 
@@ -242,18 +243,22 @@ class NTIRPsTable extends Component {
 	}
 
 	setNewLevel(tirps, path) {
-		const firstLevelTirps = tirps.filter((row) => {
-			if (row.elements.length === 1) {
-				return true
-			} else {
-				return false
-			}
-		})
-		this.setState({
-			currentTirps: tirps,
-			currentPath: path,
-			selectedTirp: firstLevelTirps[0][0],
-		});
+		try {
+			const firstLevelTirps = tirps.filter((row) => {
+				if (row.elements.length === 1) {
+					return true
+				} else {
+					return false
+				}
+			})
+			this.setState({
+				currentTirps: tirps,
+				currentPath: path,
+				selectedTirp: firstLevelTirps[0][0],
+			});
+		} catch (e) {
+			errorAlert(e)
+		}
 	}
 
 	toNLevel(level) {
@@ -382,37 +387,42 @@ class NTIRPsTable extends Component {
 	
 
 	getNextLevel(){
-		const nextPatterns = this.state.outputAlgoritm.filter((row) => {
-			if (row.elements.length === this.state.path.length + 1 && row.elements[this.state.path.length].length === 1){
-				for(let i = 0; i < this.state.path.length; i++){
-					if(!this.arrayEquals(row.elements[i], this.state.path[i])){
-						return false
-					}
-				}
-				return true
-			}
-			else{
-				if (!this.arrayEquals(row.elements, this.state.path) && row.elements.length === this.state.path.length){
-					for(let i = 0; i < this.state.path.length - 1; i++){
+		try {
+			const nextPatterns = this.state.outputAlgoritm.filter((row) => {
+				if (row.elements.length === this.state.path.length + 1 && row.elements[this.state.path.length].length === 1){
+					for(let i = 0; i < this.state.path.length; i++){
 						if(!this.arrayEquals(row.elements[i], this.state.path[i])){
-							return false
-						}
-					}
-					let last = this.state.path.length - 1
-					if (this.state.path[last].length !== row.elements[last].length - 1){
-						return false
-					}
-					for(let i = 0; i < this.state.path[last].length; i++){
-						if(String(row.elements[last][i]) !== String(this.state.path[last][i])){
 							return false
 						}
 					}
 					return true
 				}
-			}
-			return false
-		} )
-		return nextPatterns
+				else{
+					if (!this.arrayEquals(row.elements, this.state.path) && row.elements.length === this.state.path.length){
+						for(let i = 0; i < this.state.path.length - 1; i++){
+							if(!this.arrayEquals(row.elements[i], this.state.path[i])){
+								return false
+							}
+						}
+						let last = this.state.path.length - 1
+						if (this.state.path[last].length !== row.elements[last].length - 1){
+							return false
+						}
+						for(let i = 0; i < this.state.path[last].length; i++){
+							if(String(row.elements[last][i]) !== String(this.state.path[last][i])){
+								return false
+							}
+						}
+						return true
+					}
+				}
+				return false
+			} )
+			return nextPatterns
+		} catch (e) {
+			errorAlert(e)
+			return []
+		}
 	}
 
 	getNextLevelByElements(elements){ 
