@@ -15,25 +15,6 @@ const Y_AXIS = 'Y_AXIS';
 const COLOR_AXIS = 'Bubble Color';
 const SIZE_AXIS = 'Bubble Size';
 
-// class Tirp {
-// 	constructor(symbols, symbolNames, relations, size, vs0, mhs0, mmd0, vs1, mhs1, mmd1, rating) {
-// 		this.symbols = symbols;
-// 		this.symbolNames = symbolNames;
-// 		this.relations = relations;
-// 		this.size = size;
-// 		this.vs0 = vs0;
-// 		this.mhs0 = mhs0;
-// 		this.mmd0 = mmd0;
-// 		this.vs1 = vs1;
-// 		this.mhs1 = mhs1;
-// 		this.mmd1 = mmd1;
-// 		this.rating = rating;
-
-// 		this.dmhs = Math.abs(parseFloat(mhs0) - parseFloat(mhs1));
-// 		this.dmmd = Math.abs(parseFloat(mmd0) - parseFloat(mmd1));
-// 	}
-// }
-
 class NTirp {
 	constructor(symbols, size, vs, mhs, mmd, row) {
 		this.symbols = symbols;
@@ -43,24 +24,10 @@ class NTirp {
 		this.mmd = mmd;
 		this.row = row
 
-		// this.dmhs = Math.abs(parseFloat(mhs0) - parseFloat(mhs1));
-		// this.dmmd = Math.abs(parseFloat(mmd0) - parseFloat(mmd1));
 	}
 }
 
 class NSearchGraph extends Component {
-	// measureToTitles = {
-	// 	vs0: `Vertical Support - ${localStorage.class_name}`,
-	// 	mhs0: `Mean Horizontal - ${localStorage.class_name}`,
-	// 	mmd0: `Mean Mean Duration - ${localStorage.class_name}`,
-	// 	vs1: `Vertical Support - ${localStorage.second_class_name}`,
-	// 	mhs1: `Mean Horizontal Support - ${localStorage.second_class_name}`,
-	// 	mmd1: `Mean Mean Duration - ${localStorage.second_class_name}`,
-	// 	dmhs: 'Delta Mean Horizontal Support',
-	// 	dmmd: 'Delta Mean Mean Duration',
-	// 	rating: 'Query Rating',
-	// };
-
 	measureToTitles = {
 		vs: `Vertical Support`,
 		mhs: `Mean Horizontal`,
@@ -191,28 +158,6 @@ class NSearchGraph extends Component {
 
 	onSelect(tirp) {
 		this.props.handleOnSelect(tirp)
-		// 	this.props.isPredictive
-		// 		? [
-		// 				tirp.vs0,
-		// 				tirp.vs1,
-		// 				tirp.mhs0,
-		// 				tirp.mhs1,
-		// 				tirp.mmd0,
-		// 				tirp.mmd1,
-		// 				tirp.size,
-		// 				tirp.symbols,
-		// 				tirp.relations,
-		// 		  ]
-		// 		: [
-		// 				tirp.vs0,
-		// 				tirp.mhs0,
-		// 				tirp.mmd0,
-		// 				tirp.size,
-		// 				tirp.symbols,
-		// 				tirp.relations,
-		// 				tirp.rating,
-		// 		  ]
-		// );
 	}
 
 	render() {
@@ -250,9 +195,6 @@ class NSearchGraph extends Component {
 		};
 
 		const dynamicAxes = ['vs', 'mhs', 'mmd', 'size']
-		// this.props.isPredictive
-		// 	? ['vs0', 'mhs0', 'mmd0', 'vs1', 'mhs1', 'mmd1', 'dmhs', 'dmmd']
-		// 	: ['vs0', 'mhs0', 'mmd0'];
 
 		return (
 			<div>
@@ -282,9 +224,6 @@ class NSearchGraph extends Component {
 											title: (items) => {
 												const tirp = items[0].raw;
 												const symbols = tirp.symbols;
-												// const flatSymbols = symbols.flat()
-												// const flatNames = flatSymbols.map(element => this.state.vnames[element])
-												// return flatNames.join();
 												const firstSymbol = symbols.flat()[0]
 												return this.state.vnames[firstSymbol]
 											},

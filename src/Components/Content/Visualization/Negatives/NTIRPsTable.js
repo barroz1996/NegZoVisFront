@@ -324,6 +324,7 @@ class NTIRPsTable extends Component {
 				<Button
 					className={'btn btn-hugobot'}
 					id={'toy_example-btn'}
+					data-testid='next-button'
 					onClick={() => {
 						this.setState({ 
 							path: tirp.elements, 

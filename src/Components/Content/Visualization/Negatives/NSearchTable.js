@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Row, Col, Table } from 'react-bootstrap';
-import axios from 'axios';
 const headerSortingStyle = { backgroundColor: '#c8e6c9' };
 
 class NTirp {
