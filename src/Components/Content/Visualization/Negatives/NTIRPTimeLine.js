@@ -21,6 +21,8 @@ class NTIRPTimeLine extends Component {
 		'</div>')
 	}
 
+
+	// Compute the dataset and set all the argumments the charts need accordingly
     computeNDataset = (vnames, elements, negatives, timezone, gap) => {
         const columns = [
             { type: "string", id: "Elements" },

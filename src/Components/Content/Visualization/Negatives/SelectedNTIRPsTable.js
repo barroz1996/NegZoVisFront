@@ -33,7 +33,7 @@ class SelectedNTirpsTable extends Component {
 					<tr>
 						<th style={{ textAlign: 'left' }}>Vertical support</th>
 						<td>
-							{Object.keys(tirp).length > 0 && tirp['support']}
+							{Object.keys(tirp).length > 0 && Number.parseFloat(tirp['support'] / JSON.parse(localStorage.rootElement).length).toFixed(2) * 100 + "%"}
 						</td>
 					</tr>
 					<tr>

@@ -7,17 +7,11 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import DTirpBarPlot from '../TirpsContent/DTirpBarPlot';
 import TIRPsPie from '../TirpsContent/TIRPsPie';
-// import TirpMatrix from './TirpMatrix';
-// import SymbolPop from '../TirpsContent/SymbolPop';
-// import SelectedTIRPTable from './SelectedTIRPTable';
-// import WeightsForm from './WeightsForm';
 import NTIRPTimeLine from './NTIRPTimeLine';
 import WeightsPop from '../TirpsContent/WeightsPop';
 import NTirpMatrix from './NTIRPMatrix';
 import SelectedNTirpsTable from './SelectedNTIRPsTable'
 import { errorAlert } from '../../../SweetAlerts';
-
-import { getSubTree as getSubTreeRequest } from '../../../../networking/requests/visualization';
 
 
 const headerSortingStyle = { backgroundColor: '#c8e6c9' };
@@ -74,6 +68,7 @@ class NTIRPsTable extends Component {
 		return firstSymbol.length
 	}
 
+	// Find all the patterns the the current pattern extends
 	findAllPreviousPatterns(pathOfTirps) {
 		const myDict = JSON.parse(localStorage.rootElement);
 		let previousPatterns;
@@ -95,6 +90,7 @@ class NTIRPsTable extends Component {
 				}
 				return true;
 			}
+			return false
 		})
 		
 		return previousPatterns
@@ -118,7 +114,6 @@ class NTIRPsTable extends Component {
 		}
 
 
-
 		if (localStorage.negative === 'true') {
 			const myDict = JSON.parse(localStorage.rootElement);
 			const entities = JSON.parse(localStorage.VMapFile)
@@ -128,6 +123,9 @@ class NTIRPsTable extends Component {
 			})
 		}
 
+		// This is being used when directed from NTirpSearch component,
+		// it is being used to start the visualization from a certain pattern,
+		// and not from the root
 		if ((window.pathOfTirps) && Object.keys(window.pathOfTirps).length > 0) {
 			const previousPatterns = this.findAllPreviousPatterns(window.pathOfTirps)
 			this.setState({ 
@@ -145,38 +143,6 @@ class NTIRPsTable extends Component {
 		this.open_route()
 	}
 
-	getExistedChildren(tirps) {
-		return tirps._TIRP__childes.filter(
-			(child) =>
-				child._TIRP__exist_in_class0 ||
-				(child._TIRP__exist_in_class1 && this.props.discriminative)
-		);
-	}
-
-	toPercentage(amount, total) {
-		return ((amount * 100) / total).toFixed(2);
-	}
-
-	getScore = (tirp) => {
-		const vs0 = this.toPercentage(tirp._TIRP__vertical_support, this.entitiesNumber);
-		const vs1 = this.toPercentage(
-			tirp._TIRP__vertical_support_class_1,
-			this.entitiesNumberClass1
-		);
-
-		const delta_vs = Math.abs(vs0 - vs1);
-		const delta_mhs = Math.abs(
-			tirp._TIRP__mean_horizontal_support - tirp._TIRP__mean_horizontal_support_class_1
-		);
-		const delta_mmd = Math.abs(tirp._TIRP__mean_duration - tirp._TIRP__mean_duration_class_1);
-
-		const score =
-			this.state.weighted_vs * delta_vs +
-			this.state.weighted_mhs * delta_mhs +
-			this.state.weighted_mmd * delta_mmd;
-		return (score / 100).toFixed(2);
-	};
-
 	changeWeightsValue = (value) => {
 		this.setState({
 			weighted_vs: value[0],
@@ -185,6 +151,8 @@ class NTIRPsTable extends Component {
 		});
 	};
 
+	// Renders nav buttons according to the path we are exploring,
+	// Where each button when clicked will take us back in the patterns tree
 	Navbar() {
 		return (
 		<div style={{ display: 'flex' }}>
@@ -234,6 +202,7 @@ class NTIRPsTable extends Component {
 		</div>)
 	}
 
+	// Return whether we are on the root or not
 	isRoot() {
 		return this.state.currentPath.length === 0;
 	}
@@ -261,6 +230,8 @@ class NTIRPsTable extends Component {
 		}
 	}
 
+	// When clicking on nav button this function is being used to calculate based on
+	// Which button was clicked what is the current path and set path accordingly
 	toNLevel(level) {
 	// eslint-disable-next-line
 		if (level == "Root") {
@@ -275,6 +246,7 @@ class NTIRPsTable extends Component {
 		}
 	}
 
+	// Returns the path of the current level
 	toNLevelSub(level, index) {
 		// eslint-disable-next-line
 		const new_path = level.slice(1, level.length)
@@ -284,40 +256,7 @@ class NTIRPsTable extends Component {
 		})
 	}
 	
-	descendTree(tirp) {
-		if (this.isRoot()) {
-			const visualizationId = sessionStorage.getItem('visualizationId');
-			getSubTreeRequest(tirp._TIRP__symbols[0], visualizationId).then((data) => {
-				const tirpWithChildren = data['TIRPs'];
-				const children = this.getExistedChildren(tirpWithChildren);
-
-				this.setNewLevel(children, [...this.state.currentPath, tirp]);
-			});
-		} else {
-			const children = this.getExistedChildren(tirp);
-			this.setNewLevel(children, [...this.state.currentPath, tirp]);
-		}
-	}
-
-	Next(tirp) {
-		if (
-			(tirp._TIRP__childes.length !== 0 && tirp._TIRP__childes[0] === true) ||
-			this.getExistedChildren(tirp).length > 0
-		) {
-			return (
-				<Button
-					className={'btn btn-hugobot'}
-					id={'toy_example-btn'}
-					onClick={() => this.descendTree(tirp)}
-				>
-					<i className='fas fa-caret-down' id={'toy_example-icon'} />
-				</Button>
-			);
-		} else {
-			return '';
-		}
-	}
-
+	// Renders a button that when is being clicked, it computes all the patterns of next level
 	NegativeNext(tirp) {
 		if (this.getNextLevelByElements(tirp.elements).length > 0) {
 			return (
@@ -341,44 +280,6 @@ class NTIRPsTable extends Component {
 		}
 	}
 
-	getRelation(tirp) {
-		if (tirp._TIRP__rel.length === 0) {
-			return '-';
-		}
-		return tirp._TIRP__rel[tirp._TIRP__rel.length - 1];
-	}
-
-	computeTableData() {
-		return this.getExistedChildren({ _TIRP__childes: this.state.currentTirps }).map(
-			(tirp, idx) => {
-				const vs0 = tirp['_TIRP__vertical_support'];
-				const vs1 = tirp['_TIRP__vertical_support_class_1'];
-				const min_vs = Math.round(Number.parseFloat(localStorage.min_ver_support) * 100);
-				return {
-					id: idx,
-					next: this.Next(tirp),
-					relation: this.getRelation(tirp),
-					symbol: tirp['_TIRP__symbols'][tirp['_TIRP__symbols'].length - 1],
-					VS0:
-						vs0 !== 0
-							? this.toPercentage(vs0, this.entitiesNumber) + '%'
-							: `< ${min_vs}%`,
-					VS1:
-						vs1 !== 0
-							? this.toPercentage(vs1, this.entitiesNumberClass1) + '%'
-							: `< ${min_vs}%`,
-					MHS0: vs0 !== 0 ? tirp['_TIRP__mean_horizontal_support'].toFixed(2) : 'x',
-					MHS1:
-						vs1 !== 0 ? tirp['_TIRP__mean_horizontal_support_class_1'].toFixed(2) : 'x',
-					MMD0: vs0 !== 0 ? tirp['_TIRP__mean_duration'].toFixed(2) : 'x',
-					MMD1: vs1 !== 0 ? tirp['_TIRP__mean_duration_class_1'].toFixed(2) : 'x',
-					score: this.getScore(tirp) + '%',
-					tirp,
-				};
-			}
-		);
-	}
-
 	arrayEquals(a, b) {
 		return Array.isArray(a) &&
 		  Array.isArray(b) &&
@@ -386,7 +287,7 @@ class NTIRPsTable extends Component {
 		  a.every((val, index) => val === b[index]);
 	  }
 	
-
+	// Returns all the patterns that extends current level
 	getNextLevel(){
 		try {
 			const nextPatterns = this.state.outputAlgoritm.filter((row) => {
@@ -426,6 +327,7 @@ class NTIRPsTable extends Component {
 		}
 	}
 
+	// Return all the patterns extends the current pattern 
 	getNextLevelByElements(elements){ 
 		const nextPatterns = this.state.outputAlgoritm.filter((row) => {
 			if (row.elements.length === elements.length + 1 && row.elements[elements.length].length === 1){
@@ -518,9 +420,9 @@ class NTIRPsTable extends Component {
 												<th>P/N</th>
 												{renderColumn('relation', 'Relation', false)}
 												{renderColumn('symbol', 'Symbol')}
-												{renderColumn('VS0', 'VS0')}
-												{renderColumn('MHS0', 'MHS0')}
-												{renderColumn('MMD0', 'MMD0')}
+												{renderColumn('VS', 'VS')}
+												{renderColumn('MHS', 'MHS')}
+												{renderColumn('MMD', 'MMD')}
 											</tr>
 										</thead>
 										<tbody>
@@ -548,7 +450,7 @@ class NTIRPsTable extends Component {
 														         tirp.elements[tirp.elements.length - 1].length === 1 ? "before" : "equals"}</td>
 														<td>{Object.keys(this.state.vnames).length > 0 && 
 														     this.state.vnames[tirp.elements[tirp.elements.length - 1][tirp.elements[tirp.elements.length - 1].length - 1]]}</td>
-														<td>{tirp['support']}</td>
+														<td>{Number.parseFloat(tirp['support'] / this.state.outputAlgoritm.length).toFixed(2) * 100 + "%"}</td>
 														<td>{Number.parseFloat(tirp['mean horizontal support']).toFixed(2)}</td>
 														<td>{Number.parseFloat(tirp['mean mean duration']).toFixed(2)}</td>
 													</tr>

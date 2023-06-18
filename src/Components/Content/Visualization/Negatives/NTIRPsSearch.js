@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, ToggleButtonGroup, ToggleButton, Col, Row, Button } from 'react-bootstrap';
+import { Container, ToggleButtonGroup, ToggleButton, Col, Row } from 'react-bootstrap';
 
 import NSearchGraph from './NSearchGraph';
 import NSearchMeanPresentation from './NSearchMeanPresentation'
@@ -82,6 +82,7 @@ class NTIRPsSearch extends Component {
 		}
 	}
 
+	// This function is resposible for changing the value for the M.H.S, V.S and M.M.D the user chose
 	changeNParameter = (event) => {
 		const parameterName = event.target.name;
 		const parameterRawValue = parseInt(event.target.value);
@@ -91,9 +92,12 @@ class NTIRPsSearch extends Component {
 		this.setState({ Nparameters: newParameters });
 	};
 
+
+	// This function is responsible for searching the data for patterns that are matching the filtering option the user chose
 	async searchNTirps() {
 		let searchResults = this.state.outputAlgoritm
 
+		// Filter based on the 'first symbol' the user chose
 		if(this.state.startNList.length > 0){
 			searchResults = searchResults.filter((row) =>
 				row.negatives[0] ? 
@@ -103,6 +107,7 @@ class NTIRPsSearch extends Component {
 			) 
 		}
 
+		// Filter based on the 'end symbol' the user chose
 		if(this.state.endNList.length > 0 ){
 			searchResults = searchResults.filter((row) =>
 				row.negatives[row.elements.length - 1] ? 
@@ -113,6 +118,7 @@ class NTIRPsSearch extends Component {
 			) 
 		}
 
+		// Filter based on the 'intermidiate symbol' the user chose
 		if(this.state.containNList.length > 0 ){
 			searchResults = searchResults.filter((row) => {
 				let found = false
@@ -151,6 +157,7 @@ class NTIRPsSearch extends Component {
 	}
 
 
+	// This function is responsible for changing the graph to table or viseversa
 	showTableOrGraph = () => {
 		const radios = ['Graph', 'Table'];
 		return (
@@ -182,7 +189,6 @@ class NTIRPsSearch extends Component {
 	}
 
 	render() {
-		const type_of_comp = this.props.isPredictive ? 'disc' : 'tirp';
 		return (
 			<Container fluid>
 				<Row>

@@ -10,9 +10,6 @@ class NTirp {
 		this.mhs = mhs;
 		this.mmd = mmd;
 		this.row = row
-
-		// this.dmhs = Math.abs(parseFloat(mhs0) - parseFloat(mhs1));
-		// this.dmmd = Math.abs(parseFloat(mmd0) - parseFloat(mmd1));
 	}
 }
 

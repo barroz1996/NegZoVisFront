@@ -90,30 +90,6 @@ class SearchNLimits extends Component {
 					new NumInput('minSizeCls0', 1, 100, this.props.parameters.minSizeCls0),
 				],
 			},
-			// cls1: {
-			// 	max: [
-			// 		new NumInput(
-			// 			'maxVSCls1',
-			// 			this.minVS,
-			// 			100,
-			// 			this.props.parameters.maxVSCls1,
-			// 			true
-			// 		),
-			// 		new NumInput('maxHSCls1', 1, 100, this.props.parameters.maxHSCls1),
-			// 		new NumInput('maxSizeCls0', 1, 100, this.props.parameters.maxSizeCls0),
-			// 	],
-			// 	min: [
-			// 		new NumInput(
-			// 			'minVSCls1',
-			// 			this.minVS,
-			// 			100,
-			// 			this.props.parameters.minVSCls1,
-			// 			true
-			// 		),
-			// 		new NumInput('minHSCls1', 1, 100, this.props.parameters.minHSCls1),
-			// 		new NumInput('minSizeCls0', 1, 100, this.props.parameters.minSizeCls0),
-			// 	],
-			// },
 		};
 		return (
 			<div className='limits'>
@@ -148,27 +124,6 @@ class SearchNLimits extends Component {
 							<td>{this.renderMeanDropDown('mhs0')}</td>
 							<td>{this.renderMeanDropDown('size')}</td>
 						</tr>
-						{/* {this.props.isPredictive && (
-							<>
-								<tr>
-									<td className='shirtcol' rowSpan={3}>
-										{localStorage.second_class_name}
-									</td>
-									<td className='shirtcol'>Max</td>
-									{inputs.cls1.max.map(this.renderCell.bind(this))}
-								</tr>
-								<tr>
-									<td className='shirtcol'>Min</td>
-									{inputs.cls1.min.map(this.renderCell.bind(this))}
-								</tr>
-								<tr>
-									<td className='shirtcol'>Rate By</td>
-									<td>{this.renderMeanDropDown('vs1')}</td>
-									<td>{this.renderMeanDropDown('mhs1')}</td>
-									<td>{this.renderMeanDropDown('size')}</td>
-								</tr>
-							</>
-						)} */}
 					</tbody>
 				</Table>
 				<center>
