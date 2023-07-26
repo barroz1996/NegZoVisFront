@@ -1,5 +1,4 @@
 import React from 'react';
-import Swal from 'sweetalert2';
 import Enzyme from 'enzyme';
 import { mount } from 'enzyme';
 import NTIRPsTable from '../NTIRPsTable'

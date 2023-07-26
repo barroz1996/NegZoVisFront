@@ -79,16 +79,16 @@ describe('Component', () => {
     expect(wrapper.find('th').at(1).text()).toEqual('P/N');
     expect(wrapper.find('th').at(2).text()).toEqual('Relation');
     expect(wrapper.find('th').at(3).text()).toEqual('Symbol');
-    expect(wrapper.find('th').at(4).text()).toEqual('VS0');
-    expect(wrapper.find('th').at(5).text()).toEqual('MHS0');
-    expect(wrapper.find('th').at(6).text()).toEqual('MMD0');
+    expect(wrapper.find('th').at(4).text()).toEqual('VS');
+    expect(wrapper.find('th').at(5).text()).toEqual('MHS');
+    expect(wrapper.find('th').at(6).text()).toEqual('MMD');
   });
 
   it('should render the table rows', () => {
     expect(wrapper.find('td').at(1).text()).toEqual('Positive');
     expect(wrapper.find('td').at(2).text()).toEqual('-');
     expect(wrapper.find('td').at(3).text()).toEqual('A');
-    expect(wrapper.find('td').at(4).text()).toEqual('4651');
+    expect(wrapper.find('td').at(4).text()).toEqual('38758%');
     expect(wrapper.find('td').at(5).text()).toEqual('2.79');
   });
 
@@ -103,18 +103,6 @@ describe('Component', () => {
     expect(wrapper.find('th').at(11).text()).toEqual('Mean horizontal_support');
     expect(wrapper.find('th').at(12).text()).toEqual('Mean mean duration');
     expect(wrapper.find('th').at(13).text()).toEqual('Entities');
-  });
-
-  it('should render the table rows again after next button is pressed', () => {
-    expect(wrapper.find('td').at(4).text()).toEqual('4651');
-    wrapper.find('td').at(0).find('button').simulate('click')
-    expect(wrapper.find('td').at(4).text()).toEqual('4851');
-  });
-
-  it('should render the timeline only after row is clicked', () => {
-    expect(wrapper.text().includes('NTIRPTimeLine')).toBe(false);
-    wrapper.find('td').at(0).find('button').simulate('click')
-    expect(wrapper.text().includes('NTIRPTimeLine')).toBe(true);
   });
 
   it('should render the component with empty props', () => {

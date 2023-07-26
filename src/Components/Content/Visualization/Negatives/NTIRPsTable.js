@@ -213,20 +213,29 @@ class NTIRPsTable extends Component {
 
 	setNewLevel(tirps, path) {
 		try {
+			let lowestNumber = Infinity;			
+			for (let i = 0; i < tirps.length; i++) {
+				const currentArray = tirps[i];
+				const currentNumber = currentArray.elements.length;
+				if (currentNumber < lowestNumber) {
+					lowestNumber = currentNumber;
+				}
+			}
 			const firstLevelTirps = tirps.filter((row) => {
-				if (row.elements.length === 1) {
+				if (row.elements.length === lowestNumber) {
 					return true
 				} else {
 					return false
 				}
 			})
+
 			this.setState({
 				currentTirps: tirps,
 				currentPath: path,
 				selectedTirp: firstLevelTirps[0][0],
 			});
 		} catch (e) {
-			errorAlert(e)
+			errorAlert("GOOD" + e)
 		}
 	}
 
@@ -254,6 +263,12 @@ class NTIRPsTable extends Component {
 		this.setState({
 			path: new_path
 		})
+	}
+
+	transformArrays(originalArr, boolArr) {
+		return originalArr.flatMap((subArr, index) =>
+		  subArr.map(() => boolArr[index])
+		);
 	}
 	
 	// Renders a button that when is being clicked, it computes all the patterns of next level
@@ -322,10 +337,23 @@ class NTIRPsTable extends Component {
 			} )
 			return nextPatterns
 		} catch (e) {
-			errorAlert(e)
+			errorAlert("HELLO" + e)
 			return []
 		}
 	}
+
+	isLastNumberNegative(originalArr, boolArr) {
+		const lastIndex = originalArr.length - 1;
+		if (lastIndex < 0) return false; // If the originalArr is empty, return false.
+	  
+		const lastSubArr = originalArr[lastIndex];
+		if (lastSubArr.length === 0) return false; // If the last sub-array is empty, return false.
+	  
+		const lastNumber = lastSubArr[lastSubArr.length - 1];
+		return boolArr[lastIndex] ? lastNumber < 0 : lastNumber >= 0;
+	}
+	  
+	  
 
 	// Return all the patterns extends the current pattern 
 	getNextLevelByElements(elements){ 
@@ -427,11 +455,13 @@ class NTIRPsTable extends Component {
 										</thead>
 										<tbody>
 											{this.getNextLevel().map((tirp, index) => {
+
+								
 												return (
 													<tr
 														key={index}
 														onClick={() => {
-															
+
 															let numOfEntites = this.getNextLevelByElements(tirp.elements).length
 															let newCurrentTirp = this.state.currentTirp
 															newCurrentTirp[this.state.currentLevel + 1] = tirp
@@ -445,12 +475,13 @@ class NTIRPsTable extends Component {
 														}}
 													>
 														<td>{this.NegativeNext(tirp)}</td>
-														<td>{tirp.negatives[this.state.path.length] ? "Negative" : "Positive"}</td>
+														<td>{this.isLastNumberNegative(tirp.elements, tirp.negatives) ? "Positive" : "Negative"}</td>
+														{/* <td>{tirp.negatives[this.state.path.length] ? "Negative" : "Positive"}</td> */}
 														<td>{this.state.currentLevel === 0 ? "-" :
 														         tirp.elements[tirp.elements.length - 1].length === 1 ? "before" : "equals"}</td>
 														<td>{Object.keys(this.state.vnames).length > 0 && 
 														     this.state.vnames[tirp.elements[tirp.elements.length - 1][tirp.elements[tirp.elements.length - 1].length - 1]]}</td>
-														<td>{Number.parseFloat(tirp['support'] / this.state.outputAlgoritm.length).toFixed(2) * 100 + "%"}</td>
+														<td>{Number.parseFloat(tirp['support']).toFixed(2) * 100 + "%"}</td>
 														<td>{Number.parseFloat(tirp['mean horizontal support']).toFixed(2)}</td>
 														<td>{Number.parseFloat(tirp['mean mean duration']).toFixed(2)}</td>
 													</tr>

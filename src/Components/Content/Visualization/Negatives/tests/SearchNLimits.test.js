@@ -3,6 +3,8 @@ import Enzyme from 'enzyme';
 import { mount } from 'enzyme';
 import SearchNLimits from '../SearchNLimits';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import mockData from './mocks/mockData.json'
+
 
 Enzyme.configure({ adapter: new Adapter() });
 const jsdom = require('jsdom');
@@ -12,6 +14,23 @@ const dom = new JSDOM('<!doctype html><html><body></body></html>', {
 });
 global.window = dom.window;
 global.document = dom.window.document;
+
+const props = {
+  ntable: mockData,
+};
+
+const localStorageMock = {
+  rootElement: props.ntable,
+  negative: 'true',
+  VMapFile: {
+    8: 'A',
+    18: 'B',
+  },
+  num_of_entities: 0,
+  num_of_entities_class_1: 0,
+  PassedFromSearch: 'false',
+  min_ver_support: 40,
+};
 
 describe('<SearchNLimits />', () => {
   const changeParameterMock = jest.fn();
@@ -28,10 +47,6 @@ describe('<SearchNLimits />', () => {
     NmeasureToRate: {},
     changeParameter: changeParameterMock,
     changeMeasureToRate: changeMeasureToRateMock,
-  };
-
-  const localStorageMock = {
-    min_ver_support: 40
   };
 
   let wrapper;

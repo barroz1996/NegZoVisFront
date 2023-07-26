@@ -123,14 +123,13 @@ it('renders the NSearchGraph component', () => {
   expect(wrapper.text()).toContain('NSearchTableMock');
 });
 
-/// Need To Add Functionality
+
 it('renders the NSearchMeanPresentation component', () => {
   expect(wrapper.text()).not.toContain('NSearchMeanPresentationMock');
   wrapper.setState({ NSelected: props.ntable[0]})
   expect(wrapper.text()).toContain('NSearchMeanPresentationMock');
 });
 
-/// Need To Add Functionality
 it('renders the NTIRPTimeLine component', () => {
   expect(wrapper.text()).not.toContain('NTIRPTimeLineMock');
   wrapper.setState({ NSelected: props.ntable[0]})

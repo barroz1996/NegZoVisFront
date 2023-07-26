@@ -38,12 +38,21 @@ class NTIRPTimeLine extends Component {
             const endTime = startTime + (timezone[i] * 1000)
 			if (elements[i].length > 1) {
 				for(let j = 0; j < elements[i].length; j++) {
-					const row = [vnames[elements[i][j]], '',
-					this.createCustomHTMLContent(vnames[elements[i][j]], "Duration: ", 
-					String(((endTime - startTime)/ 1000).toFixed(2))," Time Units"),
-					startTime, 
-					endTime]
-					dataset.push(row)
+					if (negatives[i]) {
+						const row = [String.fromCharCode(172) + vnames[elements[i][j]], '',
+						this.createCustomHTMLContent(String.fromCharCode(172) + vnames[elements[i][j]], "Duration: ", 
+						String(((endTime - startTime)/ 1000).toFixed(2))," Time Units"),
+						startTime, 
+						endTime]
+						dataset.push(row)
+					} else {
+						const row = [vnames[elements[i][j]], '',
+						this.createCustomHTMLContent(vnames[elements[i][j]], "Duration: ", 
+						String(((endTime - startTime)/ 1000).toFixed(2))," Time Units"),
+						startTime, 
+						endTime]
+						dataset.push(row)
+					}
 				}
 			} else {
 				if (negatives[i]) {
