@@ -52,12 +52,12 @@ class NSearchGraph extends Component {
 	}
 
 	componentDidMount() {
-		let allVnames = []  
+		let allVnames = {}  
 		if (localStorage.negative === 'true') {
 			const entities = JSON.parse(localStorage.VMapFile);
 			for (const [key, value] of Object.entries(entities)) {
-				allVnames.push(value)
-				allVnames.push(String.fromCharCode(172) + value)
+				allVnames[key] = value
+				// allVnames.push(String.fromCharCode(172) + value)
 			}
 			this.setState({
 				vnames: allVnames,
@@ -160,6 +160,20 @@ class NSearchGraph extends Component {
 		this.props.handleOnSelect(tirp)
 	}
 
+	calculateTitle(row) {
+		const names = []
+		for (let i=0; i<row.elements.length; i++) {
+			for (let j=0; j<row.elements[i].length; j++) {
+				if (row.negatives[i]) {
+					names.push(String.fromCharCode(172) + this.state.vnames[row.elements[i][j]])
+				} else {
+					names.push(this.state.vnames[row.elements[i][j]])
+				}
+			}
+		}
+		return names
+	}
+
 	render() {
 		const tirps = this.calculateTirps();
 		// We are not using the parsing option because it does'nt get updated when the axes change
@@ -223,9 +237,8 @@ class NSearchGraph extends Component {
 										callbacks: {
 											title: (items) => {
 												const tirp = items[0].raw;
-												const symbols = tirp.symbols;
-												const firstSymbol = symbols.flat()[0]
-												return this.state.vnames[firstSymbol]
+												const names = this.calculateTitle(tirp.row)
+												return names.join("\n")
 											},
 											label: (item) => {
 												const properties = 
@@ -274,7 +287,6 @@ class NSearchGraph extends Component {
 										borderColor: (context) => {
 											if (!context.raw) return undefined;
 
-											const tirp = context.raw;
 											// if (
 											// 	tirp.relations === this.props.selectedRelations &&
 											// 	tirp.symbols === this.props.selectedSymbols
@@ -286,7 +298,6 @@ class NSearchGraph extends Component {
 										borderWidth: (context) => {
 											if (!context.raw) return undefined;
 
-											const tirp = context.raw;
 											// if (
 											// 	tirp.relations === this.props.selectedRelations &&
 											// 	tirp.symbols === this.props.selectedSymbols
