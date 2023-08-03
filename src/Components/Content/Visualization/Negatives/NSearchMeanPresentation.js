@@ -55,7 +55,7 @@ class NSearchMeanPresentation extends Component {
 								<th>V.S</th>
 								<td>
 									{typeof this.props.tirp['support'] !== 'undefined'
-										? this.props.tirp['support'].toFixed(2)
+										? ((this.props.tirp['support']/ this.props.entitiesNum) * 100).toFixed(2) + "%"
 										: this.props.vs}
 								</td>
 							</tr>

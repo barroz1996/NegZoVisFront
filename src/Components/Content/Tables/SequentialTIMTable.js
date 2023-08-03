@@ -444,11 +444,11 @@ class SequentialTIMTable extends Component {
 							</>
 						) : iter.status.finished ? (
 							<>
-								<td>Karmalego failed</td>
+								<td>NegZo failed</td>
 							</>
 						) : (
 							<>
-								<td>Karmalego inprogress</td>
+								<td>NegZo inprogress</td>
 							</>
 						)}
 					</tr>

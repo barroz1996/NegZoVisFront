@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import TiprsContent from './TirpsContent/TirpsContent';
 import TirpsNavigation from './TirpsNavigation';
 
-import { getEntities, getStates, initiateTirps, getVMapFile } from '../../../networking/requests/visualization';
+import { getEntities, getStates, initiateTirps, getVMapFile, getNumOfEntities } from '../../../networking/requests/visualization';
 import { getVisualizationInfo } from '../../../networking/requests/datasetsStats';
 
 /**
@@ -50,17 +50,20 @@ class TirpsApp extends Component {
 	async getRoot(visualizationId) {
 		const data = await initiateTirps(visualizationId);
 
+		
+
 		let negative = true;
 		const stringied = JSON.parse(JSON.stringify(data));
-		console.log(typeof stringied)
 		if (stringied.hasOwnProperty('Root')) {
 			negative = false
 		}
 		const VMAPFile = await getVMapFile(visualizationId)
 
 		if (negative) {
+			const numOfEntities = await getNumOfEntities(visualizationId)
 			localStorage.rootElement = JSON.stringify(data);
 			localStorage.negative = 'true'
+			localStorage.entitiesNum = JSON.stringify(numOfEntities)
 			this.setState({
 				negative: 'true'
 			});

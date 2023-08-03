@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { Button, ButtonGroup, Card, Form, Table, ToggleButton } from 'react-bootstrap';
 
-import { addTIM, getTIM, deleteKarmaLego, getNegativeTIM } from '../../../networking/requests/dataMining';
+import { addTIM, addSequentialTIM,getTIM, deleteKarmaLego, getNegativeTIM } from '../../../networking/requests/dataMining';
 import MyToolTip from '../../MyToolTip';
 import {
 	errorAlert,
@@ -43,6 +43,15 @@ class TIMTable extends Component {
 			selectedSecondButton: 'false',
 			negative: "false",
 			tims: {},
+			negativeTims: {
+				mvs: 0,
+				gap: 1,
+				negative: 'false',
+				mn: 1,
+				ofo: 'true',
+				as: 'false',
+				bc: 'false',
+			},
 		};
 
 		this.onChange = this.onChange.bind(this);
@@ -188,6 +197,40 @@ class TIMTable extends Component {
 			.catch(errorAlert);
 	};
 
+	handleNegativeSubmit = (isVisualization) => {
+		// isVisualization: false indicates the user only wants to mine with KL
+		// if true, the user wants to activate KL and automatically after it visualization as well
+		// TODO: Holy shit who wrote this? needs to get fixed asap.
+		// * A success message should be displayed only if the operation was indeed successful
+		const values = this.state.negativeTims
+
+		window.onload = setTimeout(
+			() =>
+				notifyAlert(
+					'KarmaLego is running, When the operation is complete, you will receive an email notification'
+				),
+			3000
+		);
+		addSequentialTIM(
+			values.gap,
+			values.mvs,
+			this.state.negative,
+			values.mn,
+			values.ofo,
+			values.as,
+			values.bc,
+			this.props.datasetName,
+			isVisualization
+		)
+			.then(() =>
+				successAlert(
+					'Success',
+					'Your requested time interval mining operation as been completed!'
+				)
+			)
+			.catch(errorAlert);
+	};
+
 	handleButtonClick(buttonType) {
 		this.setState({
 		  selectedButton: buttonType,
@@ -214,6 +257,12 @@ class TIMTable extends Component {
 		const current_values = this.getValues(discretization_id);
 		const new_values = { ...current_values, [key]: e.target.value };
 		this.setState({ tims: { ...this.state.tims, [discretization_id]: new_values } });
+	}
+
+	onNegativeChange(key, e) {
+		const current_values = this.state.negativeTims
+		const new_values = { ...current_values, [key]: e.target.value };
+		this.setState({ negativeTims: new_values });
 	}
 
 	getValues(discretization_id) {
@@ -304,243 +353,240 @@ class TIMTable extends Component {
 	}
 
 	renderAddRunData = () => {
-		return this.props.discretizations
+		if (this.state.selectedButton === 'true') {
+			return (
+				<tr>
+					<td>
+						<Form.Control
+							as='select'
+							defaultValue='Choose...'
+							onChange={(e) => this.onNegativeChange('mvs', e)}
+						>
+							{this.renderOptions(0, 100)}
+						</Form.Control>
+					</td>
+					<td>
+						<Form.Control
+							as='select'
+							defaultValue='Choose...'
+							onChange={(e) => this.onNegativeChange('gap', e)}
+						>
+							{this.renderOptions(1, 21)}
+						</Form.Control>
+					</td>
+					<td>
+						<Form.Control
+							as='select'
+							defaultValue='Choose...'
+							onChange={(e) => this.onNegativeChange('mn', e)}
+						>
+							{this.renderOptions(1, 21)}
+						</Form.Control>
+					</td>
+					<td>
+						<ButtonGroup toggle={true}>
+							<ToggleButton
+								checked={this.state.negativeTims.ofo === 'true'}
+								className={'btn-hugobot'}
+								onChange={(e) => this.onNegativeChange('ofo', e)}
+								type={'radio'}
+								value={true}
+							>
+								True
+							</ToggleButton>
+							<ToggleButton
+								checked={this.state.negativeTims.ofo === 'false'}
+								className={'btn-hugobot'}
+								onChange={(e) => this.onNegativeChange('ofo', e)}
+								type={'radio'}
+								value={false}
+							>
+								False
+							</ToggleButton>
+						</ButtonGroup>
+					</td>
+					<td>
+						<ButtonGroup toggle={true}>
+							<ToggleButton
+								checked={this.state.negativeTims.as === 'true'}
+								className={'btn-hugobot'}
+								onChange={(e) => this.onNegativeChange('as', e)}
+								type={'radio'}
+								value={true}
+							>
+								True
+							</ToggleButton>
+							<ToggleButton
+								checked={this.state.negativeTims.as === 'false'}
+								className={'btn-hugobot'}
+								onChange={(e) => this.onNegativeChange('as', e)}
+								type={'radio'}
+								value={false}
+							>
+								False
+							</ToggleButton>
+						</ButtonGroup>
+					</td>
+					<td>
+						<ButtonGroup toggle={true}>
+							<ToggleButton
+								checked={this.state.negativeTims.bc === 'true'}
+								className={'btn-hugobot'}
+								onChange={(e) => this.onNegativeChange('bc', e)}
+								type={'radio'}
+								value={true}
+							>
+								True
+							</ToggleButton>
+							<ToggleButton
+								checked={this.state.negativeTims.bc === 'false'}
+								className={'btn-hugobot'}
+								onChange={(e) => this.onNegativeChange('bc', e)}
+								type={'radio'}
+								value={false}
+							>
+								False
+							</ToggleButton>
+						</ButtonGroup>
+					</td>
+					<td>
+						<Button
+							className={'btn btn-hugobot'}
+							onClick={() => this.handleNegativeSubmit(false)}
+						>
+							Mine
+							<i className={'fas fa-play ml-2'} style={{ fontSize: 15 }} />
+						</Button>
+					</td>
+	
+					<td>
+						<Button
+							className={'btn btn-hugobot'}
+							onClick={() => this.handleNegativeSubmit(true)}
+						>
+							{'Mine&Visualize'}
+							<i className={'fas fa-play ml-2'} style={{ fontSize: 15 }} />
+						</Button>
+					</td>
+				</tr>
+			);
+		} else {
+			return this.props.discretizations
 			.filter((iter) => iter.status.finished && iter.status.success)
 			.map((iter, index) => {
-				if (this.state.selectedButton === 'true' && iter['MethodOfDiscretization'] === 'Sequential') {
-					return (
-						<tr key={index}>
-							<td>
-								<Form.Control
-									as='select'
-									defaultValue='Choose...'
-									onChange={(e) => this.onChange(iter.id, 'mvs', e)}
+				if (iter['MethodOfDiscretization'] !== 'Sequential') {
+				return (
+					<tr key={index}>
+						<td>{iter['PAAWindowSize']}</td>
+						<td>{iter['BinsNumber']}</td>
+						<td>{iter['InterpolationGap']}</td>
+						<td>{iter['MethodOfDiscretization']}</td>
+						<td>
+							<Form.Control
+								as='select'
+								defaultValue='Choose...'
+								onChange={(e) => this.onChange(iter.id, 'mvs', e)}
+							>
+								{this.renderOptions(0, 100)}
+							</Form.Control>
+						</td>
+						<td>
+							<Form.Control
+								as='select'
+								defaultValue='Choose...'
+								onChange={(e) => this.onChange(iter.id, 'gap', e)}
+							>
+								{this.renderOptions(1, 21)}
+							</Form.Control>
+						</td>
+						<td>
+							<ButtonGroup toggle={true} style={{ display: 'block' }}>
+								<ToggleButton
+									checked={this.getValues(iter.id).relations === '3'}
+									className={'btn-hugobot'}
+									onChange={(e) => this.onChange(iter.id, 'relations', e)}
+									type={'radio'}
+									value={3}
 								>
-									{this.renderOptions(0, 100)}
-								</Form.Control>
-							</td>
-							<td>
-								<Form.Control
-									as='select'
-									defaultValue='Choose...'
-									onChange={(e) => this.onChange(iter.id, 'gap', e)}
+									3
+								</ToggleButton>
+								<ToggleButton
+									checked={this.getValues(iter.id).relations === '7'}
+									className={'btn-hugobot'}
+									onChange={(e) => this.onChange(iter.id, 'relations', e)}
+									type={'radio'}
+									value={7}
 								>
-									{this.renderOptions(1, 21)}
-								</Form.Control>
-							</td>
-							<td>
-								<Form.Control
-									as='select'
-									defaultValue='Choose...'
-									onChange={(e) => this.onChange(iter.id, 'mn', e)}
+									7
+								</ToggleButton>
+							</ButtonGroup>
+						</td>
+						<td>
+							<Form.Control
+								as='select'
+								defaultValue='Choose...'
+								onChange={(e) => this.onChange(iter.id, 'epsilon', e)}
+							>
+								{this.renderOptions(0, 11)}
+							</Form.Control>
+						</td>
+						<td>
+							<Form.Control
+								as='select'
+								defaultValue='Choose...'
+								onChange={(e) => this.onChange(iter.id, 'tirps_len', e)}
+							>
+								{this.renderOptions(2, 21)}
+							</Form.Control>
+						</td>
+						<td>
+							<ButtonGroup toggle={true}>
+								<ToggleButton
+									checked={this.getValues(iter.id).index === 'true'}
+									className={'btn-hugobot'}
+									onChange={(e) => this.onChange(iter.id, 'index', e)}
+									type={'radio'}
+									value={true}
 								>
-									{this.renderOptions(0, 21)}
-								</Form.Control>
-							</td>
-							<td>
-								<ButtonGroup toggle={true}>
-									<ToggleButton
-										checked={this.getValues(iter.id).ofo === 'true'}
-										className={'btn-hugobot'}
-										onChange={(e) => this.onChange(iter.id, 'ofo', e)}
-										type={'radio'}
-										value={true}
-									>
-										True
-									</ToggleButton>
-									<ToggleButton
-										checked={this.getValues(iter.id).ofo === 'false'}
-										className={'btn-hugobot'}
-										onChange={(e) => this.onChange(iter.id, 'ofo', e)}
-										type={'radio'}
-										value={false}
-									>
-										False
-									</ToggleButton>
-								</ButtonGroup>
-							</td>
-							<td>
-								<ButtonGroup toggle={true}>
-									<ToggleButton
-										checked={this.getValues(iter.id).as === 'true'}
-										className={'btn-hugobot'}
-										onChange={(e) => this.onChange(iter.id, 'as', e)}
-										type={'radio'}
-										value={true}
-									>
-										True
-									</ToggleButton>
-									<ToggleButton
-										checked={this.getValues(iter.id).as === 'false'}
-										className={'btn-hugobot'}
-										onChange={(e) => this.onChange(iter.id, 'as', e)}
-										type={'radio'}
-										value={false}
-									>
-										False
-									</ToggleButton>
-								</ButtonGroup>
-							</td>
-							<td>
-								<ButtonGroup toggle={true}>
-									<ToggleButton
-										checked={this.getValues(iter.id).bc === 'true'}
-										className={'btn-hugobot'}
-										onChange={(e) => this.onChange(iter.id, 'bc', e)}
-										type={'radio'}
-										value={true}
-									>
-										True
-									</ToggleButton>
-									<ToggleButton
-										checked={this.getValues(iter.id).bc === 'false'}
-										className={'btn-hugobot'}
-										onChange={(e) => this.onChange(iter.id, 'bc', e)}
-										type={'radio'}
-										value={false}
-									>
-										False
-									</ToggleButton>
-								</ButtonGroup>
-							</td>
-							<td>
-								<Button
-									className={'btn btn-hugobot'}
-									onClick={() => this.handleSubmit(iter.id, false)}
+									True
+								</ToggleButton>
+								<ToggleButton
+									checked={this.getValues(iter.id).index === 'false'}
+									className={'btn-hugobot'}
+									onChange={(e) => this.onChange(iter.id, 'index', e)}
+									type={'radio'}
+									value={false}
 								>
-									Mine
-									<i className={'fas fa-play ml-2'} style={{ fontSize: 15 }} />
-								</Button>
-							</td>
+									False
+								</ToggleButton>
+							</ButtonGroup>
+						</td>
+						<td>
+							<Button
+								className={'btn btn-hugobot'}
+								onClick={() => this.handleSubmit(iter.id, false)}
+							>
+								Mine
+								<i className={'fas fa-play ml-2'} style={{ fontSize: 15 }} />
+							</Button>
+						</td>
 
-							<td>
-								<Button
-									className={'btn btn-hugobot'}
-									onClick={() => this.handleSubmit(iter.id, true)}
-								>
-									{'Mine&Visualize'}
-									<i className={'fas fa-play ml-2'} style={{ fontSize: 15 }} />
-								</Button>
-							</td>
-						</tr>
-					);
+						<td>
+							<Button
+								className={'btn btn-hugobot'}
+								onClick={() => this.handleSubmit(iter.id, true)}
+							>
+								{'Mine&Visualize'}
+								<i className={'fas fa-play ml-2'} style={{ fontSize: 15 }} />
+							</Button>
+						</td>
+					</tr>
+					)} else {
+						return <tr></tr>
+					}
 				}
-				else if (this.state.selectedButton === 'false' && iter['MethodOfDiscretization'] !== 'Sequential'){
-					return (
-						<tr key={index}>
-							<td>{iter['PAAWindowSize']}</td>
-							<td>{iter['BinsNumber']}</td>
-							<td>{iter['InterpolationGap']}</td>
-							<td>{iter['MethodOfDiscretization']}</td>
-							<td>
-								<Form.Control
-									as='select'
-									defaultValue='Choose...'
-									onChange={(e) => this.onChange(iter.id, 'mvs', e)}
-								>
-									{this.renderOptions(0, 100)}
-								</Form.Control>
-							</td>
-							<td>
-								<Form.Control
-									as='select'
-									defaultValue='Choose...'
-									onChange={(e) => this.onChange(iter.id, 'gap', e)}
-								>
-									{this.renderOptions(1, 21)}
-								</Form.Control>
-							</td>
-							<td>
-								<ButtonGroup toggle={true} style={{ display: 'block' }}>
-									<ToggleButton
-										checked={this.getValues(iter.id).relations === '3'}
-										className={'btn-hugobot'}
-										onChange={(e) => this.onChange(iter.id, 'relations', e)}
-										type={'radio'}
-										value={3}
-									>
-										3
-									</ToggleButton>
-									<ToggleButton
-										checked={this.getValues(iter.id).relations === '7'}
-										className={'btn-hugobot'}
-										onChange={(e) => this.onChange(iter.id, 'relations', e)}
-										type={'radio'}
-										value={7}
-									>
-										7
-									</ToggleButton>
-								</ButtonGroup>
-							</td>
-							<td>
-								<Form.Control
-									as='select'
-									defaultValue='Choose...'
-									onChange={(e) => this.onChange(iter.id, 'epsilon', e)}
-								>
-									{this.renderOptions(0, 11)}
-								</Form.Control>
-							</td>
-							<td>
-								<Form.Control
-									as='select'
-									defaultValue='Choose...'
-									onChange={(e) => this.onChange(iter.id, 'tirps_len', e)}
-								>
-									{this.renderOptions(2, 21)}
-								</Form.Control>
-							</td>
-							<td>
-								<ButtonGroup toggle={true}>
-									<ToggleButton
-										checked={this.getValues(iter.id).index === 'true'}
-										className={'btn-hugobot'}
-										onChange={(e) => this.onChange(iter.id, 'index', e)}
-										type={'radio'}
-										value={true}
-									>
-										True
-									</ToggleButton>
-									<ToggleButton
-										checked={this.getValues(iter.id).index === 'false'}
-										className={'btn-hugobot'}
-										onChange={(e) => this.onChange(iter.id, 'index', e)}
-										type={'radio'}
-										value={false}
-									>
-										False
-									</ToggleButton>
-								</ButtonGroup>
-							</td>
-							<td>
-								<Button
-									className={'btn btn-hugobot'}
-									onClick={() => this.handleSubmit(iter.id, false)}
-								>
-									Mine
-									<i className={'fas fa-play ml-2'} style={{ fontSize: 15 }} />
-								</Button>
-							</td>
-
-							<td>
-								<Button
-									className={'btn btn-hugobot'}
-									onClick={() => this.handleSubmit(iter.id, true)}
-								>
-									{'Mine&Visualize'}
-									<i className={'fas fa-play ml-2'} style={{ fontSize: 15 }} />
-								</Button>
-							</td>
-						</tr>
-					);
-				}
-				else {
-					return (<tr>
-
-					</tr>)
-				}
-			});
-	};
+			)}
+	}
 
 	renderExistingRunsHeader = () => {
 		if (this.state.selectedSecondButton === 'false') {
@@ -771,15 +817,11 @@ class TIMTable extends Component {
 							</>
 						) : iter.status.finished ? (
 							<>
-								<td>Karmalego failed</td>
-								<td>Karmalego failed</td>
-								<td>Karmalego failed</td>
+								<td>NegZo failed</td>
 							</>
 						) : (
 							<>
-								<td>Karmalego inprogress</td>
-								<td>Karmalego inprogress</td>
-								<td>Karmalego inprogress</td>
+								<td>NegZo inprogress</td>
 							</>
 						)}
 					</tr>

@@ -45,6 +45,7 @@ class NSearchGraph extends Component {
 			[SIZE_AXIS]: 'size',
 		},
 		vnames: [],
+		symbols: {}
 	};
 
 	axisToTitle(axis) {
@@ -52,15 +53,17 @@ class NSearchGraph extends Component {
 	}
 
 	componentDidMount() {
-		let allVnames = {}  
+		let allSymbols = {}
+		let allVnames = [] 
 		if (localStorage.negative === 'true') {
 			const entities = JSON.parse(localStorage.VMapFile);
 			for (const [key, value] of Object.entries(entities)) {
-				allVnames[key] = value
-				// allVnames.push(String.fromCharCode(172) + value)
+				allVnames.push(value)
+				allVnames.push(String.fromCharCode(172) + value)
+				allSymbols[key] = value
 			}
 			this.setState({
-				vnames: allVnames,
+				symbols: allSymbols
 			});
 		}
 	}
@@ -165,9 +168,9 @@ class NSearchGraph extends Component {
 		for (let i=0; i<row.elements.length; i++) {
 			for (let j=0; j<row.elements[i].length; j++) {
 				if (row.negatives[i]) {
-					names.push(String.fromCharCode(172) + this.state.vnames[row.elements[i][j]])
+					names.push(String.fromCharCode(172) + this.state.symbols[row.elements[i][j]])
 				} else {
-					names.push(this.state.vnames[row.elements[i][j]])
+					names.push(this.state.symbols[row.elements[i][j]])
 				}
 			}
 		}

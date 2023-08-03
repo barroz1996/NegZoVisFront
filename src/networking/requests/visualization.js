@@ -10,6 +10,11 @@ export function initiateTirps(visualizationId) {
 	return post('initiateTirps', params);
 }
 
+export function getNumOfEntities(visualizationId) {
+	const params = { visualization: visualizationId };
+	return post('getNumOfEntities', params);
+}
+
 export function getEntities(visualizationId) {
 	const params = { visualization: visualizationId };
 	return post('getEntities', params);

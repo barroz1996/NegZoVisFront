@@ -103,7 +103,7 @@ class TirpsNavigation extends Component {
 								to={'/TirpsApp/NegativeTirps'}
 								{...(this.props.negative === 'true' || disabledProps)}
 							>
-								<i className='fas fa-tree'></i> NegativeTirps
+								<i className='fas fa-tree'></i> NegZo
 							</NavLink>
 						</SimpleOverlayTrigger>
 					</li>
@@ -148,7 +148,7 @@ class TirpsNavigation extends Component {
 								to={'/TirpsApp/NTIRPsSearch'}
 								{...(this.props.negative === 'true' || disabledProps)}
 							>
-								<i className='fas fa-search'></i> NTIRPs Search
+								<i className='fas fa-search'></i> NegZo Search
 							</NavLink>
 						</SimpleOverlayTrigger>
 					</li>

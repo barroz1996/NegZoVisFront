@@ -5,6 +5,7 @@ import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import FormElement from '../../Login/FormElement';
 import SelectElement from '../../Login/SelectElement';
 import { uploadDataset } from '../../../networking/requests/upload';
+import { addNewDisc } from '../../../networking/requests/discretization'
 import { errorAlert, successAlert } from '../../SweetAlerts';
 import FileUploader from './FileUploader';
 import Swal from 'sweetalert2';
@@ -37,7 +38,18 @@ class UploadNewDataset extends Component {
 			this.props.details.rawDataUuid,
 			this.props.details.vmapUuid,
 			this.props.details.entitiesUuid
-		)
+		).then(() => {
+			addNewDisc('Sequential', '1', '1', this.props.details.datasetName, '2', null, '2', null, undefined, null, undefined, undefined)
+		})
+		// .then((disc_id) => {
+		// 	this.props.addDiscretization(
+		// 		disc_id,
+		// 		'2',
+		// 		'1',
+		// 		'Sequential',
+		// 		'1'
+		// 	);
+		// })
 			.finally(() => Swal.close())
 			.then(() => {
 				successAlert(

@@ -67,17 +67,21 @@ class NTIRPsSearch extends Component {
 				minVSCls0: 1,
 				maxVSCls0: 100,
 			},
-			NSelected: []
+			NSelected: [],
+			numOfEntities: 1
 		};
 	}
 
 	componentDidMount() {
 		if (localStorage.negative === 'true') {
 			const myDict = JSON.parse(localStorage.rootElement);
-			const entities = JSON.parse(localStorage.VMapFile)
+			const entities = JSON.parse(localStorage.VMapFile);
+			const entitiesNumDict = JSON.parse(localStorage.entitiesNum)
+			const entitiesNum = entitiesNumDict.NumOfEnttites
 			this.setState({
 				outputAlgoritm: myDict,
-				vnames: entities
+				vnames: entities,
+				numOfEntities: parseFloat(entitiesNum)
 			})
 		}
 	}
@@ -254,6 +258,7 @@ class NTIRPsSearch extends Component {
 									<NSearchMeanPresentation
 										canExplore={this.state.canExplore}
 										tirp={this.state.NSelected}
+										entitiesNum={this.state.numOfEntities}
 								/>
 								)}
 								{/* {this.props.isPredictive ? (

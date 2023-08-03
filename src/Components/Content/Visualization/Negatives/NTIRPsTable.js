@@ -48,6 +48,7 @@ class NTIRPsTable extends Component {
 		NmodalShow: false,
 		vnames: [], 
 		id: 0,
+		entitiesNumber: 1,
 	};
 
 	async open_route() {
@@ -117,9 +118,12 @@ class NTIRPsTable extends Component {
 		if (localStorage.negative === 'true') {
 			const myDict = JSON.parse(localStorage.rootElement);
 			const entities = JSON.parse(localStorage.VMapFile)
+			const entitiesNumDict = JSON.parse(localStorage.entitiesNum)
+			const entitiesNum = entitiesNumDict.NumOfEnttites
 			this.setState({
 				outputAlgoritm: myDict,
-				vnames: entities
+				vnames: entities,
+				entitiesNumber: entitiesNum
 			})
 		}
 
@@ -455,8 +459,6 @@ class NTIRPsTable extends Component {
 										</thead>
 										<tbody>
 											{this.getNextLevel().map((tirp, index) => {
-
-								
 												return (
 													<tr
 														key={index}
@@ -481,7 +483,7 @@ class NTIRPsTable extends Component {
 														         tirp.elements[tirp.elements.length - 1].length === 1 ? "before" : "equals"}</td>
 														<td>{Object.keys(this.state.vnames).length > 0 && 
 														     this.state.vnames[tirp.elements[tirp.elements.length - 1][tirp.elements[tirp.elements.length - 1].length - 1]]}</td>
-														<td>{Number.parseFloat(tirp['support']).toFixed(2) * 100 + "%"}</td>
+														<td>{Number.parseFloat(((tirp['support'])/ this.state.entitiesNumber) * 100).toFixed(2) + "%"}</td>
 														<td>{Number.parseFloat(tirp['mean horizontal support']).toFixed(2)}</td>
 														<td>{Number.parseFloat(tirp['mean mean duration']).toFixed(2)}</td>
 													</tr>
@@ -501,7 +503,7 @@ class NTIRPsTable extends Component {
 									currentLevel={this.state.currentLevel}
 									currentTirp={this.state.tirp}
 									numOfSymbolInSelctedPath={this.state.numOfSymbolInSelctedPath}
-							
+									entitiesNum={this.state.entitiesNumber}
 								></SelectedNTirpsTable> 
 								)}
 								{this.props.discriminative && (

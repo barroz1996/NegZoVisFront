@@ -46,7 +46,6 @@ class AddDiscretizationCard extends Component {
 		'TD4C-Entropy-IG',
 		'TD4C-SKL',
 		'Abstraction Per Property',
-		'Sequential'
 	];
 
 	optionsToRender = this.AbMethodOptions.map((option) => <option key={option}>{option}</option>);
